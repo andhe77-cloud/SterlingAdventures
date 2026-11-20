@@ -1,0 +1,6 @@
+{
+  "name": "Advokat-Engine: Krimi-Spielgerüst",
+  "description": "Interaktives Ace-Attorney-Spielgerüst mit Schauplatz-Ermittlung, Gerichtsakte, Gedanken-Notizbuch und Kreuzverhör.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
