@@ -6,6 +6,7 @@ import {
   Eye,
   Gavel,
   Hand,
+  Lock,
   MessageSquare,
   Moon,
   ShieldAlert,
@@ -50,6 +51,7 @@ interface GameStageProps {
   onNavigateStatement: (delta: number) => void;
   onPressStatement: () => void;
   onConfirmChapterTransition: () => void;
+  onReturnToTitleMenu: () => void;
 }
 
 export function GameStage({
@@ -74,6 +76,7 @@ export function GameStage({
   onNavigateStatement,
   onPressStatement,
   onConfirmChapterTransition,
+  onReturnToTitleMenu,
 }: GameStageProps) {
   const [imgError, setImgError] = useState(false);
   const currentLine = dialogQueue[0] ?? null;
@@ -350,21 +353,51 @@ export function GameStage({
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                 {state.pendingChapterTransition.summary}
               </p>
-              <button
-                type="button"
-                onClick={onConfirmChapterTransition}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors cursor-pointer"
-              >
-                {state.pendingChapterTransition.nextTimeOfDay === 'abend' ? (
-                  <Moon className="w-4 h-4 shrink-0" />
-                ) : (
-                  <Sun className="w-4 h-4 shrink-0" />
-                )}
-                <span>
-                  {state.pendingChapterTransition.nextButtonLabel ??
-                    'Nächstes Kapitel starten'}
-                </span>
-              </button>
+              {state.pendingChapterTransition.isComingSoon ? (
+                <div className="space-y-3 pt-1">
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-800/90 border border-slate-700 text-slate-400 text-xs sm:text-sm font-semibold rounded-lg cursor-not-allowed select-none opacity-85"
+                  >
+                    <Lock className="w-4 h-4 text-amber-400/70 shrink-0" />
+                    <span>
+                      {state.pendingChapterTransition.nextButtonLabel ?? 'Demnächst verfügbar'}
+                    </span>
+                  </button>
+                  {state.pendingChapterTransition.comingSoonNote && (
+                    <p className="text-[11px] text-slate-400">
+                      {state.pendingChapterTransition.comingSoonNote}
+                    </p>
+                  )}
+                  <div>
+                    <button
+                      type="button"
+                      onClick={onReturnToTitleMenu}
+                      className="inline-flex items-center justify-center px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-colors cursor-pointer"
+                    >
+                      Zurück zur Fallauswahl
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onConfirmChapterTransition}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors cursor-pointer"
+                >
+                  {state.pendingChapterTransition.nextTimeOfDay === 'abend' ? (
+                    <Moon className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <Sun className="w-4 h-4 shrink-0" />
+                  )}
+                  <span>
+                    {state.pendingChapterTransition.nextButtonLabel ??
+                      'Nächstes Kapitel starten'}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -376,7 +409,9 @@ export function GameStage({
       {/* Bottom Interactive Console */}
       {state.pendingChapterTransition ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
-          Kapitel abgeschlossen. Klicke oben auf „Weiter“, um den nächsten Tagesabschnitt zu beginnen.
+          {state.pendingChapterTransition.isComingSoon
+            ? 'Akt 2.1 abgeschlossen – Fortsetzung folgt ab Akt 2.2!'
+            : 'Kapitel abgeschlossen. Klicke oben auf „Weiter“, um den nächsten Tagesabschnitt zu beginnen.'}
         </div>
       ) : currentLine ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3">

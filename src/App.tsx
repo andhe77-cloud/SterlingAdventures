@@ -159,6 +159,59 @@ function createFinalTrialCheckpoint(): CheckpointEntry {
   };
 }
 
+function createCreteAct22Checkpoint(): CheckpointEntry {
+  const introLines: DialogLine[] = [
+    {
+      speakerId: 'maya',
+      emotion: 'thinking',
+      text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation und das Rettungsboot-Deck für unsere Fragen offen stehen.',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'thinking',
+      text: 'Gut – fangen wir ohne wilde Spekulationen bei der Schiffsärztin Dr. Vance an. Sie müsste den Zustand von Arthur heute Morgen ja als Erste gesehen haben.',
+    },
+  ];
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CRETE_CASE.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'c2_akt2_mittag',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'infirmary',
+    unlockedLocations: [
+      'promenade',
+      'music_salon',
+      'vip_salon',
+      'brig_cell',
+      'infirmary',
+      'lifeboat_deck',
+    ],
+    collectedEvidence: ['ausweis_nate', 'higginson_notiz'],
+    unlockedThoughts: ['thought_c2_blockade'],
+    solvedDeductions: [],
+    flags: {
+      flag_c2_a1_promenade: true,
+      flag_c2_a1_music: true,
+      flag_c2_a1_vip: true,
+      flag_c2_brig_freigeschaltet: true,
+      flag_c2_a1_rauswurf: true,
+      flag_c2_a1_angenommen: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: CRETE_CASE.chapters?.c2_akt2_mittag?.dayLabel ?? 'Tag 4 · Mittag (Akt 2.2)',
+    introLines,
+    snapshot,
+  };
+}
+
 function createCreteAct24Checkpoint(): CheckpointEntry {
   const introLines: DialogLine[] = [
     {
@@ -332,6 +385,19 @@ export default function App() {
   const [muted, setMuted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showRestartModal, setShowRestartModal] = useState(false);
+  const [devShortcutsUnlocked, setDevShortcutsUnlocked] = useState(false);
+  const devTapRef = useRef<{ count: number; lastAt: number }>({ count: 0, lastAt: 0 });
+
+  const handleSecretDevTap = () => {
+    const now = Date.now();
+    const nextCount = now - devTapRef.current.lastAt < 1400 ? devTapRef.current.count + 1 : 1;
+    devTapRef.current = { count: nextCount, lastAt: now };
+    if (nextCount >= 5) {
+      devTapRef.current.count = 0;
+      setDevShortcutsUnlocked((prev) => !prev);
+      soundFx.play('thought_pop');
+    }
+  };
 
   const activeCase = CASE_MAP[state.caseId ?? CRUISE_CASE.id] ?? CRUISE_CASE;
 
@@ -1215,7 +1281,10 @@ export default function App() {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <header className="flex items-center justify-between gap-8 px-6 py-4 border-b border-slate-800/80 max-w-6xl w-full mx-auto">
-          <span className="font-display text-lg font-bold tracking-wide text-amber-400 whitespace-nowrap shrink-0">
+          <span
+            onClick={handleSecretDevTap}
+            className="font-display text-lg font-bold tracking-wide text-amber-400 whitespace-nowrap shrink-0 select-none"
+          >
             Advokat-Engine
           </span>
           <button
@@ -1228,7 +1297,7 @@ export default function App() {
           </button>
         </header>
 
-        <main className="flex-1 flex items-center justify-center px-6 py-10">
+        <main className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-6">
           <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
             {ALL_CASES.map((caseItem) => {
               const hasCaseSave = Boolean(savedCaseIds[caseItem.id]);
@@ -1271,6 +1340,37 @@ export default function App() {
               );
             })}
           </div>
+
+          {devShortcutsUnlocked && (
+            <div className="max-w-5xl w-full bg-slate-900/90 border border-amber-500/30 rounded-xl px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+              <span className="text-xs font-semibold text-amber-300">
+                Kapitel-Direktsprung (Fall 2):
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => restoreCheckpoint(createCreteAct22Checkpoint(), true)}
+                  className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                >
+                  Akt 2.2 · Tag 4 Mittag
+                </button>
+                <button
+                  type="button"
+                  onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
+                  className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                >
+                  Akt 2.4 · Eleonore
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDevShortcutsUnlocked(false)}
+                  className="px-2.5 py-1.5 text-[11px] text-slate-400 hover:text-slate-200 cursor-pointer"
+                >
+                  Verbergen
+                </button>
+              </div>
+            </div>
+          )}
         </main>
       </div>
     );
@@ -1570,6 +1670,9 @@ export default function App() {
           onNavigateStatement={handleNavigateStatement}
           onPressStatement={handlePressStatement}
           onConfirmChapterTransition={handleConfirmChapterTransition}
+          onReturnToTitleMenu={() =>
+            setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }))
+          }
         />
       </main>
 
@@ -1608,7 +1711,10 @@ export default function App() {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-display text-lg font-bold text-slate-100">
+                <h3
+                  onClick={handleSecretDevTap}
+                  className="font-display text-lg font-bold text-slate-100 select-none"
+                >
                   Neustart wählen
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
@@ -1669,20 +1775,34 @@ export default function App() {
                     Direkt zum Hauptverfahren · ab Kommissar Marston
                   </div>
                 </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
-                  className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
-                >
-                  <div className="text-xs font-semibold">
-                    Zu Akt 2.4 springen (Eleonore im Zeugenstand)
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
-                    Direkt ab Tag 4 · Abend & danach Akt 2.5
-                  </div>
-                </button>
-              )}
+              ) : devShortcutsUnlocked ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => restoreCheckpoint(createCreteAct22Checkpoint(), true)}
+                    className="w-full text-left px-4 py-2.5 bg-amber-950/50 hover:bg-amber-900/50 border border-amber-500/40 text-amber-200 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <div className="text-xs font-semibold">
+                      Zu Akt 2.2 springen (Tag 4 · Mittag)
+                    </div>
+                    <div className="text-[11px] text-amber-300/75 mt-0.5">
+                      Entwickler-Shortcut · ab Krankenstation / Tatzeit-Ermittlung
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
+                    className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <div className="text-xs font-semibold">
+                      Zu Akt 2.4 springen (Eleonore im Zeugenstand)
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
+                      Direkt ab Tag 4 · Abend & danach Akt 2.5
+                    </div>
+                  </button>
+                </>
+              ) : null}
 
               <button
                 type="button"

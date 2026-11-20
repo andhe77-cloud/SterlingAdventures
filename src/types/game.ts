@@ -6,7 +6,8 @@ export type Emotion =
   | 'sweating'
   | 'thinking'
   | 'facepalm'
-  | 'headshake';
+  | 'headshake'
+  | 'grumpy';
 
 export type PortraitAnimation =
   | 'facepalm'
@@ -126,6 +127,8 @@ export interface ChapterTransition {
   unlocksLocations?: string[];
   locksLocations?: string[];
   setsFlag?: string;
+  isComingSoon?: boolean;
+  comingSoonNote?: string;
   nextIntroLines: DialogLine[];
 }
 

@@ -108,8 +108,18 @@ export const CRETE_CASE: GameCase = {
       lines: [
         {
           speakerId: 'maya',
+          emotion: 'thinking',
+          text: 'Warte mal, Nate… egal, wen wir auf den oberen Decks gefragt haben – überall heißt es nur noch, alle Offiziere seien Hals über Kopf nach ganz unten gelaufen.',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          text: 'Und auf dem Sicherheits-Terminal hat genau ein Bereich geblinkt: das Unterdeck. Irgendwo dort unten liegt also der Grund, warum wir nicht von Bord dürfen.',
+        },
+        {
+          speakerId: 'maya',
           emotion: 'confident',
-          text: 'Nate! Auf allen oberen Decks heißt es, Kommissar Marston sei hinunter zur Arrestzelle gestürzt! Wir können jetzt endlich dorthin reisen!',
+          text: 'Wenn sonst niemand oben mehr durchgelassen wird, bleibt eigentlich nur noch ein Weg: Wir gehen direkt hinunter ins Unterdeck zur Arrestzelle und sehen selbst nach, was Marston dort vor uns versteckt!',
         },
       ],
     },
@@ -225,60 +235,159 @@ export const CRETE_CASE: GameCase = {
     {
       speakerId: 'maya',
       emotion: 'confident',
-      text: 'Tag 4, Morgen! Schau nur aus dem Hafenfenster, Nate – Heraklion liegt direkt vor uns! Endlich raus aus dem Anzug und rein in die Sandalen!',
+      text: 'Tag 4, Morgen! Nate, schau doch mal raus durch die großen Fenster – Heraklion! Weiße Häuser, strahlend blauer Himmel, kein einziger Gerichtssaal weit und breit!',
     },
     {
       speakerId: 'nate',
       emotion: 'confident',
-      text: 'Und kein einziges Kreuzverhör mehr bis zum Rückflug. Komm, schnappen wir uns unsere Taschen und gehen…',
+      text: 'Ich kann’s kaum glauben. Gestern Abend noch Kreuzverhör im Ballsaal, und heute Morgen riecht die Luft endlich nach Hafen, Salz und starkem griechischem Kaffee.',
+    },
+    {
+      speakerId: 'maya',
+      emotion: 'confident',
+      sfx: 'bag_rummage',
+      text: 'Und ich bin vorbereitet! Ich hab schon meinen Sonnenhut, drei Strandhandtücher, einen historischen Reiseführer für Knossos und eine XXL-Flasche Sonnencreme dabei!',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'sweating',
+      text: 'Das passt alles ernsthaft in diese eine Umhängetasche?! Na gut… dann schnappen wir unsere Koffer und gehen endlich über die Gangway an Land…',
     },
     {
       speakerId: 'captain',
       emotion: 'neutral',
       sfx: 'alarm',
       shake: true,
-      text: 'BORDDURCHSAGE! Alle Passagiere bleiben augenblicklich an Deck! Die Gangway ist bis auf Weiteres geschlossen! Früher auf der alten MS Poseidon hätte es so ein Tohuwabohu gar nicht gegeben!',
+      text: 'BORDDURCHSAGE! Hier spricht Kapitän Brammer! Alle Passagiere treten augenblicklich von der Gangway zurück und bleiben bis auf Weiteres an Bord!',
+    },
+    {
+      speakerId: 'captain',
+      emotion: 'neutral',
+      text: 'Die Hafenausgänge werden mit sofortiger Wirkung verriegelt. Halten Sie die Treppenhäuser zum Unterdeck frei und warten Sie weitere Anweisungen auf den Promenaden ab.',
+    },
+    {
+      speakerId: 'maya',
+      emotion: 'shocked',
+      text: 'Äh… wie bitte?! Verriegelt?! Nate, wir stehen zehn Meter vor dem Festland!',
     },
     {
       speakerId: 'andrew',
+      emotion: 'grumpy',
+      text: 'Das darf doch wohl nicht wahr sein!! Schon wieder gesperrt?! Ich hab’s euch zu Hause hundertmal gesagt: Wir fahren in die Berge zum Wandern! Kein Hafenamt, keine verschlossenen Türen, nur Kuhglocken und klare Bergluft!',
+    },
+    {
+      speakerId: 'eleonore',
       emotion: 'neutral',
-      text: 'Das darf doch wohl nicht wahr sein!! Schon wieder gesperrt?! Ich hab euch allen gesagt: Wir fahren in die Berge zum Wandern! Kein Seegang, keine verschlossenen Türen, nur frische Bergluft!',
+      text: 'Jetzt reg dich doch nicht gleich so auf, Andrew, es gibt bestimmt nur irgendeine kleine Zollkontrolle oder…',
     },
     {
       speakerId: 'eleonore',
       emotion: 'shocked',
       animation: 'shock',
-      text: 'Moment… stopp mal!! Andrew! Kinder! Schaut doch mal, wer da steht!! Das ist Nate Sterling – der Star-Verteidiger aus den Bord-Nachrichten gestern!!',
-    },
-    {
-      speakerId: 'conrad',
-      emotion: 'smug',
-      text: 'Boah, cool!! Hat der echt gestern den Oberkellner überführt?! Darf ich mal an deinem Sakko ziehen, ob da ein echtes Anwaltsabzeichen drunter hängt?!',
-    },
-    {
-      speakerId: 'andrew',
-      emotion: 'neutral',
-      text: 'Conrad, Finger weg von fremden Leuten! Eleonore, warum hört der Junge schon wieder kein Wort? Du hast ihn komplett so verzogen!',
-    },
-    {
-      speakerId: 'eleonore',
-      emotion: 'neutral',
-      text: 'ICH?! Wer hat ihm denn vorgestern drei Extra-Waffeln beim Frühstück erlaubt, weil „im Urlaub andere Regeln gelten“?!',
-    },
-    {
-      speakerId: 'leo',
-      emotion: 'smug',
-      text: 'Haha, hier geht’s ja schon wieder rund. Komm, Rick – wetten, wir kriegen raus, wo die Security hinrennt, noch bevor Papa fertig gemeckert hat?',
-    },
-    {
-      speakerId: 'rick',
-      emotion: 'smug',
-      text: 'Top, die Wette gilt! Und wenn wir unterwegs einen Abkürzungs-Trick finden, umso besser!',
+      sfx: 'evidence_chime',
+      text: 'Moment… stopp mal!! Andrew! Kinder!! Schaut doch mal, wer da direkt neben uns an der Reling steht!! DEN kenn ich doch aus dem Bord-Fernsehen!!',
     },
     {
       speakerId: 'nate',
       emotion: 'sweating',
-      text: '(Eine ganze Großfamilie mitten in einer Hafenblockade… Komm, Maya – suchen wir auf allen offenen Decks nach Kommissar Marston, um herauszufinden, was hier überhaupt los ist!)',
+      text: 'Äh… guten Morgen? Haben wir uns schon einmal gesehen?',
+    },
+    {
+      speakerId: 'eleonore',
+      emotion: 'confident',
+      text: 'Sie sind Mr. Nate Sterling! Der Strafverteidiger von gestern Abend auf Bord-Kanal 4! Wie Sie diesen Kellner mit dem Weinglas in die Enge getrieben haben… sagen Sie bloß, Sie ermitteln hier schon wieder?!',
+      choices: [
+        {
+          label: '„Ich bin heute eigentlich nur ganz normal im Urlaub…“',
+          nextLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Ehrlich gesagt wollte ich heute einfach nur in Sandalen über Kreta schlendern und keinen einzigen Tatort mehr sehen.',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'confident',
+              text: 'Hihi, genau so reden bescheidene Hauptcharaktere immer kurz vor dem nächsten Kapitel!',
+            },
+          ],
+        },
+        {
+          label: '„Ein guter Verteidiger bleibt eben immer wachsam!“',
+          nextLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              text: 'Sagen wir so: Wenn plötzlich alle Türen dichtgemacht werden, juckt es berufsbedingt schon ein bisschen in den Fingern.',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'shocked',
+              text: 'Oh!! Andrew, hast du diese Entschlossenheit gehört?! Wie in Teil 1!!',
+            },
+          ],
+        },
+        {
+          label: '„Pssst! Sagen Sie’s nicht dem Staatsanwalt, ich will nur ein Eis.“',
+          nextLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Bitte verraten Sie niemanden von der Crew, dass ich überhaupt noch ein Anwaltsabzeichen in der Tasche habe…',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Keine Sorge, mit doppeltem Schokoeis in der Hand tarnt dich niemand als Ermittler!',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      speakerId: 'conrad',
+      emotion: 'smug',
+      text: 'Boah, cool!! Bist du echt ein richtiger Anwalt?! Darf ich mal an deinem Sakko ziehen, ob da drunter ein geheimes Detektiv-Abzeichen klebt?!',
+    },
+    {
+      speakerId: 'andrew',
+      emotion: 'grumpy',
+      text: 'Conrad! Finger weg von fremden Anzügen, sonst gibt’s drei Tage kein Eis! Eleonore, warum hört der Junge wieder auf kein einziges Wort? Du hast ihn komplett so verzogen!',
+    },
+    {
+      speakerId: 'eleonore',
+      emotion: 'neutral',
+      text: 'ICH?! Wer hat ihm denn vorgestern beim Abendbuffet zugenickt, als er seine Gummibärchen in den Schokobrunnen getunkt hat, weil „im Urlaub andere Gesetze gelten“?!',
+    },
+    {
+      speakerId: 'leo',
+      emotion: 'smug',
+      text: 'Haha, läuft ja wieder super bei uns. Komm, Rick – wetten, wir kriegen schneller raus, warum die Security hier rumrennt, als Papa bis zehn zählen kann?',
+    },
+    {
+      speakerId: 'rick',
+      emotion: 'smug',
+      text: 'Die Wette gilt! Und wer zuerst einen echten Polizisten sieht, sucht sich heute Nachmittag den Nachtisch für beide aus!',
+    },
+    {
+      speakerId: 'conrad',
+      emotion: 'smug',
+      text: 'Ich komm mit!! Ich will auch einen echten Polizeiwagen sehen!',
+    },
+    {
+      speakerId: 'andrew',
+      emotion: 'neutral',
+      text: 'Bleib sofort hier, Conrad!! … Entschuldigen Sie dieses Familienchaos, Mr. Sterling. Aber wenn Sie schon dieser berühmte TV-Anwalt sind – finden Sie doch bitte heraus, wer hier den Ausgang blockiert!',
+    },
+    {
+      speakerId: 'maya',
+      emotion: 'thinking',
+      text: 'Also ich mag die ja irgendwie… Aber im Ernst, Nate: Hier scheint wirklich etwas Großes im Gange zu sein. Und von Detective Marston oder Staatsanwalt von Falk fehlt jede Spur.',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'thinking',
+      text: 'Stimmt. Irgendjemand muss wissen, warum plötzlich alle Ausgänge dicht sind. Schauen wir uns erst einmal auf den offenen Decks und in den Salons um, Maya – vielleicht erfahren wir dort, wo Marston abgeblieben ist.',
     },
   ],
   characters: {
@@ -309,7 +418,10 @@ export const CRETE_CASE: GameCase = {
       role: 'Genervter Familienvater',
       bio: 'Leicht gereizter Familienvater, der Kreuzfahrten längst satt hat und eigentlich viel lieber auf einem Berggipfel stehen würde.',
       accentColor: '#f97316',
-      portraitUrl: '/src/assets/images/sprite_andrew_higginson_1795164436947.jpg',
+      portraitUrl: '/src/assets/images/sprite_andrew_friendly_1795181599060.jpg',
+      portraits: {
+        grumpy: '/src/assets/images/sprite_andrew_higginson_1795164436947.jpg',
+      },
       side: 'right',
     },
     eleonore: {
@@ -328,18 +440,18 @@ export const CRETE_CASE: GameCase = {
       id: 'leo',
       name: 'Leo Higginson',
       role: 'Älterer Sohn (Streich-Planer)',
-      bio: 'Grün-weiß gestreiftes Shirt, wacher Blick und ständig auf der Suche nach dem nächsten Schiffsstreich zusammen mit seinem Bruder Rick.',
+      bio: 'Trägt stolz sein Piraten-Shirt und ist ständig auf der Suche nach dem nächsten Schiffsstreich zusammen mit seinem Bruder Rick.',
       accentColor: '#22c55e',
-      portraitUrl: '/src/assets/images/sprite_leo_higginson_1795164437738.jpg',
+      portraitUrl: '/src/assets/images/sprite_rick_higginson_1795164437974.jpg',
       side: 'right',
     },
     rick: {
       id: 'rick',
       name: 'Rick Higginson',
       role: 'Älterer Sohn (Komplize)',
-      bio: 'Trägt stolz sein Piraten-Shirt und macht bei jedem noch so verrückten Streich auf dem Schiff sofort begeistert mit.',
+      bio: 'Grün-weiß gestreiftes Shirt, wacher Blick und macht bei jedem noch so verrückten Streich auf dem Schiff sofort begeistert mit.',
       accentColor: '#a855f7',
-      portraitUrl: '/src/assets/images/sprite_rick_higginson_1795164437974.jpg',
+      portraitUrl: '/src/assets/images/sprite_leo_higginson_1795164437738.jpg',
       side: 'right',
     },
     conrad: {
@@ -696,8 +808,23 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'thinking',
+              text: 'Die ganze Gangway wurde tatsächlich mit gelb-schwarzem Absperrband dichtgemacht. Zwei stämmige Matrosen stehen davor und lassen nicht einmal die Kofferträger durch.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              text: 'Und schau mal ganz nach unten auf den Kai, Nate! Da blinkt doch blaues Licht – mindestens zwei Streifenwagen der griechischen Hafenpolizei sind schon vorgefahren!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Eine Zollkontrolle erklärt noch keine zwei Streifenwagen und eine komplette Ausgangssperre. Vor allem: Wo steckt eigentlich Detective Marston in so einem Moment?',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
               setsFlag: 'flag_c2_a1_promenade',
-              text: 'Die Gangway ist tatsächlich mit gelb-schwarzem Flatterband dichtgemacht. Unten am Pier warten schon griechische Streifenwagen… irgendetwas Ernstes ist unter Deck passiert.',
+              text: 'Der Steward da vorn hat auf meine Frage nur nervös geschluckt und in Richtung der unteren Decks genickt… Schauen wir auf jeden Fall auch noch im Musiksalon und im VIP-Salon nach!',
             },
           ],
         },
@@ -711,9 +838,29 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'conrad',
+              emotion: 'smug',
+              text: 'Boah, guckt mal, da unten am Steg schwimmt ein riesiger Fisch!! Oder ist das ’n kleiner Hai?!',
+            },
+            {
+              speakerId: 'andrew',
+              emotion: 'grumpy',
+              text: 'Conrad! Runter von der untersten Relingstange, sofort!! Wie oft hab ich dir gesagt, du sollst dich hier nicht halb drüberhängen?!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Hoppla – hab ihn am Rucksackträger. Alles gut, kleiner Mann, von hier oben sieht man die Fische doch genauso gut.',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'confident',
+              text: 'Oh, danke, Mr. Sterling! Schnelle Reflexe wie bei einem guten Verteidiger! Andrew, siehst du, man muss nur freundlich mit ihm reden!',
+            },
+            {
               speakerId: 'andrew',
               emotion: 'neutral',
-              text: 'Schöne Aussicht, sicher… bringt uns aber auch nicht ins Hotel! Schauen Sie bitte auch in den anderen Salons nach, wo Ihr Herr Kommissar steckt!',
+              text: 'Klar, in drei Minuten hängt er wieder dran… Ach, Mr. Sterling, schauen Sie lieber in den Salons nach, was hier los ist – sonst drehe ich hier an Deck noch durch!',
             },
           ],
         },
@@ -721,25 +868,127 @@ export const CRETE_CASE: GameCase = {
       talkTopics: [
         {
           id: 'higginson_was_ist_los',
-          title: 'Familie Higginson: Was ist hier passiert?',
+          title: 'Familie Higginson: Was habt ihr beobachtet?',
           speakerId: 'eleonore',
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'nate',
+              emotion: 'neutral',
+              text: 'Sagen Sie mal, Sie standen ja schon recht früh an der Reling – haben Sie gesehen, wann und warum die Crew die Gangway plötzlich abgeriegelt hat?',
+            },
+            {
               speakerId: 'eleonore',
               emotion: 'confident',
               setsFlag: 'flag_c2_a1_promenade',
-              text: 'Wir standen ganz vorn an der Reling, als plötzlich alle Stewards losrannten! Wenn Sie mich fragen, Mr. Sterling: Das riecht förmlich nach einem neuen Fall – genau wie damals in Fall 2 von…',
+              text: 'Oh ja! Wir wollten uns die besten Plätze für die Hafeneinfahrt sichern – und ich hab zu Andrew noch gesagt: „Den da kenn ich doch aus dem Bord-Fernsehen!“, als Sie vorhin um die Ecke kamen!',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'shocked',
+              text: 'Kurz nach acht rannten plötzlich drei Sicherheitsoffiziere kreidebleich an uns vorbei zur Treppe nach unten! Ich hab sofort zu Andrew gesagt: „Schatz, das riecht nach Fall 2!“',
             },
             {
               speakerId: 'andrew',
-              emotion: 'neutral',
-              text: 'Eleonore, bitte! Der Mann hat Urlaub – genau wie wir, bevor hier alles zugesperrt wurde! Conrad, hör auf, am Rettungsring zu schaukeln!',
+              emotion: 'grumpy',
+              text: 'Und ich hab zum zehnten Mal geantwortet, dass ein Urlaub KEINE Kriminalserie ist! Wir hätten ins Allgäu fahren sollen – auf einer Alm sperrt niemand morgens um acht die Wandertür ab!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Der arme Mann seufzt ja fast so laut wie das Nebelhorn… Was sage ich ihm am besten?)',
+              choices: [
+                {
+                  label: '„Da haben Sie recht – auf einer Alm gibt’s keinen Hafenalarm.“',
+                  nextLines: [
+                    {
+                      speakerId: 'andrew',
+                      emotion: 'neutral',
+                      text: 'Danke!! Endlich mal jemand mit klarem Menschenverstand hier an Bord!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Immerhin wartet hier unten statt Steigungen das Frühstücksbuffet!“',
+                  nextLines: [
+                    {
+                      speakerId: 'andrew',
+                      emotion: 'neutral',
+                      text: 'Hm… na schön, das Rührei mit Speck heute früh war tatsächlich gar nicht so verkehrt.',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Ach, nehmen Sie es sportlich, Mr. Higginson – ein Schiff voller Geheimnisse ist doch fast noch spannender als Kühe auf einer Wiese!',
             },
             {
               speakerId: 'conrad',
               emotion: 'smug',
-              text: 'Ich guck doch nur, ob da unten Fische schwimmen!!',
+              text: 'Hast du denn in deiner riesigen Tasche auch Handschellen oder eine echte Detektiv-Lupe dabei, Fräulein Maya?!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              sfx: 'bag_rummage',
+              text: 'Hahaha, die Lupe hab ich gestern wieder eingepackt, ja – aber die bleibt schön geheim, bis wir wirklich einen Hinweis finden!',
+            },
+            {
+              speakerId: 'andrew',
+              emotion: 'grumpy',
+              text: 'Conrad, jetzt hör auf, fremde Damen nach ihrem Tascheninhalt auszufragen! Wo bleiben eigentlich Leo und Rick schon wieder? Eleonore, die zwei hecken doch garantiert wieder irgendeinen Unfug aus!',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'neutral',
+              text: 'Lass sie doch ein bisschen herumstromern, Andrew – sie haben schließlich Ferien! Und solange sie nichts kaputtmachen…',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Sicherheitsoffiziere, die kreidebleich nach unten rennen, und Hafenpolizei am Kai… Klingt leider nach deutlich mehr als nur verlorenem Gepäck. Gehen wir die anderen Salons abklappern, Maya!)',
+            },
+          ],
+        },
+        {
+          id: 'dimitri_ansprechen',
+          title: 'Kommissar Dimitri: Direkt ansprechen',
+          speakerId: 'dimitri',
+          requiredFlag: 'flag_c2_a1_rauswurf',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'neutral',
+              text: 'Entschuldigen Sie, Kommissar Dimitri – sprechen Sie vielleicht ein wenig Englisch oder ein paar Brocken Deutsch? Ich würde gern verstehen, was Sie von mir erwarten.',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Α, κύριε Στέρλινγκ! Ναι, βεβαίως, ακούστε με προσεκτικά: η υπόθεση στο καράβι έχει πολλές σκιές και κανένας αξιωματικός δεν μου λέει όλη την αλήθεια για το βράδυ!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Χρειαζόμαστε καθαρό μυαλό, καλό ελληνικό καφέ και απόλυτη διαφάνεια πριν υπογράψω οποιοδήποτε χαρτί για το λιμεναρχείο του Ηρακλείου!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Ελάτε μαζί μου, θα ελέγξουμε τα πάντα βήμα-βήμα και μετά θα κεράσω τζατζίκι στην παραλία!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: 'Ähm… hast du diesmal irgendwas verstanden? Ich glaub, am Schluss klang ein Wort fast wie „Zaziki“ – oder vielleicht auch „Zelle“?',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Kein einziges Wort. Aber er lächelt und deutet auf seine Dienstmarke… Fragen wir wohl doch besser nochmal Kapitän Brammer, was er genau von uns will.',
             },
           ],
         },
@@ -751,40 +1000,131 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_dimitri_weg',
           lines: [
             {
-              speakerId: 'dimitri',
-              emotion: 'confident',
-              text: 'Είναι απλό, Καπετάνιε! Ο δικηγόρος αποκάλυψε την αλήθεια στο πλοίο. Θέλω μόνο εκείνον να με βοηθήσει να βρούμε την ώρα θανάτου!',
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Entschuldigen Sie, Kapitän Brammer – können Sie mir mal kurz übersetzen, was Kommissar Dimitri da eben genau von mir wollte? Er ist doch gerade erst vom Hafen an Bord gekommen!',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              text: 'Er hat Ihren Prozess gestern im Bord-Fernsehen gesehen. Vertraut nur Ihnen. Früher hätten die Griechen keinen Rechtsanwalt gefragt, aber naja.',
+              text: 'Er will Sie bei der Sache dabei haben. Ganz einfach.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Aber woher weiß er überhaupt, wer ich bin? Er konnte unsere Verhandlung gestern ja kaum im Bord-Fernsehen verfolgt haben.',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Κύριε Στέρλινγκ, δεν σας είδα στην τηλεόραση – δεν έχω καν πρόσβαση στο κλειστό κύκλωμα του πλοίου! Όμως το πρωί ο καπετάνιος μού έστειλε το επίσημο ημερολόγιο και τη σύνοψη της χθεσινής δίκης!',
+            },
+            {
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: 'Ich musste der Hafenbehörde vor dem Anlegen das offizielle Bord-Protokoll von gestern rüberfunken. Ihr Name stand fett drin – weil Sie als Einziger den wahren Täter statt dem nächstbesten Sündenbock überführt haben.',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Ο εισαγγελέας και ο επιθεωρητής φωνάζουν όλη την ώρα και βιάζονται να κλείσουν το κελί. Όταν διάβασα πώς σώσατε έναν αθώο χθες, κατάλαβα ότι είστε ο μόνος ψύχραιμος εδώ μέσα!',
+            },
+            {
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: 'Er sagt, Ihre eigenen Schiffsleute reden da unten viel zu nervös um den heißen Brei. Ihnen traut er. Denen nicht.',
             },
             {
               speakerId: 'maya',
               emotion: 'confident',
-              text: 'Komm, Nate – bevor wir ewig an Bord festsitzen, suchen wir eben gemeinsam die genaue Tatzeit! Und danach gehen wir in Heraklion das größte Gyros essen!',
+              text: 'Oh! Hörst du das, Nate? Kommissar Dimitri möchte dich offiziell als unabhängigen Blick an seiner Seite haben!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Moment mal, ganz langsam, Maya… Ich bin Strafverteidiger im Urlaub und kein Hilfsermittler für die griechische Hafenpolizei! Außerdem hast du ja gesehen, wie geladen Staatsanwalt von Falk schon jetzt auf mich ist.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Und genau DAS macht mir Sorgen, Nate! Hast du gehört, was Falk dir eben unten im Gang an den Kopf geworfen hat? Er schiebt die ganze Schuld an Arthurs Tod auf dein Urteil von gestern!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Hm… stimmt schon. Ich hab Arthur Morgan gestern überführt – und keine zwölf Stunden später stirbt er genau in dieser Arrestzelle, während Marston und Falk am liebsten sofort die Tür zuschweißen würden.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Und abgesehen davon: Von Bord lässt uns heute Vormittag sowieso niemand! Also warum sollen wir uns nicht wenigstens gemeinsam mit Dimitri anschauen, was eigentlich passiert ist? Wenn alles ein tragischer Unfall war, gehen wir danach beruhigt an den Strand!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Eigentlich wollte ich heute Urlaub machen – aber einfach umdrehen und abtauchen?)',
+              choices: [
+                {
+                  label: '„Stimmt ja – von Bord kommen wir jetzt ohnehin nicht.“',
+                  nextLines: [
+                    {
+                      speakerId: 'nate',
+                      emotion: 'sweating',
+                      text: 'Recht hast du… solange die Gangway zu bleibt, können wir unsere Zeit genauso gut sinnvoll nutzen.',
+                    },
+                  ],
+                },
+                {
+                  label: '„Falk schiebt mir die Schuld zu – das lasse ich nicht stehen!“',
+                  nextLines: [
+                    {
+                      speakerId: 'nate',
+                      emotion: 'confident',
+                      text: 'Ich lasse mir sicher nicht nachsagen, ich hätte gestern jemanden leichtfertig in den Tod geschickt!',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Παρακαλώ, κύριε Στέρλινγκ! Μόνο λίγη βοήθεια μέχρι να δούμε καθαρά τα γεγονότα!',
+            },
+            {
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: 'Er bittet höflich. Bis Mittag hält er Ihnen den Staatsanwalt vom Hals.',
             },
             {
               speakerId: 'nate',
               emotion: 'confident',
-              text: 'Einverstanden, Maya. Auf zum Kapitän wegen der Schiffsposition, zur Krankenstation und wieder runter zur Arrestzelle!',
+              text: 'Na gut… versprochen ist erst einmal nichts, aber wegschauen kann ich bei der Sache auch nicht. Fangen wir ganz ruhig an und hören uns erst einmal an, was die Leute hier an Bord überhaupt über die Nacht wissen.',
               completesChapter: {
                 completedChapterTitle: 'Akt 2.1 abgeschlossen',
                 completedTimeLabel: 'Tag 4 · Morgen beendet',
                 summary:
-                  'Nach dem Chaos mit Familie Higginson und dem Rauswurf an der Zelle beauftragt der griechische Kommissar Dimitri dich über den wortkargen Kapitän persönlich: Ermittle die genaue Tatzeit von Arthurs Tod!',
+                  'Nach dem Trubel mit Familie Higginson und dem Rauswurf vor Zelle 08 schaltet sich Kommissar Dimitri von der Hafenpolizei Heraklion ein. Dank Kapitän Brammers Funk-Protokoll vertraut er nur deinem Urteil – und Nate beschließt, erst einmal behutsam herauszufinden, was in der Nacht überhaupt geschehen ist.',
                 nextChapterId: 'c2_akt2_mittag',
                 nextLocationId: 'infirmary',
                 nextPhase: 'investigation',
                 nextTimeOfDay: 'tag',
                 unlocksLocations: ['infirmary', 'lifeboat_deck', 'brig_cell'],
-                nextButtonLabel: 'Weiter zu Tag 4 · Mittag (Tatzeit ermitteln)',
+                setsFlag: 'flag_c2_a1_angenommen',
+                isComingSoon: true,
+                nextButtonLabel: 'Demnächst: Tag 4 · Mittag (Akt 2.2)',
+                comingSoonNote: 'Akt 2.1 endet hier als Vorschau – an Akt 2.2 wird gerade weitergearbeitet.',
                 nextIntroLines: [
                   {
                     speakerId: 'maya',
                     emotion: 'thinking',
-                    text: 'Tag 4, Mittag! Die Krankenstation und das Rettungsboot-Deck stehen jetzt offen – lass uns zuerst bei Schiffsärztin Dr. Vance nach dem Todeszeitpunkt fragen!',
+                    setsFlag: 'flag_c2_a1_angenommen',
+                    text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation und das Rettungsboot-Deck für unsere Fragen offen stehen.',
+                  },
+                  {
+                    speakerId: 'nate',
+                    emotion: 'thinking',
+                    text: 'Gut – fangen wir ohne wilde Spekulationen bei der Schiffsärztin Dr. Vance an. Sie müsste den Zustand von Arthur heute Morgen ja als Erste gesehen haben.',
                   },
                 ],
               },
@@ -795,24 +1135,34 @@ export const CRETE_CASE: GameCase = {
           id: 'captain_seemeilen',
           title: 'Kapitän Brammer: Wann erreichte das Schiff Kreta?',
           speakerId: 'captain',
-          requiredFlag: 'flag_c2_a1_rauswurf',
+          requiredFlag: 'flag_c2_a1_angenommen',
           hideIfFlag: 'flag_c2_dimitri_weg',
           lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Eine nautische Frage am Rande, Kapitän: Ab wann genau lagen wir heute Morgen eigentlich im griechischen Seegebiet vor Kreta?',
+            },
             {
               speakerId: 'captain',
               emotion: 'neutral',
               unlocksEvidence: 'bruecken_log',
-              text: 'Die griechische 12-Meilen-Zone haben wir exakt um 05:45 Uhr morgens passiert. Alles davor war offene internationale See. Hier, mein Brücken-Logbuch!',
+              text: 'Die griechische 12-Meilen-Zone haben wir heute früh um exakt 05:45 Uhr morgens überquert. Alles davor war offene internationale See. Steht alles sauber hier in meinem Brücken-Logbuch.',
             },
             {
               speakerId: 'dimitri',
               emotion: 'confident',
-              text: 'Πολύ καλά! Αν ο θάνατος συνέβη μετά τις 05:45, η υπόθεση ανήκει στην ελληνική δικαιοσύνη!',
+              text: 'Πολύ καλά, καπετάνιε! Σημειώστε το ακριβώς: αν το περιστατικό έγινε μετά τις 05:45 στα ελληνικά χωρικά ύδατα, η υπόθεση ανήκει στην Εισαγγελία Ηρακλείου. Αν έγινε νωρίτερα… δεν έχω καμία δικαιοδοσία!',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              text: 'Ab 05:45 Uhr ist er zuständig. Davor nicht.',
+              text: 'Ab 05:45 Uhr ist Kreta zuständig. Davor hat er auf seinem eigenen Papier nichts mehr damit zu tun.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Klingt ganz so, als würde genau diese Uhrzeit noch verdammt wichtig werden, falls irgendetwas nicht zur offiziellen Version passt…',
             },
           ],
         },
@@ -825,7 +1175,7 @@ export const CRETE_CASE: GameCase = {
           lines: [
             {
               speakerId: 'andrew',
-              emotion: 'neutral',
+              emotion: 'grumpy',
               setsFlag: 'flag_c2_a3_start',
               text: 'Mr. Sterling! Endlich sind Sie wieder da! Conrads blauer Rucksack wurde vorhin einfach gestohlen!! Irgendein Kerl hat ihn weggerissen und ist weggerannt!',
             },
@@ -880,7 +1230,7 @@ export const CRETE_CASE: GameCase = {
             },
             {
               speakerId: 'andrew',
-              emotion: 'neutral',
+              emotion: 'grumpy',
               text: 'Siehst du, Eleonore?! DAS hast du ihm so beigebracht!!',
             },
             {
@@ -930,7 +1280,7 @@ export const CRETE_CASE: GameCase = {
       id: 'music_salon',
       name: 'Musiksalon',
       subtitle: 'Konzertflügel & Ausgang zu den Decks',
-      backgroundUrl: '/src/assets/images/cruise_music_salon_1795089043481.jpg',
+      backgroundUrl: '/src/assets/images/case2_music_salon_day_1795186993338.jpg',
       charactersPresent: [
         {
           characterId: 'maya',
@@ -946,10 +1296,25 @@ export const CRETE_CASE: GameCase = {
           height: 28,
           lines: [
             {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Wie merkwürdig still es hier im Musiksalon ist… Gestern Abend hat hier noch die Abendgala gespielt, und jetzt stehen auf dem Tisch halbvolle Kaffeetassen, als wären die Gäste mitten im Frühstück aufgestanden.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Schau mal auf den Konzertflügel, Nate – da liegt ein zerknitterter Dienstplan der Stewards. Jemand hat mit rotem Stift die gesamte Morgenbesatzung vom Frühstücksbuffet abgezogen.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Abgezogen? Wohin denn – etwa zu den Kabinen?',
+            },
+            {
               speakerId: 'maya',
               emotion: 'thinking',
               setsFlag: 'flag_c2_a1_music',
-              text: 'Hier drin ist alles leer, Nate. Ein Kellner an der Tür meinte gerade noch, Detective Marston und Staatsanwalt von Falk seien über die Treppen ganz nach unten gerannt!',
+              text: 'Nein, eher in den Service-Trakt! Ein Kellner an der Tür meinte gerade noch flüsternd, Detective Marston und Staatsanwalt von Falk seien vor zehn Minuten kreidebleich die hintere Treppe ganz nach unten gestürzt!',
             },
           ],
         },
@@ -962,10 +1327,48 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Hätte gedacht, Marston hält hier vielleicht ein kleines Briefing für die verunsicherten Passagiere ab – aber hier drinnen lässt sich kein einziger Offizier blicken.',
+            },
+            {
               speakerId: 'maya',
               emotion: 'thinking',
+              text: 'Kein Wunder. Ich hab vorhin den Barkeeper gefragt, der meinte nur: „Stellen Sie keine Fragen, Miss, heute Morgen stimmt unter Deck gar nichts.“ Danach hat er sofort alle Gläser weggeräumt.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Klingt gar nicht gut… Vor allem, wenn auch Staatsanwalt von Falk so früh am Morgen mit ihm unterwegs ist. Der Mann würde normalerweise niemals vor neun Uhr ohne frisch gebügelten Kragen irgendwo hinrennen.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              sfx: 'bag_rummage',
               setsFlag: 'flag_c2_a1_music',
-              text: 'Nein, nur ein paar aufgescheuchte Stewards – die meinten, Marston und Falk hätten sich sofort nach dem Alarm ganz nach unten zurückgezogen.',
+              text: 'Und ich hatte meinen großen Strandhut schon ganz oben griffbereit in die Tasche gestopft… Na komm, schauen wir mal weiter, ob im VIP-Salon jemand Genaueres weiß!',
+              choices: [
+                {
+                  label: '„Kopf hoch – heute Nachmittag liegen wir bestimmt am Strand!“',
+                  nextLines: [
+                    {
+                      speakerId: 'maya',
+                      emotion: 'confident',
+                      text: 'Dein Wort in Kretas Ohren, Nate! Dann bleibt mein Sonnenhut eben noch ein Stündchen auf Standby!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Wetten, in deiner Tasche steckt sogar ein Schlauchboot?“',
+                  nextLines: [
+                    {
+                      speakerId: 'maya',
+                      emotion: 'confident',
+                      text: 'Hey!! Nur Schwimmflügel und ein kleiner Sonnenschirm – ich bin schließlich für jede Hafenlage vorbereitet!',
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
@@ -983,7 +1386,7 @@ export const CRETE_CASE: GameCase = {
       id: 'vip_salon',
       name: 'VIP-Salon',
       subtitle: 'Tageslicht · Oberdeck-Foyer',
-      backgroundUrl: '/src/assets/images/cruise_suite_day_clean_1795093696232.jpg',
+      backgroundUrl: '/src/assets/images/case2_vip_salon_day_1795181599051.jpg',
       charactersPresent: [
         {
           characterId: 'maya',
@@ -993,16 +1396,31 @@ export const CRETE_CASE: GameCase = {
         {
           id: 'c2_a1_security_pult',
           label: 'Bord-Funk-Konsole',
-          x: 62,
-          y: 35,
-          width: 24,
-          height: 24,
+          x: 55,
+          y: 31,
+          width: 14,
+          height: 22,
           lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Hier im VIP-Salon hat man das Gefühl, die Zeit sei stehen geblieben… Schau mal, da drüben blinkt noch die kleine Sicherheits-Konsole neben der Tür.',
+            },
             {
               speakerId: 'nate',
               emotion: 'thinking',
+              text: 'Alle oberen Decks sind auf Grün… bis auf ein einziges blinkendes Warnsignal ganz unten auf Deck -2.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              text: 'Lies mal die Zeile daneben, Nate! „PRIORITÄT ROT · UNTERDECK · ARRESTZELLE 08“!!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'shocked',
               setsFlag: 'flag_c2_a1_vip',
-              text: 'Sieh mal auf das kleine Sicherheits-Terminal am Eingang: Alle Warnleuchten blinken nur an einem einzigen Punkt – „Unterdeck · Arrestzelle 08“!',
+              text: 'Arrestzelle 08… Dort unten wurde doch gestern Abend nach der Verhandlung Arthur Morgan eingesperrt! Was um alles in der Welt ist heute Nacht in dieser Zelle passiert?!',
             },
           ],
         },
@@ -1032,10 +1450,25 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Seltsam. Hier im VIP-Bereich hält sich sonst immer mindestens ein Sicherheitsoffizier auf, falls wichtige Gäste an Bord sind.',
+            },
+            {
               speakerId: 'maya',
               emotion: 'thinking',
+              text: 'Stimmt – kein einziger Mann in Uniform weit und breit. Selbst die kleinen Funkgeräte auf dem Tresen wurden einfach liegen gelassen, als alle weggerufen wurden.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Und auf der Status-Anzeige leuchtet ausschließlich der Zellentrakt ganz unten im Rumpf auf.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
               setsFlag: 'flag_c2_a1_vip',
-              text: 'Der VIP-Salon ist menschenleer – aber schau mal rechts auf die Status-Konsole: Der ganze Notruf kam aus Arrestzelle 08 unten im Rumpf!',
+              text: 'Wenn wir wissen wollen, warum niemand an Land darf und was mit Arthur Morgan los ist, führt wohl leider kein Weg an diesem Zellentrakt vorbei…',
             },
           ],
         },
@@ -1079,38 +1512,78 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: 'Brrr… spürst du das, Nate? Hier unten im Stahlgang ist es plötzlich bitterkalt im Vergleich zum Sonnendeck oben…',
+            },
+            {
               speakerId: 'nate',
               emotion: 'shocked',
               sfx: 'tension',
-              text: 'Um Himmels willen… Arthur Morgans Zelle! Umgekippter Hocker, gelbe Tatort-Markierungen…',
+              text: 'Um Himmels willen… Arthur Morgans Arrestzelle! Gelbe Tatort-Markierungen #1 und #2 auf dem Boden, ein umgekippter Metallhocker – und die Zelle ist abgesperrt!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              text: 'Nate… heißt das etwa… Arthur ist in der Nacht hier unten…?!',
             },
             {
               speakerId: 'falk',
               emotion: 'shocked',
               shake: true,
-              text: 'WAS MACHEN SIE HIER UNTEN, STERLING?! Ist Ihnen eigentlich klar, was Ihr kleiner „Triumph“ gestern Abend ausgelöst hat?!',
+              text: 'WAS MACHEN SIE HIER UNTEN, STERLING?! Haben Sie hier nicht schon genug Schaden angerichtet?! Ist Ihnen überhaupt klar, was Ihr kleiner „Triumph“ gestern Abend ausgelöst hat?!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Staatsanwalt von Falk?! Moment – was ist hier heute Nacht mit meinem früheren Mandanten passiert?! Ich war gestern Abend selbst im Gerichtssaal, ich habe ein Recht zu erfahren…',
             },
             {
               speakerId: 'marston',
               emotion: 'sweating',
-              text: 'Raus hier, Nate! Sofort! Wegen Ihrer Anklage saß Arthur hier unten – jetzt herrscht Ausnahmezustand, und wir brauchen hier keine Zaungäste!',
+              text: 'Gar nichts haben Sie hier unten, Nate! Bitte gehen Sie jetzt sofort wieder nach oben an Deck! Wegen Ihrer Anklage von gestern saß Arthur hier – jetzt liegt er tot in unserer eigenen Obhut und die griechische Hafenpolizei steht vor der Gangway!',
+            },
+            {
+              speakerId: 'falk',
+              emotion: 'shocked',
+              text: 'Schaffen Sie diesen Zivilisten aus meinem Blickfeld, Detective! Und halten Sie gefälligst alle unbefugten Urlauber vom Zellentrakt fern!',
             },
             {
               speakerId: 'maya',
               emotion: 'shocked',
               setsFlag: 'flag_c2_a1_rauswurf',
               switchesLocationId: 'promenade',
-              text: 'Au backe, da fliegen wir direkt wieder vor die Tür! Oh, schau mal – da wartet schon der Kapitän… und wer ist der Mann in der griechischen Uniform?!',
+              text: 'Au backe, die zwei setzen uns ja hochkant wieder vor die Tür! Komm, Nate – ehe hier noch jemand Handschellen klickt… Oh! Da draußen an der Reling wartet schon der Kapitän – und wer ist der Mann in der blauen Uniform neben ihm?!',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              text: 'Früher wäre mir so ein Chaos auf keinem meiner Dampfer passiert. Na toll, da kommt auch schon die Hafenpolizei aus Heraklion.',
+              text: 'Na wunderbar. Früher hätte mir so ein Trauerspiel niemand auf eines meiner Schiffe gebracht. Herr Sterling – das hier ist Kommissar Dimitri von der Hafenpolizei Heraklion.',
             },
             {
               speakerId: 'dimitri',
               emotion: 'confident',
-              text: 'Καλημέρα σας! Κύριε Στέρλινγκ, άκουσα για την οξυδέρκειά σας στο χθεσινό δικαστήριο. Κανένας εδώ δεν τολμά να μιλήσει καθαρά. Σας χρειάζομαι δίπλα μου στην έρευνα!',
+              text: 'Καλημέρα σας, κύριε Στέρλινγκ! Επιτέλους σας βρίσκω! Μόλις ανέβηκα στο πλοίο από το λιμεναρχείο και ήδη επικρατεί απόλυτο χάος στους διαδρόμους!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Διάβασα το πρωί την έκτακτη αναφορά του καπετάνιου για τα χθεσινά γεγονότα. Οι αξιωματικοί εδώ κάτω μου κρύβουν την αλήθεια, τρέχουν πανικόβλητοι και δεν απαντούν σε καμία ερώτηση!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Η ελληνική αστυνομία χρειάζεται διαφάνεια και έναν ψύχραιμο μάρτυρα! Θέλω να έρθετε αμέσως μαζί μου για να ρίξουμε φως σε αυτή την περίεργη υπόθεση πριν χαθεί πολύτιμος χρόνος!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: 'Äh… Nate? Hast du davon auch nur ein einziges Wort verstanden? Ich glaube, ich hab bloß „Kalimera“ und deinen Nachnamen rausgehört…',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Keinen Schimmer. Klang entweder nach einer Standpauke oder nach einer riesigen Einladung. Warten wir ab, was der Kapitän uns übersetzt.',
             },
             {
               speakerId: 'captain',
@@ -1118,9 +1591,14 @@ export const CRETE_CASE: GameCase = {
               text: 'Sie sollen mitkommen.',
             },
             {
-              speakerId: 'maya',
+              speakerId: 'nate',
               emotion: 'sweating',
-              text: 'Äh… vierzig Sekunden griechischer Vortrag für „Sie sollen mitkommen“?! Frag den Kapitän lieber nochmal genauer, warum Dimitri ausgerechnet uns will!',
+              text: '… Das war jetzt ernsthaft die komplette Übersetzung?!',
+            },
+            {
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: 'Das Wesentliche. Fragen Sie ruhig noch nach, wenn Sie’s genauer wissen wollen.',
             },
           ],
         },
@@ -1204,32 +1682,67 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
           lines: [
             {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Detective Marston! Staatsanwalt von Falk! Was ist hier unten passiert – warum wird das ganze Schiff abgeriegelt?',
+            },
+            {
               speakerId: 'falk',
               emotion: 'shocked',
               shake: true,
-              text: 'RAUS HIER, STERLING!! Ihr letzter Mandant und seine ganze Verhaftung sind schuld an diesem Desaster! Sie haben in meiner Zelle nichts verloren!',
+              text: 'RAUS HIER, STERLING!! Ihr letzter Mandant und seine ganze Verhaftung sind schuld an diesem Desaster! Sie haben vor dieser Arrestzelle nicht das Geringste verloren!',
+            },
+            {
+              speakerId: 'marston',
+              emotion: 'sweating',
+              text: 'Bitte gehen Sie einfach zurück nach oben, Nate. Arthur hat die Nacht nicht überlebt – und genau jetzt steht schon die griechische Hafenpolizei vor der Tür. Es wird ohnehin nur unangenehme Fragen geben!',
             },
             {
               speakerId: 'maya',
               emotion: 'shocked',
               setsFlag: 'flag_c2_a1_rauswurf',
               switchesLocationId: 'promenade',
-              text: 'Schon verstanden, schon verstanden! Kommen Sie, Nate – draußen wartet der Kapitän mit einem Polizisten aus Kreta!',
+              text: 'Schon verstanden, schon verstanden! Kommen Sie, Nate, bevor er uns noch in die Nachbarzelle steckt… Oh! Schauen Sie mal draußen an der Treppe – da wartet der Kapitän mit einem Polizisten aus Kreta!',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              text: 'Früher hätte es so eine Unruhe nicht gegeben. Der Herr hier ist Kommissar Dimitri von der Hafenpolizei.',
+              text: 'Na wunderbar. Früher hätte es so eine Unruhe auf keinem meiner Schiffe gegeben. Herr Sterling – das hier ist Kommissar Dimitri von der Hafenpolizei Heraklion.',
             },
             {
               speakerId: 'dimitri',
               emotion: 'confident',
-              text: 'Καλημέρα σας! Κύριε Στέρλινγκ, παρακολούθησα τη χθεσινή σας δίκη. Είσαστε ο μόνος που δεν φοβάται την αλήθεια – συνεργαστείτε μαζί μου!',
+              text: 'Καλημέρα σας, κύριε Στέρλινγκ! Επιτέλους σας βρίσκω! Μόλις ανέβηκα στο πλοίο από το λιμεναρχείο και ήδη επικρατεί απόλυτο χάος στους διαδρόμους!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Μου έδωσαν το πρωί τη χθεσινή αναφορά του καπετάνιου. Όλοι εδώ κάτω πανικοβάλλονται, φωνάζουν χωρίς λόγο και δεν απαντούν καθαρά στις ερωτήσεις μου!',
+            },
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Χρειάζομαι έναν ανεξάρτητο και ψύχραιμο άνθρωπο δίπλα μου, αλλιώς δεν θα βγάλουμε άκρη μέχρι το βράδυ! Ελάτε μαζί μου τώρα!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: 'Ähm… Nate? Hast du davon auch nur ein einziges Wort verstanden? Ich glaube, es ging um das Schiff… oder um uns?',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'sweating',
+              text: 'Nicht den blassesten Schimmer. Er redet auf jeden Fall ziemlich dringend auf uns ein… Hören wir mal, was der Kapitän dazu sagt.',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
               text: 'Sie sollen mitkommen.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: '… Moment. Wirklich nur „Sie sollen mitkommen“?! Reden wir doch nochmal in Ruhe mit ihm – oder fragen wir den Kapitän, was genau hier gerade vor sich geht!',
             },
           ],
         },
