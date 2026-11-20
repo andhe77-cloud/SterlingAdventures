@@ -18,9 +18,11 @@ import type {
   GameCase,
   GameSaveState,
   LocationScene,
+  MiniGameId,
   ShoutType,
   TestimonyStatement,
 } from '../types/game';
+import { Case2MiniGame } from './Case2MiniGames';
 import { CharacterPortrait } from './CharacterPortrait';
 import { ShoutOverlay } from './ShoutOverlay';
 import { preloadCharacterSprites } from '../utils/chromaKey';
@@ -52,6 +54,9 @@ interface GameStageProps {
   onPressStatement: () => void;
   onConfirmChapterTransition: () => void;
   onReturnToTitleMenu: () => void;
+  activeMiniGameId: MiniGameId | null;
+  onCompleteMiniGame: (miniGameId: MiniGameId) => void;
+  onCancelMiniGame: () => void;
 }
 
 export function GameStage({
@@ -77,6 +82,9 @@ export function GameStage({
   onPressStatement,
   onConfirmChapterTransition,
   onReturnToTitleMenu,
+  activeMiniGameId,
+  onCompleteMiniGame,
+  onCancelMiniGame,
 }: GameStageProps) {
   const [imgError, setImgError] = useState(false);
   const currentLine = dialogQueue[0] ?? null;
@@ -187,10 +195,9 @@ export function GameStage({
     presentCharacters.length > 0;
 
   const showActiveSpeaker =
-    (Boolean(currentLine) || state.phase === 'court') &&
+    (Boolean(currentLine) || (state.phase === 'court' && investigationMenu !== 'inspect')) &&
     Boolean(activeSpeaker) &&
-    !state.pendingChapterTransition &&
-    investigationMenu !== 'inspect';
+    !state.pendingChapterTransition;
 
   const currentStatement =
     testimony && visibleStatements.length > 0
@@ -400,6 +407,15 @@ export function GameStage({
               )}
             </div>
           </div>
+        )}
+
+        {/* Active Mini-Game Overlay */}
+        {activeMiniGameId && (
+          <Case2MiniGame
+            miniGameId={activeMiniGameId}
+            onComplete={onCompleteMiniGame}
+            onCancel={onCancelMiniGame}
+          />
         )}
 
         {/* Shout Splash */}

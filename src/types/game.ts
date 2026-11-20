@@ -19,6 +19,8 @@ export type PortraitAnimation =
 
 export type ShoutType = 'EINSPRUCH!' | 'MOMENT MAL!' | 'VOLLTREFFER!' | 'NICHT SCHULDIG!';
 
+export type MiniGameId = 'cooling_pipes' | 'sea_chart' | 'dimitri_pantomime';
+
 export type SoundEffect =
   | 'blip'
   | 'gavel'
@@ -156,6 +158,7 @@ export interface DialogLine {
     wrongLines: DialogLine[];
   };
   choices?: DialogChoice[];
+  startsMiniGameId?: MiniGameId;
   triggersOutro?: boolean;
   winGame?: boolean;
 }

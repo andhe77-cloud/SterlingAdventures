@@ -378,14 +378,13 @@ export function CaseBinder({
                     <button
                       key={thoughtId}
                       type="button"
-                      onClick={() => !isDeduction && toggleThought(thoughtId)}
-                      disabled={isDeduction}
-                      className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                        isDeduction
-                          ? 'bg-amber-950/25 border-amber-600/40 cursor-default'
-                          : isSelected
-                            ? 'bg-blue-950/60 border-blue-400 cursor-pointer'
-                            : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 cursor-pointer'
+                      onClick={() => toggleThought(thoughtId)}
+                      className={`w-full text-left p-3 rounded-lg border transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'bg-blue-950/60 border-blue-400'
+                          : isDeduction
+                            ? 'bg-amber-950/25 border-amber-600/40 hover:border-amber-500/70'
+                            : 'bg-slate-950/50 border-slate-800 hover:border-slate-700'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -393,7 +392,11 @@ export function CaseBinder({
                           {node.title}
                         </span>
                         <span className="text-[11px] text-slate-400 shrink-0">
-                          {isDeduction ? 'Schlussfolgerung' : isSelected ? 'Ausgewählt' : 'Hinweis'}
+                          {isSelected
+                            ? 'Ausgewählt'
+                            : isDeduction
+                              ? 'Schlussfolgerung'
+                              : 'Hinweis'}
                         </span>
                       </div>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">

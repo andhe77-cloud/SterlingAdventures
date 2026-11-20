@@ -128,30 +128,37 @@ export const CRETE_CASE: GameCase = {
     {
       id: 'c2_a2_to_court',
       chapterId: 'c2_akt2_mittag',
-      requiredFlags: ['flag_c2_tatzeit_geloest'],
-      toast: 'Die wahre Tatzeit ist geknackt! Auf zur Anhörung im Ballsaal!',
+      requiredFlags: ['flag_c2_tatzeit_geloest', 'flag_c2_a2_bruecke_geloest'],
+      toast: 'Wahre Tatzeit & Seekarte abgeglichen! Auf zur Anhörung im Ballsaal!',
       lines: [
         {
           speakerId: 'maya',
           emotion: 'confident',
-          text: 'Das erklärt ALLES, Nate! Die eisige 9-°C-Kühlstörung ab 02:20 Uhr hat Dr. Vances Schätzung komplett verzerrt – der Vorfall geschah schon um 02:15 Uhr!',
+          text: 'Alles greift ineinander, Nate! Die eisige Abkühlung ab 03:00 Uhr hat Dr. Vances Schätzung komplett verzerrt – der Vorfall geschah schon viel früher, gegen 02:15 Uhr!',
         },
         {
           speakerId: 'nate',
           emotion: 'confident',
-          text: 'Und wenn ich mir Kapitän Brammers Logbuch anschaue… dann hat das gleich explosive Folgen für die Zuständigkeit! Ab in den Großen Ballsaal zu Kommissar Dimitri!',
+          text: 'Jetzt wissen wir auch, warum hier jemand die Uhrzeit unbedingt auf 07:30 Uhr biegen wollte: wegen des Hafeneinlaufs! Ab in den Großen Ballsaal zu Kommissar Dimitri, Dr. Vance – und Kapitän Brammer!',
           completesChapter: {
             completedChapterTitle: 'Akt 2.2 · Ermittlung abgeschlossen',
-            completedTimeLabel: 'Genaue Tatzeit ermittelt',
+            completedTimeLabel: 'Genaue Tatzeit & Motiv ermittelt',
             summary:
-              'Durch das 9-°C-Klimaprotokoll und Leo & Ricks Walkie-Talkie-Streich konntest du die angenommene Tatzeit (07:30 Uhr) um über fünf Stunden vorverlegen. Zeit für die Anhörung vor Kommissar Dimitri!',
+              'Durch Eleonores Barnaby-Einfall, die Kühlrohr-Diagnose (Temperaturänderung um 03:00 Uhr), Leo & Ricks 02:10-Uhr-Streich und die Hafenordnung § 14 samt Seekarte hast du alle Fakten gegen das verschleppte 07:30-Uhr-Protokoll zusammen.',
             nextChapterId: 'c2_akt2_mittag',
             nextLocationId: 'courtroom',
             nextPhase: 'court',
             nextTimeOfDay: 'tag',
             unlocksLocations: ['courtroom'],
-            nextButtonLabel: 'Weiter zur Anhörung (Dr. Vance & Dimitri)',
+            nextButtonLabel: 'Weiter zur Anhörung (Dr. Vance & Kapitän Brammer)',
             nextIntroLines: [
+              {
+                speakerId: 'pendelton',
+                emotion: 'neutral',
+                animation: 'slam',
+                sfx: 'gavel_double',
+                text: 'Ruhe im Großen Ballsaal! Kommissar Dimitri hat um eine außerordentliche Mittagsanhörung gebeten, bevor die griechische Hafenpolizei den Vorfall übernimmt.',
+              },
               {
                 speakerId: 'dimitri',
                 emotion: 'confident',
@@ -165,7 +172,7 @@ export const CRETE_CASE: GameCase = {
               {
                 speakerId: 'falk',
                 emotion: 'smug',
-                text: 'Mit Vergnügen, Käpt’n! Dr. Helena Vance wird in wenigen Sekunden bestätigen, dass wir uns beim Todeszeitpunkt längst unter griechischer Hafenhoheit befanden!',
+                text: 'Mit Vergnügen, Käpt’n! Dr. Helena Vance wird gleich bestätigen, dass wir beim Tod längst im Hafen lagen – und dass Ihre Uhrzeit-Spielereien vollkommen gegenstandslos sind, Sterling!',
                 startsTestimonyId: 'testimony_c2_vance',
               },
             ],
@@ -558,27 +565,36 @@ export const CRETE_CASE: GameCase = {
       name: 'Vorläufiger Arzt-Bericht',
       category: 'evidence',
       iconName: 'file',
-      summary: 'Dr. Vances Schätzung: Tod um ca. 07:30 Uhr morgens.',
+      summary: 'Dr. Vances Schnellbericht: Tod ca. 07:30 Uhr – Eilübergabe an Heraklion.',
       detail:
-        'Laut Dr. Helena Vance sprechen Körpertemperatur und Zustand für einen Todeszeitpunkt um 07:30 Uhr – kurz nach der Hafeneinfahrt. Hinweis am Rand: Standardberechnung bei 21 °C Raumtemperatur.',
+        'Laut Dr. Helena Vance sprechen Messung (08:15 Uhr) und Standardtabelle (Normwert 21 °C) für einen offiziellen Todeszeitpunkt um 07:30 Uhr – kurz nach der Hafeneinfahrt. Vermerk: Zügige Übergabe an die Hafenbehörde empfohlen.',
+    },
+    brandt_wachbuch: {
+      id: 'brandt_wachbuch',
+      name: 'Wachprotokoll Officer Brandt',
+      category: 'evidence',
+      iconName: 'clock',
+      summary: 'Nachtwache bis 06:00 Uhr – Gefangenen bei Schichtende entdeckt.',
+      detail:
+        'Unterschriebenes Wachprotokoll von Officer Lukas Brandt: Regulärer Dienst bis 06:00 Uhr morgens. Vermerk: „Keine besonderen Vorkommnisse während der Nachtschicht; leblosen Gefangenen beim Kontrollgang zu Schichtende in Zelle 08 entdeckt und gemeldet.“',
     },
     zellen_klima_protokoll: {
       id: 'zellen_klima_protokoll',
       name: 'Zellen-Klimaprotokoll',
       category: 'evidence',
       iconName: 'thermometer',
-      summary: 'Kühlung von Zelle 08 sank um 02:20 Uhr auf eisige 9 °C.',
+      summary: 'Zellentemperatur wurde um 03:00 Uhr manuell stark heruntergedreht.',
       detail:
-        'Technischer Sensor-Ausdruck der Arrestzelle: Um 02:20 Uhr fiel die Regulierung aus und kühlte die Stahlluft auf 9 °C herunter – wodurch ein Leichnam extrem verzögert abkühlt und viel „jünger“ wirkt!',
+        'Technischer Sensor-Ausdruck der Arrestzelle: Um exakt 03:00 Uhr nachts hat jemand manuell über das Regel-Ventil eingegriffen und den Raum auf eisige 9 °C abgekühlt – wodurch Dr. Vances 21-°C-Standardtabelle um Stunden verfälscht wird!',
     },
     lueftung_streich: {
       id: 'lueftung_streich',
       name: 'Leo & Ricks Streich-Protokoll',
       category: 'evidence',
       iconName: 'clock',
-      summary: 'Um 02:10 Uhr hörten die Brüder ein Poltern aus Zelle 08.',
+      summary: 'Um 02:10 Uhr hörten die Brüder ein lautes Poltern aus Zelle 08.',
       detail:
-        'Bei einem Walkie-Talkie-Streich am Schacht des Rettungsboot-Decks hörten Leo und Rick um exakt 02:10 Uhr tief unten einen umstürzenden Metallhocker – und kurz danach ein lautes Lüftungs-Surren.',
+        'Bei einem Walkie-Talkie-Streich am Schacht des Rettungsboot-Decks hörten Leo und Rick um exakt 02:10 Uhr tief unten einen umstürzenden Metallhocker – erschrocken riss ihr Gürtel-Clip ab und beide rannten sofort zurück in ihre Kabine.',
     },
     bruecken_log: {
       id: 'bruecken_log',
@@ -658,31 +674,66 @@ export const CRETE_CASE: GameCase = {
     },
     thought_c2_0730_hafen: {
       id: 'thought_c2_0730_hafen',
-      title: 'Dr. Vances Angabe: 07:30 Uhr',
+      title: 'Offizieller Bericht: 07:30 Uhr',
       detail:
-        'Die Schiffsärztin schätzt den Tod auf 07:30 Uhr – kurz nach Ankunft im griechischen Hafenbecken.',
+        'Dr. Vance gibt als offiziellen Todeszeitpunkt ca. 07:30 Uhr an (Normwert 21 °C).',
       kind: 'observation',
     },
-    thought_c2_kuehlung_9grad: {
-      id: 'thought_c2_kuehlung_9grad',
-      title: 'Kühlstörung auf 9 °C ab 02:20 Uhr',
+    thought_c2_brandt_dienst: {
+      id: 'thought_c2_brandt_dienst',
+      title: 'Brandts Fund bei Schichtende (06:00)',
       detail:
-        'Zelle 08 war seit 02:20 Uhr eiskalt – dadurch lässt sich die Todeszeit nicht mit normalen 21-°C-Werten berechnen!',
+        'Laut Wachprotokoll war nachts alles ruhig – erst am Ende seiner Schicht um 06:00 Uhr fand Brandt Arthur tot in Zelle 08.',
       kind: 'observation',
     },
     thought_c2_0210_poltern: {
       id: 'thought_c2_0210_poltern',
-      title: 'Poltern im Schacht um 02:10 Uhr',
+      title: 'Krachen im Schacht um 02:10 Uhr',
       detail:
-        'Leo und Rick hörten bei ihrem Streich um 02:10 Uhr tief unten einen umkippenden Stuhl in Zelle 08.',
+        'Leo und Rick hörten bei ihrem Streich um 02:10 Uhr tief unten einen lauten Schlag in Zelle 08 und rannten erschrocken weg.',
+      kind: 'observation',
+    },
+    thought_c2_zeit_unmoeglich: {
+      id: 'thought_c2_zeit_unmoeglich',
+      title: '06:00 Uhr gefunden vs. 07:30 Uhr tot?!',
+      detail:
+        'Brandt fand Arthur um 06:00 Uhr tot – doch der Arztbericht nennt 07:30 Uhr als Todeszeitpunkt! Hier wird etwas massiv verschleiert!',
+      kind: 'deduction',
+    },
+    thought_c2_brandt_luegt: {
+      id: 'thought_c2_brandt_luegt',
+      title: 'Brandt lügt (02:10 vs. 06:00/07:30)!',
+      detail:
+        'Schon um 02:10 Uhr krachte es in der Zelle, obwohl Brandt eine ruhige Schicht bis 06:00 Uhr protokolliert hat! Zeig es Dimitri in Zelle 08!',
+      kind: 'deduction',
+    },
+    thought_c2_kuehlung_9grad: {
+      id: 'thought_c2_kuehlung_9grad',
+      title: 'Temperatur in Zelle 08 um 03:00 Uhr geändert',
+      detail:
+        'Jemand hat die Zellentemperatur um 03:00 Uhr manuell stark nach unten verändert – aber ändert das etwas an Dr. Vances 21-°C-Berechnung?',
+      kind: 'observation',
+    },
+    thought_c2_klima_verdacht: {
+      id: 'thought_c2_klima_verdacht',
+      title: 'Eleonores Krimi-Einfall: Raumtemperatur!',
+      detail:
+        'Nach Eleonores Barnaby- und Gerichtsspiel-Anekdote: Bei manipulativ heruntergekühltem Raum statt normaler 21 °C versagt jede Standard-Todeszeit-Tabelle um mehrere Stunden!',
       kind: 'observation',
     },
     thought_c2_wahre_tatzeit: {
       id: 'thought_c2_wahre_tatzeit',
-      title: 'Wahre Tatzeit: ~02:15 Uhr (Int. Gewässer)',
+      title: 'Todeszeit ~02:15 Uhr (Warum verschwiegen?)',
       detail:
-        'Durch die Kühlung getarnt geschah die Tat bereits um 02:15 Uhr – mitten auf offener See vor Kreta!',
+        'Arthur starb schon gegen 02:15 Uhr statt 07:30 Uhr – doch die Schiffsleitung behauptet, die Uhrzeit spiele keine Rolle!',
       kind: 'deduction',
+    },
+    thought_c2_hafen_regel: {
+      id: 'thought_c2_hafen_regel',
+      title: 'Hafenordnung § 14: Einlaufstopp!',
+      detail:
+        'Ein ungeklärter Todesfall auf hoher See hätte die MS Aurora vor dem Hafen blockiert! Genau deshalb musste 07:30 Uhr im Bericht stehen!',
+      kind: 'observation',
     },
     thought_c2_schal_vermisst: {
       id: 'thought_c2_schal_vermisst',
@@ -715,17 +766,65 @@ export const CRETE_CASE: GameCase = {
   },
   logicCombinations: [
     {
+      id: 'c2_logic_brandt_zeit',
+      thoughtA: 'thought_c2_brandt_dienst',
+      thoughtB: 'thought_c2_0730_hafen',
+      resultThoughtId: 'thought_c2_zeit_unmoeglich',
+      feedbackLines: [
+        {
+          speakerId: 'nate',
+          emotion: 'shocked',
+          shout: 'MOMENT MAL!',
+          shake: true,
+          text: 'Laut Brandts Wachprotokoll hat er den Gefangenen bereits am Ende seiner Schicht um 06:00 Uhr tot in Zelle 08 gefunden – aber im offiziellen Bericht der Schiffsärztin steht Todeszeitpunkt 07:30 Uhr?! Niemand stirbt anderthalb Stunden, NACHDEM er tot aufgefunden wurde!! Was ist heute Nacht also wirklich geschehen?!',
+        },
+      ],
+    },
+    {
+      id: 'c2_logic_brandt_luege',
+      thoughtA: 'thought_c2_zeit_unmoeglich',
+      thoughtB: 'thought_c2_0210_poltern',
+      resultThoughtId: 'thought_c2_brandt_luegt',
+      setsFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+      feedbackLines: [
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          text: 'HAB ICH IHN!! Um 02:10 Uhr nachts hat es in Zelle 08 laut gekracht – mitten in Brandts Schicht! Trotzdem behauptet er, nachts sei alles ruhig gewesen, während 06:00 Uhr und 07:30 Uhr vorn und hinten nicht zusammenpassen! Brandt LÜGT!! Zurück in die Arrestzelle zu Kommissar Dimitri – machen wir ihm diesen Widerspruch mit Händen und Füßen klar!',
+        },
+      ],
+    },
+    {
       id: 'c2_logic_tatzeit',
       thoughtA: 'thought_c2_kuehlung_9grad',
-      thoughtB: 'thought_c2_0210_poltern',
+      thoughtB: 'thought_c2_klima_verdacht',
       resultThoughtId: 'thought_c2_wahre_tatzeit',
       setsFlag: 'flag_c2_tatzeit_geloest',
       feedbackLines: [
         {
           speakerId: 'nate',
           emotion: 'confident',
-          sfx: 'deduction',
-          text: 'GENAU DAS IST ES!! Um 02:10 Uhr hörten Leo und Rick den Stuhl fallen – und um 02:20 Uhr drehte jemand die Kühlung auf 9 °C, um Dr. Vances Schätzung um fünf Stunden nach hinten zu verschieben!',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          text: 'SO SCHLIESST SICH DER KREIS!! Um 02:10 Uhr fiel der Metallhocker in Zelle 08, und um 03:00 Uhr wurde die Temperatur im Raum absichtlich extrem heruntergedreht – damit Dr. Vances Standard-21-°C-Rechnung Stunden daneben liegt! Arthur starb schon gegen 02:15 Uhr, NICHT um 07:30 Uhr!! Damit stoppen wir die überstürzte Hafenübergabe!',
+        },
+        {
+          speakerId: 'falk',
+          emotion: 'smug',
+          text: 'Und selbst wenn er schon um 02:15 Uhr starb statt um 07:30 Uhr – NA UND, Sterling?! Ist doch völlig egal, zu welcher Uhrzeit jemand in Zelle 08 das Zeitliche segnet!',
+        },
+        {
+          speakerId: 'vance',
+          emotion: 'sweating',
+          text: 'Mr. von Falk hat recht… ein Todesfall bleibt ein Todesfall. Warum sollte überhaupt irgendjemand an Bord die Uhrzeit künstlich nach hinten verlegen wollen?!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          setsFlag: 'flag_c2_a2_warum_zeit_wichtig',
+          text: 'Moment… warum weichen sie mir alle genau bei dieser Frage aus?! Irgendjemand MUSS ein handfestes Interesse daran gehabt haben, dass Arthur angeblich erst nach dem Einlaufen im Hafen gestorben ist! Finden wir heraus, warum diese fünf Stunden so wichtig waren!',
         },
       ],
     },
@@ -739,8 +838,9 @@ export const CRETE_CASE: GameCase = {
         {
           speakerId: 'nate',
           emotion: 'confident',
-          sfx: 'deduction',
-          text: 'Moment mal… Eleonore hatte gar keine Security-Keycard – aber jemand mit genau so einer Karte war nachts unten, nahm ihren verlorenen Schal und klaute später Conrads Rucksack!',
+          shout: 'MOMENT MAL!',
+          shake: true,
+          text: 'Eleonore hatte gar keine Security-Keycard – aber jemand mit genau so einer Karte war nachts unten, nahm ihren verlorenen Schal und klaute später Conrads Rucksack!',
         },
       ],
     },
@@ -765,6 +865,16 @@ export const CRETE_CASE: GameCase = {
           hideIfFlag: 'flag_c2_a1_rauswurf',
         },
         {
+          characterId: 'andrew',
+          visibleIfFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+        },
+        {
+          characterId: 'eleonore',
+          visibleIfFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+        },
+        {
           characterId: 'captain',
           visibleIfFlag: 'flag_c2_a1_rauswurf',
           hideIfFlag: 'flag_c2_dimitri_weg',
@@ -772,7 +882,7 @@ export const CRETE_CASE: GameCase = {
         {
           characterId: 'dimitri',
           visibleIfFlag: 'flag_c2_a1_rauswurf',
-          hideIfFlag: 'flag_c2_dimitri_weg',
+          hideIfFlag: 'flag_c2_a1_angenommen',
         },
         {
           characterId: 'captain',
@@ -958,7 +1068,7 @@ export const CRETE_CASE: GameCase = {
           title: 'Kommissar Dimitri: Direkt ansprechen',
           speakerId: 'dimitri',
           requiredFlag: 'flag_c2_a1_rauswurf',
-          hideIfFlag: 'flag_c2_dimitri_weg',
+          hideIfFlag: 'flag_c2_a1_angenommen',
           lines: [
             {
               speakerId: 'nate',
@@ -997,7 +1107,7 @@ export const CRETE_CASE: GameCase = {
           title: 'Kapitän Brammer: Warum will Dimitri ausgerechnet uns?',
           speakerId: 'captain',
           requiredFlag: 'flag_c2_a1_rauswurf',
-          hideIfFlag: 'flag_c2_dimitri_weg',
+          hideIfFlag: 'flag_c2_a1_angenommen',
           lines: [
             {
               speakerId: 'nate',
@@ -1109,7 +1219,7 @@ export const CRETE_CASE: GameCase = {
                 nextLocationId: 'infirmary',
                 nextPhase: 'investigation',
                 nextTimeOfDay: 'tag',
-                unlocksLocations: ['infirmary', 'lifeboat_deck', 'brig_cell'],
+                unlocksLocations: ['infirmary', 'brig_cell'],
                 setsFlag: 'flag_c2_a1_angenommen',
                 isComingSoon: true,
                 nextButtonLabel: 'Demnächst: Tag 4 · Mittag (Akt 2.2)',
@@ -1119,12 +1229,12 @@ export const CRETE_CASE: GameCase = {
                     speakerId: 'maya',
                     emotion: 'thinking',
                     setsFlag: 'flag_c2_a1_angenommen',
-                    text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation und das Rettungsboot-Deck für unsere Fragen offen stehen.',
+                    text: 'Tag 4, Mittag! Kommissar Dimitri hat durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation für unsere Fragen offen steht – bis zur Mittagsanhörung bleibt nicht viel Zeit.',
                   },
                   {
                     speakerId: 'nate',
                     emotion: 'thinking',
-                    text: 'Gut – fangen wir ohne wilde Spekulationen bei der Schiffsärztin Dr. Vance an. Sie müsste den Zustand von Arthur heute Morgen ja als Erste gesehen haben.',
+                    text: 'Fangen wir in der Krankenstation bei Dr. Vance an und hören uns ganz unvoreingenommen um, was die Akten über die Nacht sagen.',
                   },
                 ],
               },
@@ -1132,37 +1242,192 @@ export const CRETE_CASE: GameCase = {
           ],
         },
         {
-          id: 'captain_seemeilen',
-          title: 'Kapitän Brammer: Wann erreichte das Schiff Kreta?',
+          id: 'higginson_mittag_pause',
+          title: 'Familie Higginson: Wie läuft’s an Deck?',
+          speakerId: 'andrew',
+          requiredFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_a2_rettungsdeck_offen',
+          lines: [
+            {
+              speakerId: 'andrew',
+              emotion: 'grumpy',
+              text: 'Mittag ist durch, und wir stehen immer noch in der Hitze vor Heraklion! Wenigstens habe ich Conrad gerade mit einer Tüte Cracker unter dem Sonnensegel festgenagelt. Kommen Sie denn überhaupt voran, Mr. Sterling?',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Schwierig… unten vor Zelle 08 steht Officer Brandt wie eine Wand und lässt uns keinen Schritt in die Zelle hinein.',
+              choices: [
+                {
+                  label: '„Wenn wenigstens jemand nachts etwas gehört hätte…“',
+                  nextLines: [
+                    {
+                      speakerId: 'eleonore',
+                      emotion: 'confident',
+                      text: 'Oh! In jedem guten Krimi gibt es genau dann einen geheimen Ohrenzeugen, der wach war, als niemand wach sein sollte!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Sie wollen einfach alles blitzschnell als Selbstmord abhaken.“',
+                  nextLines: [
+                    {
+                      speakerId: 'eleonore',
+                      emotion: 'shocked',
+                      text: 'Typisch!! Genau so fängt Fall 2 in den Klassikern immer an – schnelle Abschlussberichte sind IMMER verdächtig!',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'andrew',
+              emotion: 'neutral',
+              text: 'Also gehört hab ich nachts gar nichts – ich hab ja durchgeschlafen. Nur unsere beiden Großen, Leo und Rick, schleichen seit heute früh auffällig oft oben aufs Rettungsboot-Deck und tuscheln über ihr grünes Walkie-Talkie… keine Ahnung, was die da oben wieder ausgefressen haben.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              unlocksLocation: 'lifeboat_deck',
+              setsFlag: 'flag_c2_a2_rettungsdeck_offen',
+              text: 'Auf dem Rettungsboot-Deck?! Danke, Mr. Higginson – schauen wir uns doch gleich oben auf dem Rettungsboot-Deck um und reden dort mit Leo und Rick!',
+            },
+          ],
+        },
+        {
+          id: 'eleonore_barnaby_einfall',
+          title: 'Eleonore: Die rätselhafte Temperatur in Zelle 08!',
+          speakerId: 'eleonore',
+          requiredFlag: 'flag_c2_a2_klima_geloest',
+          hideIfFlag: 'flag_c2_a2_eleonore_klima_idee',
+          lines: [
+            {
+              speakerId: 'andrew',
+              emotion: 'grumpy',
+              text: 'Na, Mr. Sterling? Immer noch an Bord? Oder haben Sie unten im Rumpf inzwischen herausgefunden, warum niemand das Schiff verlässt?',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Kommissar Dimitri hat uns zwar endlich Zelle 08 öffnen lassen, aber eins verstehe ich nicht: Um 03:00 Uhr nachts hat jemand die Temperatur dort unten extrem heruntergeregelt – obwohl in Dr. Vances Bericht pauschal „Normwert 21 °C“ steht!',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'shocked',
+              animation: 'shock',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'EINE HERUNTERGEKÜHLTE ZELLE UM 03:00 UHR UND EIN STANDARD-BERICHT BEI 21 °C?! Mr. Sterling!! Genau DIESEN Trick gab es doch mal in dieser alten Inspektor-Barnaby-Folge mit dem tiefgekühlten Weinkeller – und auch in meinem allerliebsten Anwalts-Spiel!!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Wie bitte, Mrs. Higginson? Inspektor Barnaby…?',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'confident',
+              text: 'Na klar!! Wenn ein Raum manipuliert extrem heruntergekühlt wird statt normaler 21 Grad, stimmt KEINE Standard-Abkühltabelle der Welt mehr! Jeder Arzt, der stumpf mit „21 °C Normwert“ rechnet, verschätzt sich oder biegt sich die Todeszeit gleich um MEHRERE STUNDEN zurecht!!',
+            },
+            {
+              speakerId: 'andrew',
+              emotion: 'grumpy',
+              text: 'Eleonore!! Wir sind hier auf einem Kreuzfahrtschiff vor Kreta und nicht in Midsomer County bei Inspektor Barnaby!!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              setsFlag: 'flag_c2_a2_eleonore_klima_idee',
+              unlocksThought: 'thought_c2_klima_verdacht',
+              text: 'Moment… ganz so verrückt ist Inspektor Barnaby hier leider überhaupt nicht!! Kombinieren wir diese Krimi-Erkenntnis sofort in unserem Notizbuch mit der Temperatur-Notiz von 03:00 Uhr!',
+            },
+          ],
+        },
+        {
+          id: 'captain_seemeilen_warten',
+          title: 'Kapitän Brammer: Wie geht es hier weiter?',
           speakerId: 'captain',
           requiredFlag: 'flag_c2_a1_angenommen',
-          hideIfFlag: 'flag_c2_dimitri_weg',
+          hideIfFlag: 'flag_c2_a2_hafenregel_gelesen',
           lines: [
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Eine nautische Frage am Rande, Kapitän: Ab wann genau lagen wir heute Morgen eigentlich im griechischen Seegebiet vor Kreta?',
+              text: 'Kapitän Brammer – wie lange sollen die Passagiere hier an Deck noch festgehalten werden?',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              unlocksEvidence: 'bruecken_log',
-              text: 'Die griechische 12-Meilen-Zone haben wir heute früh um exakt 05:45 Uhr morgens überquert. Alles davor war offene internationale See. Steht alles sauber hier in meinem Brücken-Logbuch.',
+              text: 'Die Schiffsärztin hat ihren Bericht vorgelegt, und um Punkt Mittag gibt es die offizielle Abschlussuntersuchung vor dem Seegericht im Großen Ballsaal. Bis dahin trägt Kommissar Dimitri alles zusammen – und danach übernimmt das Hafenamt, damit meine Passagiere endlich von Bord kommen.',
+            },
+          ],
+        },
+        {
+          id: 'captain_seemeilen',
+          title: 'Kapitän Brammer: Warum war Ihnen 07:30 Uhr beim Einlaufen so wichtig?!',
+          speakerId: 'captain',
+          requiredFlag: 'flag_c2_a2_hafenregel_gelesen',
+          hideIfFlag: 'flag_c2_a2_bruecke_geloest',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'Jetzt weichen Sie mir nicht mehr aus, Kapitän Brammer! Ich habe Hafenordnung § 14 gelesen! Bei einem ungeklärten Todesfall VOR der 12-Meilen-Grenze hätte Heraklion der MS Aurora heute Morgen überhaupt keine Einlauferlaubnis erteilt!',
+            },
+            {
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: '… Hmm. Sie schnüffeln eindeutig in Funk-Protokollen herum, die keinen Passagier etwas angehen, Herr Sterling.',
             },
             {
               speakerId: 'dimitri',
               emotion: 'confident',
-              text: 'Πολύ καλά, καπετάνιε! Σημειώστε το ακριβώς: αν το περιστατικό έγινε μετά τις 05:45 στα ελληνικά χωρικά ύδατα, η υπόθεση ανήκει στην Εισαγγελία Ηρακλείου. Αν έγινε νωρίτερα… δεν έχω καμία δικαιοδοσία!',
+              text: 'Τι είπατε τώρα, κύριε Στέρλινγκ?! Κανονισμός Λιμένα § 14?! Καπετάνιε! Δείξτε μας αμέσως τον ναυτικό χάρτη – αν το περιστατικό έγινε πριν τα 12 ναυτικά μίλια, όλη η αναφορά αλλάζει!',
             },
             {
               speakerId: 'captain',
               emotion: 'neutral',
-              text: 'Ab 05:45 Uhr ist Kreta zuständig. Davor hat er auf seinem eigenen Papier nichts mehr damit zu tun.',
+              text: 'Schon gut, Kommissar… Hier ist mein Radar-Kurs auf dem Brücken-Tablet. Prüfen Sie selbst auf der Seekarte, Herr Verteidiger: Wann wir die griechische 12-Meilen-Grenze passiert haben – und wo die Aurora um 02:15 Uhr wirklich lag.',
+              choices: [
+                {
+                  label: '„Legen Sie die Seekarte auf den Tisch – ich prüfe es!“',
+                  nextLines: [
+                    {
+                      speakerId: 'maya',
+                      emotion: 'confident',
+                      startsMiniGameId: 'sea_chart',
+                      text: 'Na los, Nate – zeigen wir Kapitän Brammer, dass man Seerecht und Uhrzeiten nicht einfach unterm Teppich verschwinden lässt!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Sie wollten das Schiff um jeden Preis in den Hafen bringen!“',
+                  nextLines: [
+                    {
+                      speakerId: 'captain',
+                      emotion: 'neutral',
+                      text: 'Lesen Sie erst die Koordinaten ab, bevor Sie hier große Reden schwingen! Hier ist das Radar.',
+                      startsMiniGameId: 'sea_chart',
+                    },
+                  ],
+                },
+              ],
             },
+          ],
+        },
+        {
+          id: 'captain_seemeilen_done',
+          title: 'Kapitän Brammer: Zur Seekarten-Bestätigung',
+          speakerId: 'captain',
+          requiredFlag: 'flag_c2_a2_bruecke_geloest',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
             {
-              speakerId: 'maya',
-              emotion: 'thinking',
-              text: 'Klingt ganz so, als würde genau diese Uhrzeit noch verdammt wichtig werden, falls irgendetwas nicht zur offiziellen Version passt…',
+              speakerId: 'captain',
+              emotion: 'neutral',
+              text: 'Das beglaubigte Brücken-Log liegt in Ihrer Akte. 05:45 Uhr war die 12-Meilen-Grenze – alles vor dieser Marke war hohe See. Sehen Sie zu, wie Sie das im Ballsaal vertreten.',
             },
           ],
         },
@@ -1182,20 +1447,27 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'sweating',
-              text: 'Ähm… tut mir leid, Mr. Higginson, aber ich muss gerade wegen des Mordfalls an die Schiffs-Akten und bin wirklich kein Kreuzfahrt-Fundbüro.',
+              text: 'Ähm… tut mir leid, Mr. Higginson, aber ich muss gerade wegen der Untersuchung in Zelle 08 an die Schiffs-Akten und bin wirklich kein Kreuzfahrt-Fundbüro.',
             },
             {
               speakerId: 'eleonore',
               emotion: 'shocked',
               setsFlag: 'flag_c2_a3_rucksack_gesichtet',
-              text: 'Aber mein schöner Kreta-Seidenschal hängt doch auch schon in der Arrestzelle?! Und dabei hatte ich meinen Schal schon gestern Abend verloren! Ach, schauen Sie wenigstens am Rettungsboot-Deck mal die Augen offen!',
+              text: 'Aber mein schöner blauer Kreta-Seidenschal hängt doch auch schon unten in der Arrestzelle?! Und dabei hatte ich meinen Schal schon gestern Abend verloren! Ach, halten Sie wenigstens am Rettungsboot-Deck mal die Augen offen!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'shocked',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'Warte mal… dieses feine blaue „Seidentuch“, das ich unten in der Zelle gesehen und für eines von Arthurs Kellner-Tüchern gehalten habe – das war gar kein Krawattentuch, sondern IHR Kreta-Seidenschal, Mrs. Higginson?!',
             },
             {
               speakerId: 'marston',
               emotion: 'thinking',
               unlocksEvidence: 'seidenschal_spur',
               unlocksThought: 'thought_c2_schal_vermisst',
-              text: 'Tut mir leid, Mrs. Higginson – Ihr Schal wurde wirklich als Beweis am Zellengitter gesichert. Falk will Sie heute Abend dazu vor dem Tribunal befragen!',
+              text: 'Tut mir leid, Mrs. Higginson – Ihr Schal wurde unten wirklich als Beweis am Zellengitter gesichert. Falk will Sie heute Abend dazu vor dem Tribunal befragen!',
             },
           ],
         },
@@ -1242,6 +1514,34 @@ export const CRETE_CASE: GameCase = {
         },
       ],
       presentRules: [
+        {
+          evidenceId: 'zellen_klima_protokoll',
+          targetCharacterId: 'eleonore',
+          requiredFlag: 'flag_c2_a2_klima_geloest',
+          hideIfFlag: 'flag_c2_a2_eleonore_klima_idee',
+          lines: [
+            {
+              speakerId: 'eleonore',
+              emotion: 'shocked',
+              animation: 'shock',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'Temperaturänderung um 03:00 Uhr in Zelle 08 – und im Arztbericht steht „Normwert 21 °C“?! GENAU SO ETWAS GAB ES IN EINER ALTEN INSPEKTOR-BARNABY-FOLGE (und in meinem Lieblings-Anwaltsspiel)!!',
+            },
+            {
+              speakerId: 'eleonore',
+              emotion: 'confident',
+              setsFlag: 'flag_c2_a2_eleonore_klima_idee',
+              unlocksThought: 'thought_c2_klima_verdacht',
+              text: 'Wenn der Raum manipuliert heruntergekühlt war, stimmt KEINE Standard-Todeszeit-Rechnung mehr! Dann lag der Vorfall in Wahrheit Stunden früher!!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              text: 'Brillant, Mrs. Higginson! Kombinieren wir diese Erkenntnis gleich im Notizbuch mit unserer Temperatur-Notiz!',
+            },
+          ],
+        },
         {
           evidenceId: 'conrads_rucksack',
           targetCharacterId: 'andrew',
@@ -1425,6 +1725,37 @@ export const CRETE_CASE: GameCase = {
           ],
         },
         {
+          id: 'c2_a2_hafen_vorschrift',
+          label: 'Hafenbehörde-Protokoll & Einlaufordnung',
+          x: 34,
+          y: 44,
+          width: 16,
+          height: 22,
+          visibleIfFlag: 'flag_c2_a2_warum_zeit_wichtig',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Mal sehen, was auf der Funk-Konsole noch im Posteingang der Brücke blinkt… Hier: „Hafenamt Heraklion – Einlaufbestimmungen für Passagierschiffe, § 14“.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              setsFlag: 'flag_c2_a2_hafenregel_gelesen',
+              unlocksThought: 'thought_c2_hafen_regel',
+              text: 'NATE!! Lies dir diesen Absatz laut vor!! „Meldet ein Schiff einen ungeklärten Todesfall aus internationalen Gewässern (vor Passieren der 12-Meilen-Zone), wird die Hafeneinfahrt verweigert und das Schiff auf Außenreede blockiert! Nur Vorfälle nach Erreichen des Hoheitsgebiets werden direkt am Pier übernommen.“',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'DESWEGEN wollten sie die 07:30 Uhr!! Hätte Dr. Vance 02:15 Uhr gemeldet, hätte Kapitän Brammer mit der MS Aurora heute Morgen GAR NICHT erst in den Hafen von Kreta einlaufen dürfen! Ab aufs Promenadendeck – stellen wir den Kapitän mit seiner Seekarte zur Rede!',
+            },
+          ],
+        },
+        {
           id: 'c2_a3_fussspur',
           label: 'Kleine nasse Turnschuh-Spuren',
           x: 28,
@@ -1485,8 +1816,12 @@ export const CRETE_CASE: GameCase = {
     brig_cell: {
       id: 'brig_cell',
       name: 'Arrestzelle 08 · Unterdeck',
-      subtitle: 'Tatort unter Verschluss',
+      subtitle: 'Tatort & Innenansicht der Zelle',
       backgroundUrl: '/src/assets/images/case2_brig_cell_day_1795164438127.jpg',
+      alternateBackground: {
+        flag: 'flag_c2_a2_zelle_offen',
+        backgroundUrl: '/src/assets/images/cell_08_inside_1795211919808.jpg',
+      },
       charactersPresent: [
         {
           characterId: 'marston',
@@ -1495,6 +1830,16 @@ export const CRETE_CASE: GameCase = {
         {
           characterId: 'falk',
           hideIfFlag: 'flag_c2_a1_rauswurf',
+        },
+        {
+          characterId: 'brandt',
+          visibleIfFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+        },
+        {
+          characterId: 'dimitri',
+          visibleIfFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_dimitri_weg',
         },
         {
           characterId: 'maya',
@@ -1603,46 +1948,140 @@ export const CRETE_CASE: GameCase = {
           ],
         },
         {
-          id: 'c2_a2_klima_panel',
-          label: 'Digitales Zellen-Klimapanel',
-          x: 27,
-          y: 38,
-          width: 10,
-          height: 18,
+          id: 'c2_a2_zelle_gesperrt',
+          label: 'Versiegelte Arrestzelle 08 (Kein Zutritt)',
+          x: 42,
+          y: 36,
+          width: 34,
+          height: 46,
           visibleIfFlag: 'flag_c2_a1_rauswurf',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'brandt',
+              emotion: 'neutral',
+              text: 'Stopp, Mr. Sterling! Zelle 08 steht unter strengem Sicherheitsverschluss. Solange mein Wachbericht gilt, darf hier kein Unbefugter hinein.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Solange Officer Brandt sich vor das Gitter stellt, kommen wir nicht ins Innere… Nur Kommissar Dimitri könnte ihm befehlen aufzuschließen – dafür brauchen wir erst einen echten Widerspruch gegen das, was uns hier erzählt wird.',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_seil_schal',
+          label: 'Blaues Stoffband an der oberen Stange',
+          x: 42,
+          y: 10,
+          width: 8,
+          height: 44,
+          visibleIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'shocked',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              text: 'Im ersten Funkspruch hieß es doch „Gefangener erhängt“ – aber sieh dir dieses angebliche „Seil“ hier oben aus der Nähe an, Maya!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              setsFlag: 'flag_c2_a2_seil_gesehen',
+              text: 'Nanu?! Das ist gar kein grobes Schiffstau aus dem Arrest… das fasst sich an wie ein ganz feines, glattes **Seidentuch**!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Ein edles blaues Seidentuch? Eigentlich gar nicht so ungewöhnlich bei einem geschniegelten Oberkellner aus der Ersten Klasse – Arthur trug so etwas ja oft unterm Kragen. Merkwürdig ist höchstens, dass man ihm das in der Zelle gelassen hat… behalten wir es im Hinterkopf.',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_zellenschloss',
+          label: 'Elektronisches Zellenschloss',
+          x: 2,
+          y: 46,
+          width: 10,
+          height: 22,
+          visibleIfFlag: 'flag_c2_a2_zelle_offen',
           lines: [
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              unlocksEvidence: 'zellen_klima_protokoll',
-              unlocksThought: 'thought_c2_kuehlung_9grad',
-              text: 'Moment mal! Warum läuft an dieser Zellenwand die Lüftungs-Kühlung auf eiskalten 9 °C?! Laut Protokoll ist der Regler um exakt 02:20 Uhr nachts abgestürzt!',
+              setsFlag: 'flag_c2_a2_schloss_gesehen',
+              text: 'Schauen wir uns das elektronische Sicherheits-Schloss direkt am Türrahmen an: Kein einziger Kratzer, keine Aufbruchspur – und laut Display-Log gab es zwischen 00:00 und 08:15 Uhr keinen einzigen Keycard-Scan!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Die Tür ging also von außen die ganze Nacht kein einziges Mal auf… Falls das hier also kein Selbstmord war, wäre die Zelle ein perfekter verschlossener Raum! Behalten wir das Schloss auf jeden Fall für später im Hinterkopf!',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_klima_panel',
+          label: 'Vereistes Klima- & Kühlpanel an der Wand',
+          x: 23,
+          y: 27,
+          width: 14,
+          height: 34,
+          visibleIfFlag: 'flag_c2_a2_zelle_offen',
+          hideIfFlag: 'flag_c2_a2_klima_geloest',
+          lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              text: 'Brrr!! Jetzt, wo wir direkt in Zelle 08 stehen, spürt man es sofort: Die Wandklappe hier drüben ist ja regelrecht mit Reif überzogen – hier drin ist es eisig kalt!!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Und dahinter ist ein Wartungsmodul für die Zellentemperatur! Die Leitungen stehen völlig quer – richten wir die Rohre sauber bis zum Sensor aus, um zu prüfen, wann und ob hier jemand gedreht hat!',
+              startsMiniGameId: 'cooling_pipes',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_klima_fertig',
+          label: 'Ausgelesenes Zellen-Klimaprotokoll',
+          x: 23,
+          y: 27,
+          width: 14,
+          height: 34,
+          visibleIfFlag: 'flag_c2_a2_klima_geloest',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              text: 'Das Protokoll der Kühlklappe ist eindeutig: Punkt 03:00 Uhr nachts wurde die Zellentemperatur manuell stark nach unten verändert.',
             },
           ],
         },
         {
           id: 'c2_a2_hocker',
           label: 'Umgekippter Metallhocker',
-          x: 56,
+          x: 53,
           y: 66,
-          width: 18,
-          height: 22,
-          visibleIfFlag: 'flag_c2_a1_rauswurf',
+          width: 20,
+          height: 26,
+          visibleIfFlag: 'flag_c2_a2_zelle_offen',
           lines: [
             {
-              speakerId: 'maya',
+              speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Der Stuhl wurde extrem wuchtig umgestoßen… genau so ein Krachen müsste man durch die Lüftungsschächte doch bis nach oben gehört haben!',
+              text: 'Da liegt genau der schwere Metallhocker, dessen Krachen Leo und Rick um 02:10 Uhr bis aufs Rettungsboot-Deck gehört haben! Die Kratzspur verläuft quer unter dem oberen Lüftungsgitter.',
             },
           ],
         },
         {
           id: 'c2_a5_lueftung_flashback',
           label: 'Oberes Lüftungsgitter (Zelle 08)',
-          x: 61,
-          y: 16,
-          width: 16,
-          height: 14,
+          x: 52,
+          y: 3,
+          width: 21,
+          height: 22,
           visibleIfFlag: 'flag_c2_a4_fertig',
           lines: [
             {
@@ -1746,13 +2185,232 @@ export const CRETE_CASE: GameCase = {
             },
           ],
         },
+        {
+          id: 'brandt_nachtwache',
+          title: 'Officer Brandt: Wer hat den Gefangenen heute Nacht bewacht?',
+          speakerId: 'brandt',
+          requiredFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'brandt',
+              emotion: 'neutral',
+              text: 'Guten Mittag, Mr. Sterling. Officer Lukas Brandt, Sicherheitsoffizier der Nachtschicht. Kommissar Dimitri hat mir aufgetragen, Zelle 08 bis zur Übernahme abgesperrt zu halten.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Sie hatten also heute Nacht hier unten Dienst, Officer Brandt? Wie genau ist der Morgen hier abgelaufen?',
+            },
+            {
+              speakerId: 'brandt',
+              emotion: 'neutral',
+              setsFlag: 'flag_c2_a2_brandt_protokoll',
+              unlocksEvidence: 'brandt_wachbuch',
+              unlocksThought: 'thought_c2_brandt_dienst',
+              text: 'Ganz nach Vorschrift. Bis zu meinem regulären Schichtende um 06:00 Uhr morgens war in diesem Trakt alles ruhig. Erst bei meinem letzten Kontrollgang zum Schichtwechsel habe ich Arthur Morgan leblos in Zelle 08 entdeckt und sofort Meldung erstattet – hier haben Sie eine Kopie meines Wachprotokolls für Ihre Unterlagen.',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Hmm… er wirkt fast schon zu routiniert. Was frage ich ihn noch?)',
+              choices: [
+                {
+                  label: '„Dürfen wir wenigstens einen kurzen Blick in die Zelle werfen?“',
+                  nextLines: [
+                    {
+                      speakerId: 'brandt',
+                      emotion: 'neutral',
+                      text: 'Ausgeschlossen, Mr. Sterling. Solange nichts gegen meinen offiziellen Bericht spricht, bleibt die Zelle verriegelt.',
+                    },
+                  ],
+                },
+                {
+                  label: '„Haben Sie in der Nacht irgendetwas Ungewöhnliches gehört?“',
+                  nextLines: [
+                    {
+                      speakerId: 'brandt',
+                      emotion: 'neutral',
+                      text: 'Auf einem fahrenden Stahlschiff knarrt und ächzt es nachts ständig durch die Schotten. Besondere Vorkommnisse gab es auf meiner Wache keine.',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Immerhin haben wir sein unterschriebenes Wachprotokoll jetzt ordentlich in unserer Gerichtsakte, Nate.',
+            },
+          ],
+        },
+        {
+          id: 'dimitri_zelle_check',
+          title: 'Kommissar Dimitri: Können Sie die Zelle für uns öffnen?',
+          speakerId: 'dimitri',
+          requiredFlag: 'flag_c2_a1_angenommen',
+          hideIfFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          lines: [
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Κύριε Στέρλινγκ, δεν μπορώ να ανοίξω έτσι απλά ένα σφραγισμένο κελί! Ο αξιωματικός ασφαλείας έχει την ευθύνη – φέρτε μου πρώτα μια ξεκάθαρη απόδειξη ότι κάτι δεν πάει καλά στα έγγραφα!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'sweating',
+              text: 'Er schüttelt den Kopf und deutet auf das Schloss und den Wachoffizier… Ohne handfesten Widerspruch aus unseren eigenen Ermittlungen lässt er uns die Zelle wohl noch nicht öffnen.',
+            },
+          ],
+        },
+        {
+          id: 'dimitri_widerspruch_zeigen',
+          title: 'Kommissar Dimitri: Den Zeit-Widerspruch ohne Worte erklären!',
+          speakerId: 'dimitri',
+          requiredFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Jetzt haben wir die Lügen auf dem Tisch, Nate! Aber Kapitän Brammer ist nicht hier unten zum Übersetzen… du musst es Kommissar Dimitri mit Uhrzeiten und Gesten klarmachen!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              startsMiniGameId: 'dimitri_pantomime',
+              text: 'Kommissar Dimitri, schauen Sie genau her – gleich reicht mein Pantomime-Griechisch für ein „Brandt lügt, Zelle auf!“!',
+            },
+          ],
+        },
+        {
+          id: 'dimitri_nach_oeffnung',
+          title: 'Kommissar Dimitri: Was steht jetzt an?',
+          speakerId: 'dimitri',
+          requiredFlag: 'flag_c2_a2_zelle_offen',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'dimitri',
+              emotion: 'confident',
+              text: 'Εξετάστε όλο το κελί με ησυχία, κύριε Στέρλινγκ! Εγώ κρατώ το πόστο εδώ μέχρι να βρείτε κάθε λεπτομέρεια!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Kommissar Dimitri hält uns den Eingang frei – schau dich einfach in Ruhe im Inneren von Zelle 08 um, Nate!',
+            },
+          ],
+        },
       ],
-      presentRules: [],
+      presentRules: [
+        {
+          evidenceId: 'brandt_wachbuch',
+          targetCharacterId: 'dimitri',
+          requiredFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              startsMiniGameId: 'dimitri_pantomime',
+              text: 'Schauen Sie her, Kommissar Dimitri – ich zeige Ihnen den Widerspruch aus Brandts Wachprotokoll direkt mit Händen und Füßen!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'lueftung_streich',
+          targetCharacterId: 'dimitri',
+          requiredFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              startsMiniGameId: 'dimitri_pantomime',
+              text: 'Kommissar Dimitri, passen Sie auf – hier ist der Widerspruch zu Brandts Nachtwache!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'obduktion_vorlaeufig',
+          targetCharacterId: 'dimitri',
+          requiredFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          hideIfFlag: 'flag_c2_a2_zelle_offen',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
+              startsMiniGameId: 'dimitri_pantomime',
+              text: 'Kommissar Dimitri! Diese Uhrzeit im Arztbericht passt nicht zu Brandts Schicht – ich zeige es Ihnen!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'brandt_wachbuch',
+          targetCharacterId: 'dimitri',
+          hideIfFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          lines: [
+            {
+              speakerId: 'dimitri',
+              emotion: 'thinking',
+              text: 'Χμ; Κύριε Στέρλινγκ, δεν διαβάζω γερμανικά… Πρώτα βρείτε καθαρά τη διαφορά στα στοιχεία σας!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Mit dem einen Dokument allein weiß er noch nichts anzufangen – prüfe erst im Notizbuch, ob die Zeiten aus Wachprotokoll, Arztbericht und Schacht zusammenpassen!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'obduktion_vorlaeufig',
+          targetCharacterId: 'dimitri',
+          hideIfFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          lines: [
+            {
+              speakerId: 'dimitri',
+              emotion: 'thinking',
+              text: 'Χμ; Τι λέει το χαρτί της γιατρού; Δεν ξέρω γερμανικά, κύριε Στέρλινγκ!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Er versteht das deutsche Formular noch nicht – verbinde im Notizbuch erst alle Zeit-Hinweise miteinander!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'lueftung_streich',
+          targetCharacterId: 'dimitri',
+          hideIfFlag: 'flag_c2_a2_brandt_widerspruch_geloest',
+          lines: [
+            {
+              speakerId: 'dimitri',
+              emotion: 'thinking',
+              text: 'Ένα κλιπ από γουόκι-τόκι; Τι σχέση έχει με το κελί 08, κύριε Στέρλινγκ;;',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Noch sieht Dimitri den Zusammenhang nicht – verbinde im Notizbuch erst deine Zeit-Schlussfolgerung mit dem 02:10-Uhr-Geräusch!',
+            },
+          ],
+        },
+      ],
       fallbackPresentLines: [
         {
           speakerId: 'maya',
           emotion: 'thinking',
-          text: 'Hier unten an den kalten Stahlschotten hilft uns das gerade nicht weiter.',
+          text: 'Hier unten an den Stahlschotten bringt dieses Beweisstück gerade niemandem etwas.',
         },
       ],
     },
@@ -1769,7 +2427,7 @@ export const CRETE_CASE: GameCase = {
       hotspots: [
         {
           id: 'c2_a2_arzt_monitor',
-          label: 'Obduktions-Notiz am Terminal',
+          label: 'Medizinischer Befund am Terminal',
           x: 40,
           y: 46,
           width: 16,
@@ -1778,7 +2436,13 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Auf Dr. Vances Bildschirm steht eine Fußnote: „Standard-Abkühlkurve bei 21 °C Kabinentemperatur vorausgesetzt.“ Falls die Zelle kälter war, stimmt die Uhrzeit überhaupt nicht!',
+              setsFlag: 'flag_c2_a2_21grad_notiz',
+              text: 'Mal sehen, was auf Dr. Vances Terminal steht: „Befund Arrestzelle 08 · Erstuntersuchung 08:15 Uhr · Geschätzter Todeszeitpunkt ca. 07:30 Uhr (Standardtabelle / Normwert 21 °C) · Übergabe an Hafenbehörde Heraklion vorbereitet.“',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Ganz schön knapper medizinischer Standardbogen… Aber immerhin stehen alle Messwerte fein säuberlich drauf.',
             },
           ],
         },
@@ -1786,25 +2450,82 @@ export const CRETE_CASE: GameCase = {
       talkTopics: [
         {
           id: 'vance_todeszeit',
-          title: 'Dr. Vance: Wann genau ist Arthur gestorben?',
+          title: 'Dr. Vance: Zu Ihrer Untersuchung in Zelle 08',
           speakerId: 'vance',
           lines: [
             {
               speakerId: 'vance',
               emotion: 'neutral',
+              setsFlag: 'flag_c2_a2_vance_befragt',
               unlocksEvidence: 'obduktion_vorlaeufig',
               unlocksThought: 'thought_c2_0730_hafen',
-              text: 'Meine Werte von 08:15 Uhr sind eindeutig, Mr. Sterling: Der Eintritt des Todes lag etwa bei 07:30 Uhr morgens – also bereits innerhalb des Hafengebiets von Kreta.',
+              text: 'Fassen Sie sich bitte kurz, Mr. Sterling. Ich habe heute früh meinen Befund in Arrestzelle 08 aufgenommen. Äußere Spuren eines Handgemenges gibt es nicht – hier ist meine vorläufige Aktenkopie für Ihre Unterlagen.',
             },
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Und die genaue Zellentemperatur bei Ihrer Messung haben Sie nicht geprüft?',
+              text: 'Danke, Frau Doktor. Darf ich Ihnen noch eine kurze Frage zu Ihren Feststellungen stellen?',
+              choices: [
+                {
+                  label: '„Gehen Sie medizinisch sicher von einem Selbstmord aus?“',
+                  nextLines: [
+                    {
+                      speakerId: 'vance',
+                      emotion: 'neutral',
+                      text: 'Die Zellentür war verschlossen, es gab keinen Kampf. Ob Suizid oder etwas anderes, wird das Seegericht oder die Hafenpolizei abschließend bewerten.',
+                    },
+                  ],
+                },
+                {
+                  label: '„Wie schnell übernimmt jetzt die Hafenpolizei den Fall?“',
+                  nextLines: [
+                    {
+                      speakerId: 'vance',
+                      emotion: 'neutral',
+                      text: 'Nach der Abschlussuntersuchung heute Mittag im Großen Ballsaal werden die Papiere direkt an Heraklion übergeben.',
+                    },
+                  ],
+                },
+                {
+                  label: '„Haben Sie in der Zelle selbst noch etwas Besonderes bemerkt?“',
+                  nextLines: [
+                    {
+                      speakerId: 'vance',
+                      emotion: 'neutral',
+                      text: 'Alles Relevante steht in meinem vorläufigen Arzt-Bericht, Mr. Sterling. Mehr gibt es für mich im Moment nicht hinzuzufügen.',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Ziemlich kühl und kurz angebunden… Schauen wir uns ihren schriftlichen Arzt-Bericht gleich in der Gerichtsakte genauer an!',
+            },
+          ],
+        },
+        {
+          id: 'vance_beweise_anforderung',
+          title: 'Dr. Vance: Ändert die Temperatur in Zelle 08 etwas?',
+          speakerId: 'vance',
+          requiredFlag: 'flag_c2_a2_klima_geloest',
+          hideIfFlag: 'flag_c2_a2_eleonore_klima_idee',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Dr. Vance, uns ist unten in Zelle 08 aufgefallen, dass es dort eiskalt ist – laut Sensor-Protokoll wurde die Temperatur um 03:00 Uhr nachts manuell geändert. Hat das für Ihren Bericht irgendeine Bedeutung?',
             },
             {
               speakerId: 'vance',
-              emotion: 'sweating',
-              text: 'Ähm… wir gehen auf dem gesamten Schiff routinemäßig von 21 Grad aus! Warum fragen Sie?',
+              emotion: 'neutral',
+              text: 'Ein verstelltes Bordventil ist ein Fall für die Haustechnik, nicht für meine Krankenakte, Mr. Sterling. Solange niemand einen konkreten Zusammenhang beweist, ändert eine kalte Zelle an meinem Befund nicht das Geringste!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Puh, die Ärztin speist uns einfach ab… Aber seltsam bleibt es schon, warum jemand um 03:00 Uhr an der Kühlung dreht. Reden wir oben auf dem Promenadendeck mal mit Eleonore – vielleicht kennt sie so einen Fall aus ihren Krimis!',
             },
           ],
         },
@@ -1813,11 +2534,65 @@ export const CRETE_CASE: GameCase = {
         {
           evidenceId: 'zellen_klima_protokoll',
           targetCharacterId: 'vance',
+          hideIfFlag: 'flag_c2_a2_eleonore_klima_idee',
+          lines: [
+            {
+              speakerId: 'vance',
+              emotion: 'neutral',
+              text: 'Heruntergekühlt um 03:00 Uhr? Ein klemmendes Bordventil vielleicht – aber das allein erklärt doch niemandem, warum mein 07:30-Uhr-Bericht deshalb um Stunden falsch sein soll.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Solange wir das nicht sauber begründen können, blockt sie sofort ab… Vielleicht fällt jemandem wie Hobbydetektivin Eleonore auf dem Promenadendeck etwas zu diesem Temperatur-Trick ein!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'zellen_klima_protokoll',
+          targetCharacterId: 'vance',
+          requiredFlag: 'flag_c2_a2_eleonore_klima_idee',
+          hideIfFlag: 'flag_c2_tatzeit_geloest',
           lines: [
             {
               speakerId: 'vance',
               emotion: 'shocked',
-              text: 'Neun Grad?! Um 02:20 Uhr?! Nun… das würde die Abkühlkurve natürlich völlig auf den Kopf stellen! Das klären wir am besten gleich vor dem Kommissar!',
+              setsFlag: 'flag_c2_a2_vance_klimaschock',
+              text: 'Tch… Sie reden also schon über die manipulierte Abkühlkurve ab 03:00 Uhr?! Aber selbst wenn Sie das in Ihren Notizen verknüpfen – an der Hafenübergabe ändert das gar nichts!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'zellen_klima_protokoll',
+          targetCharacterId: 'vance',
+          requiredFlag: 'flag_c2_tatzeit_geloest',
+          lines: [
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'Wie gesagt, Mr. Sterling – selbst wenn es 02:15 Uhr war statt 07:30 Uhr: Wen auf der Brücke oder im Hafen soll diese Uhrzeit bitteschön interessieren?!',
+            },
+          ],
+        },
+        {
+          evidenceId: 'lueftung_streich',
+          targetCharacterId: 'vance',
+          lines: [
+            {
+              speakerId: 'vance',
+              emotion: 'thinking',
+              text: 'Zwei Teenager mit einem Walkie-Talkie um 02:10 Uhr? Die bestätigen höchstens ein Geräusch – keinen medizinischen Befund.',
+            },
+          ],
+        },
+        {
+          evidenceId: 'obduktion_vorlaeufig',
+          targetCharacterId: 'vance',
+          lines: [
+            {
+              speakerId: 'vance',
+              emotion: 'neutral',
+              text: 'Meinen eigenen Bericht kenne ich auswendig, Mr. Sterling.',
             },
           ],
         },
@@ -1836,6 +2611,11 @@ export const CRETE_CASE: GameCase = {
       subtitle: 'Oberdeck · Lüftungsanlage & Vorratskisten',
       backgroundUrl: '/src/assets/images/case2_lifeboat_deck_1795164437954.jpg',
       charactersPresent: [
+        {
+          characterId: 'brandt',
+          visibleIfFlag: 'flag_c2_a2_zelle_offen',
+          hideIfFlag: 'flag_c2_a2_brandt_deck_done',
+        },
         {
           characterId: 'leo',
           hideIfFlag: 'flag_c2_dimitri_weg',
@@ -1866,7 +2646,18 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'maya',
               emotion: 'thinking',
-              text: 'Puh, von hier zieht ein ganz schön kräftiger Schacht direkt in die unteren Decks! Und direkt am Rand riecht es nach Maschinenöl…',
+              text: 'Puh, hier geht ein mächtiger Schacht direkt nach unten ins Schiff! Und direkt am äußeren Metallrand klebt irgendetwas Buntes…',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              setsFlag: 'flag_c2_a2_walkie_indiz',
+              text: 'Schau mal zwischen den Lamellen, Maya! Ein abgerissener grüner Gürtel-Clip mit Totenkopf-Sticker und einem dicken „L“ darauf! Genau so ein Walkie-Talkie hatte Leo vorhin am Gurt!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'shocked',
+              text: 'Aha!! Dann haben Leo und Rick heute Nacht hier am Schacht also sehr wohl etwas getrieben! Stellen wir die beiden gleich hier drüben zur Rede!',
             },
           ],
         },
@@ -1897,27 +2688,172 @@ export const CRETE_CASE: GameCase = {
       ],
       talkTopics: [
         {
-          id: 'leo_rick_streich',
-          title: 'Leo & Rick: Habt ihr nachts hier etwas gehört?',
-          speakerId: 'leo',
-          hideIfFlag: 'flag_c2_dimitri_weg',
+          id: 'brandt_oberdeck',
+          title: 'Officer Brandt: Warum haben Sie die Zelle verlassen?',
+          speakerId: 'brandt',
+          requiredFlag: 'flag_c2_a2_zelle_offen',
+          hideIfFlag: 'flag_c2_a2_brandt_deck_done',
           lines: [
             {
-              speakerId: 'rick',
-              emotion: 'smug',
-              text: 'Ähm… schwörst du, dass Papa nichts davon erfährt, wenn wir’s dir erzählen?!',
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Nanu, Officer Brandt? Eben noch unten vor Zelle 08 über Ihre „ruhige Schicht“ geprahlt, und jetzt mit Putzlappen und Handschuhen am Oberdeck-Lüftungsschacht?',
+            },
+            {
+              speakerId: 'brandt',
+              emotion: 'neutral',
+              text: 'Routinekontrolle, Mr. Sterling. Da unten steht ja jetzt Ihr griechischer Kommissar herum. Und das Scharnier dieser Abluftklappe hier hat geklemmt – die Nachtwache ölt die Gelenke bei Bedarf selbst nach.',
+              choices: [
+                {
+                  label: '„Führt dieser Schacht direkt bis in Arrestzelle 08 hinunter?“',
+                  nextLines: [
+                    {
+                      speakerId: 'brandt',
+                      emotion: 'sweating',
+                      text: 'Durch den halben Schiffsrumpf, ja… Aber durch die Rohre kommt man akustisch normalerweise nicht sauber durch.',
+                    },
+                  ],
+                },
+                {
+                  label: '„Sie riechen hier oben aber ziemlich stark nach Maschinenöl.“',
+                  nextLines: [
+                    {
+                      speakerId: 'brandt',
+                      emotion: 'neutral',
+                      text: 'Das bringt das Schmierfett einer Schiffs-Lüftung eben mit sich. Nichts, worüber sich ein Urlauber den Kopf zerbrechen müsste.',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'brandt',
+              emotion: 'neutral',
+              setsFlag: 'flag_c2_a2_brandt_deck_done',
+              text: 'Halten Sie übrigens die Kinder dieser Familie Higginson von den Kisten fern. Heute Nacht schlich bereits genug unbefugtes Publikum über die Gänge. Guten Tag noch.',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Irgendwie läuft mir bei dem Typen ein kalter Schauer über den Rücken, Nate…',
+            },
+          ],
+        },
+        {
+          id: 'leo_rick_streich',
+          title: 'Leo & Rick: Wart ihr heute Nacht hier oben unterwegs?',
+          speakerId: 'leo',
+          hideIfFlag: 'flag_c2_a2_walkie_indiz',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'neutral',
+              text: 'Na, ihr zwei? Ihr habt vorhin unten auf dem Promenadendeck doch gewettet, wer zuerst etwas über den Polizeieinsatz herausfindet – wart ihr heute Nacht schon mal hier oben?',
             },
             {
               speakerId: 'leo',
               emotion: 'smug',
+              text: 'Wer, wir?! Niemals! Ab 22 Uhr haben wir wie die Engel in unseren Kabinenkojen geschlafen, stimmts, Rick?!',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'smug',
+              text: 'Total! Nicht mal ein einziger Schritt vor die Tür! Warum fragen Sie überhaupt, Herr Anwalt?',
+              choices: [
+                {
+                  label: '„Ich dachte, vielleicht habt ihr von hier oben Geräusche gehört.“',
+                  nextLines: [
+                    {
+                      speakerId: 'leo',
+                      emotion: 'neutral',
+                      text: 'Nö, hier pfeift höchstens der Wind durch die Lüftung. Solange Sie keinen Beweis haben, dass wir hier waren, sagen wir gar nichts!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Eleonore meinte, euch fehlten Batterien fürs Walkie-Talkie…“',
+                  nextLines: [
+                    {
+                      speakerId: 'rick',
+                      emotion: 'sweating',
+                      text: 'Äh… Mamas Detektiv-Gespür wieder!! Nein, ehrlich, Mr. Sterling – ohne Beweis verraten wir uns doch nicht selbst vor Papa!',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Die zwei grinsen viel zu verschwörerisch… so unschuldig schaut niemand nach einer durchwachten Nacht.)',
+            },
+          ],
+        },
+        {
+          id: 'leo_rick_gestaendnis',
+          title: 'Leo & Rick: Was macht euer Walkie-Talkie-Clip im Lüftungsgitter?!',
+          speakerId: 'leo',
+          requiredFlag: 'flag_c2_a2_walkie_indiz',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              text: 'Schaut mal her, ihr zwei „Schlafmützen“! Diesen grünen Piraten-Walkie-Talkie-Clip mit einem dicken „L“ darauf habe ich gerade aus den Lamellen dort am Lüftungsgitter gezogen!',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'shocked',
+              text: 'Oha!! Leo, ich hab dir doch gesagt, das Schnürsenkel-Seil reißt gleich!!',
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'sweating',
+              text: 'Pssst!! Sei still! Wenn Papa erfährt, dass wir nach Mitternacht mit dem Walkie-Talkie Geistergeräusche in die unteren Schiffsdecks gefunkt haben, kriegen wir bis Weihnachten Eisverbot!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: '(Sie sind kurz vorm Einknicken – wie überzeuge ich die beiden am besten?)',
+              choices: [
+                {
+                  label: '„Ehrenwort: Euer Vater erfährt von mir kein Sterbenswort!“',
+                  nextLines: [
+                    {
+                      speakerId: 'maya',
+                      emotion: 'confident',
+                      text: 'Anwalts-Ehrenwort! Wir brauchen nur die genaue Uhrzeit von eurem Streich – für eine echte Ermittlung!',
+                    },
+                  ],
+                },
+                {
+                  label: '„Eure Mutter wäre mega stolz auf zwei echte Geheimzeugen!“',
+                  nextLines: [
+                    {
+                      speakerId: 'rick',
+                      emotion: 'smug',
+                      text: 'Stimmt eigentlich! Mama feiert jeden echten Zeugen total ab – und Papa merkt davon ja gar nichts!',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'smug',
+              text: 'Na gut! Also: Wir wollten um Punkt zwei Uhr nachts mit dem zweiten Walkie-Talkie an einer Schnur ein bisschen „Buuuuh“ in den Schacht rufen, um irgendeine Crew-Schicht zu erschrecken…',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'sweating',
               unlocksEvidence: 'lueftung_streich',
               unlocksThought: 'thought_c2_0210_poltern',
-              text: 'Wir haben um exakt 02:10 Uhr nachts unsere Walkie-Talkies hier ins Lüftungsgitter gehängt für einen Geister-Prank – doch plötzlich hat’s ganz tief unten richtig laut gepoltert, als wäre ein schwerer Stuhl umgeflogen! Und dann wurde der Schacht eiskalt!',
+              text: 'Doch um exakt 02:10 Uhr – stand genau auf Leos leuchtender Armbanduhr! – hat es ganz tief unten im Schacht einen riesigen Schlag getan, als wäre ein schwerer Metallhocker umgefallen! Wir haben uns total erschrocken, der Clip ist abgerissen – und wir sind sofort weg in unsere Kabine gerannt!!',
             },
             {
               speakerId: 'nate',
               emotion: 'confident',
-              text: '02:10 Uhr?! Ihr zwei Chaoten habt uns gerade den wichtigsten Zeugen-Hinweis auf diesem ganzen Schiff geliefert!',
+              text: 'Um exakt 02:10 Uhr nachts ein riesiges Krachen ganz unten aus Zelle 08?! Kein Wunder, dass ihr beiden Reißaus genommen habt – aber diese Uhrzeit ist für uns Gold wert!',
             },
           ],
         },
@@ -1969,6 +2905,8 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              shake: true,
               text: 'Das wird Ihnen gleich vergehen, Officer Brandt! Genau Ihre abgebrochene Keycard SEC-04 klebte frisch geölt im Lüftungsgitter über Zelle 08!',
             },
             {
@@ -2038,47 +2976,81 @@ export const CRETE_CASE: GameCase = {
   testimonies: {
     testimony_c2_vance: {
       id: 'testimony_c2_vance',
-      title: 'Aussage: Dr. Helena Vance (Todeszeitpunkt)',
+      title: 'Aussage: Dr. Helena Vance (Todeszeitpunkt & Hafeneinlauf)',
       witnessId: 'vance',
       introLines: [
         {
           speakerId: 'vance',
           emotion: 'neutral',
-          text: 'Ich fasse mich kurz: Meine medizinische Untersuchung fand um 08:15 Uhr direkt in Arrestzelle 08 statt.',
+          text: 'Euer Ehren, Herr Kommissar – ich wiederhole meine offizielle Feststellung vom Vormittag, damit die Akte ohne weitere Verzögerung an Heraklion gehen kann.',
         },
       ],
       statements: [
         {
           id: 'c2_vance_s1',
-          text: 'Bei normaler Raumtemperatur von 21 °C kühlte der Körper bis 08:15 Uhr absolut typisch ab.',
+          text: 'Um 08:15 Uhr nahm ich direkt in Arrestzelle 08 die medizinische Messung auf.',
           pressLines: [
             {
               speakerId: 'nate',
               emotion: 'thinking',
               shout: 'MOMENT MAL!',
-              text: 'Sie gehen also fest davon aus, dass in Zelle 08 angenehme 21 Grad herrschten?',
+              text: 'Haben Sie vor oder während Ihrer Messung mit Kapitän Brammer gesprochen, bevor Sie Ihren Bericht schrieben?',
             },
             {
               speakerId: 'vance',
               emotion: 'sweating',
-              text: 'Nun… die gesamte Schiffsklimaanlage ist auf 21 Grad geeicht. Etwas anderes lag mir nicht vor!',
+              text: 'Nun… der Kapitän erkundigte sich natürlich sofort über Funk, wann genau der Vorfall wohl geschehen sei. Das ist reine Schiffsroutine!',
             },
           ],
         },
         {
           id: 'c2_vance_s2',
-          text: 'Demnach trat der Tod eindeutig erst gegen 07:30 Uhr morgens ein – bereits im Hafen von Kreta!',
+          text: 'Auf meinem Bogen habe ich ganz normal die übliche Kabinentemperatur von 21 °C zugrunde gelegt.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              shout: 'MOMENT MAL!',
+              text: 'Obwohl man sich unten in Zelle 08 fast den Atem gefroren hat?! Haben Sie die Kälte dort unten einfach absichtlich ignoriert?!',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'Ich… musste mich beeilen! Niemand wollte ein stundenlanges technisches Gutachten, wir lagen schließlich kurz vor dem Pier!',
+            },
+          ],
+        },
+        {
+          id: 'c2_vance_s3',
+          text: 'Ob die Uhrzeit nun etwas früher oder später lag, spielt rechtlich ohnehin keine Rolle – der Vorfall wird genauso behandelt.',
           pressLines: [
             {
               speakerId: 'nate',
               emotion: 'confident',
               shout: 'MOMENT MAL!',
-              text: 'Wenn aber ein technischer Ausfall den Raum abgekühlt hat, verschiebt sich die Todeszeit um Stunden nach vorn!',
+              text: 'Ach ja?! Für die MS Aurora und Kapitän Brammer machte genau diese Uhrzeit den Unterschied zwischen Hafeneinfahrt und tagelanger Sperre auf offener See!',
             },
             {
               speakerId: 'falk',
               emotion: 'smug',
-              text: '„Wenn“ ist kein Beweis, Sterling! Zeigen Sie uns harte Fakten statt Temperatur-Märchen!',
+              text: 'Wilde Unterstellungen, Sterling! Beweisen Sie erst einmal, dass Dr. Vances 07:30-Uhr-Zeitpunkt überhaupt falsch war!',
+            },
+          ],
+        },
+        {
+          id: 'c2_vance_s4',
+          text: 'Der Tod trat eindeutig gegen 07:30 Uhr morgens ein – und an diesem Ergebnis gibt es nichts zu rütteln!',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              text: '07:30 Uhr ist komplett erfunden, Frau Doktor! Zeigen wir dem Tribunal die echten Zahlen aus Zelle 08!',
+            },
+            {
+              speakerId: 'falk',
+              emotion: 'smug',
+              text: 'Dann reden Sie nicht nur, Sterling – legen Sie die Beweise genau hier vor!',
             },
           ],
           contradiction: {
@@ -2090,22 +3062,35 @@ export const CRETE_CASE: GameCase = {
                 emotion: 'confident',
                 shout: 'EINSPRUCH!',
                 shake: true,
-                text: 'Genau diese harten Fakten habe ich hier! Laut dem digitalen Klimaprotokoll stürzte Zelle 08 bereits um 02:20 Uhr auf eisige 9 °C ab – und um 02:10 Uhr hörten zwei Zeugen durch den Schacht den Hocker fallen!',
+                text: 'HIER IST DIE WAHRHEIT, Euer Ehren! Um exakt 03:00 Uhr wurde die Temperatur in Zelle 08 massiv auf eisige 9 °C heruntergedreht – und um 02:10 Uhr hörten zwei Zeugen durch den Lüftungsschacht den Metallhocker krachen! Arthur starb schon um 02:15 Uhr, NICHT um 07:30 Uhr!',
+              },
+              {
+                speakerId: 'dimitri',
+                emotion: 'shocked',
+                text: 'Τι?! Αλλαγή θερμοκρασίας στις 03:00 και θόρυβος στις 02:10?! Κυρία γιατρέ, αυτό ανατρέπει όλη την ώρα θανάτου!!',
               },
               {
                 speakerId: 'vance',
                 emotion: 'shocked',
-                text: 'Neun Grad seit 02:20 Uhr?! Oh nein… bei dieser Unterkühlung stimmt meine Schätzung überhaupt nicht! Der tatsächliche Todeszeitpunkt lag dann bei etwa 02:15 Uhr nachts!',
+                shake: true,
+                text: 'Genug!! Ich… ich halte das nicht mehr aus!! Ja!! Ich habe schon um 08:15 Uhr gemerkt, dass der Raum viel zu kalt war und meine 21-Grad-Zahl nicht stimmen kann – aber KAPITÄN BRAMMER hat mir heute früh persönlich befohlen, mindestens 07:30 Uhr in den Bericht zu schreiben!!',
+              },
+              {
+                speakerId: 'pendelton',
+                emotion: 'shocked',
+                animation: 'slam',
+                sfx: 'gavel_double',
+                text: 'WAS?! Kapitän Brammer hat der Schiffsärztin eine falsche Todeszeit befohlen?!',
               },
               {
                 speakerId: 'falk',
                 emotion: 'facepalm',
                 animation: 'facepalm',
                 sfx: 'facepalm',
-                text: 'Gah!! Selbst wenn es 02:15 Uhr war, Sterling – was ändert die frühe Uhrzeit schon für Kommissar Dimitri?!',
+                text: 'Gah!! Was soll dieser Irrsinn, Käpt’n?! Und selbst wenn Sie um 02:15 Uhr herum herumgetrickst haben – zeigen Sie dem Tribunal endlich den konkreten Beweis, Sterling, WO das Schiff um 02:15 Uhr war und warum Brammer überhaupt diese Stunden verschleppen wollte!!',
                 requiresFinalEvidencePrompt: {
                   question:
-                    'Zeige Staatsanwalt von Falk und Kommissar Dimitri den Beweis, warum die frühe Tatzeit um 02:15 Uhr ALLES verändert!',
+                    'Zeige Staatsanwalt von Falk, Judge Pendelton und Kommissar Dimitri den Beweis für die Position um 02:15 Uhr und Kapitän Brammers Motiv!',
                   correctEvidenceId: 'bruecken_log',
                   successLines: [
                     {
@@ -2113,13 +3098,30 @@ export const CRETE_CASE: GameCase = {
                       emotion: 'confident',
                       shout: 'VOLLTREFFER!',
                       shake: true,
-                      text: 'Das ändert ALLES! Laut Kapitän Brammers Brücken-Log erreichte die MS Aurora die griechischen Gewässer erst um 05:45 Uhr! Um 02:15 Uhr befanden wir uns noch mitten in INTERNATIONALEN GEWÄSSERN!',
+                      text: 'Hier ist Ihr Beweis, Staatsanwalt von Falk! Laut Kapitän Brammers Brücken-Log passierte die MS Aurora die griechische 12-Meilen-Grenze erst um 05:45 Uhr! Um 02:15 Uhr trieben wir noch 42 Seemeilen vor Kreta – mitten in INTERNATIONALEN GEWÄSSERN!',
+                    },
+                    {
+                      speakerId: 'captain',
+                      emotion: 'neutral',
+                      text: '… Verdammt. Ja, ich hab Dr. Vance befohlen, den Zeitpunkt nach dem Einlaufen anzusetzen! Nach Hafenordnung § 14 hätte uns Heraklion bei einem ungeklärten Todesfall auf hoher See überhaupt nicht anlegen lassen! Die Reederei hätte mir den Kopf abgerissen, wenn wir Tage auf Außenreede blockiert geblieben wären!',
+                    },
+                    {
+                      speakerId: 'pendelton',
+                      emotion: 'headshake',
+                      animation: 'headshake',
+                      sfx: 'gavel',
+                      text: 'Eine grobe Pflichtverletzung, Kapitän! Das wird ein eigenes Disziplinar-Nachspiel haben!',
                     },
                     {
                       speakerId: 'dimitri',
                       emotion: 'confident',
-                      sfx: 'gavel',
-                      text: 'Απίστευτο!! Στις 02:15 σε διεθνή ύδατα?! Κύριε Στέρλινγκ, είστε ιδιοφυΐα! Αυτό σημαίνει ότι η Ελληνική Ακτοφυλακή δεν έχει καμία απολύτως αρμοδιότητα! Καλή συνέχεια και… γεια σας!',
+                      sfx: 'gavel_double',
+                      text: 'Απίστευτο!! Στις 02:15 στα 42 ναυτικά μίλια – καθαρά διεθνή ύδατα!! Κύριε Στέρλινγκ, είστε ιδιοφυΐα! Αυτό σημαίνει ότι η Ελληνική Ακτοφυλακή δεν έχει καμία απολύτως αρμοδιότητα! Εγώ φεύγω για έναν καλό φρέντο εσπρέσο στο λιμάνι – γεια σας!!',
+                    },
+                    {
+                      speakerId: 'maya',
+                      emotion: 'sweating',
+                      text: 'Äh… Kapitän Brammer? Warum klappt Kommissar Dimitri plötzlich fröhlich seine Akte zu und marschiert gemütlich Richtung Gangway?!',
                     },
                     {
                       speakerId: 'captain',
@@ -2130,12 +3132,29 @@ export const CRETE_CASE: GameCase = {
                       speakerId: 'falk',
                       emotion: 'shocked',
                       shake: true,
-                      text: 'WAS?! Sie lassen uns jetzt einfach allein auf dem Schiff zurück, Kommissar?! Verdammter Urlaub… dann liegt der gesamte Mordfall eben wieder bei unserem Bord-Tribunal!',
+                      text: 'WAS?! Sie lassen uns jetzt einfach sitzen, Kommissar?! Dann bleibt der gesamte Fall wieder beim Bord-Tribunal – und die Gangway für Passagiere bleibt bis auf Weiteres komplett verrammelt!',
+                    },
+                    {
+                      speakerId: 'andrew',
+                      emotion: 'grumpy',
+                      shake: true,
+                      text: 'DAS DARF DOCH WOHL NICHT WAHR SEIN!! Der griechische Kommissar geht gerade in aller Seelenruhe an Land Kaffee trinken – und wir Passagiere stecken hier weiterhin fest?! Auf dem Promenadendeck toben bereits alle Gäste!!',
+                    },
+                    {
+                      speakerId: 'maya',
+                      emotion: 'thinking',
+                      text: 'Au weia, die Stimmung draußen kippt komplett, Nate… Immerhin haben wir gestoppt, dass der Fall einfach heimlich unter den Teppich gekehrt wird.',
+                    },
+                    {
+                      speakerId: 'nate',
+                      emotion: 'thinking',
+                      sfx: 'tension',
+                      text: 'Stimmt – wir wissen jetzt, warum Kapitän Brammer und Dr. Vance die Uhrzeit verschleppt haben. Aber eines ist immer noch völlig offen: War Arthurs Tod um 02:15 Uhr nun tatsächlich ein Selbstmord… oder hat jemand in Zelle 08 nachgeholfen? Genau das müssen wir als Nächstes herausfinden!',
                       completesChapter: {
                         completedChapterTitle: 'Akt 2.2 abgeschlossen',
                         completedTimeLabel: 'Tag 4 · Mittag beendet',
                         summary:
-                          'Du hast bewiesen, dass Arthur bereits um 02:15 Uhr in internationalen Gewässern starb. Kommissar Dimitri verabschiedete sich trocken auf Griechisch und ging von Bord. Am Nachmittag wartet schon das nächste Drama auf dem Deck!',
+                          'Du hast aufgedeckt, dass Kapitän Brammer Dr. Vance befahl, die Todeszeit auf 07:30 Uhr zu verschieben, damit das Schiff in den Hafen einlaufen durfte. In Wahrheit starb Arthur um 02:15 Uhr in internationalen Gewässern – Dimitri geht entspannt von Bord, alle Passagiere sind außer sich vor Wut über die gesperrte Gangway, und ob es Suizid war oder nicht, bleibt völlig offen!',
                         nextChapterId: 'c2_akt3_nachmittag',
                         nextLocationId: 'promenade',
                         nextPhase: 'investigation',
@@ -2147,7 +3166,7 @@ export const CRETE_CASE: GameCase = {
                             speakerId: 'maya',
                             emotion: 'sweating',
                             setsFlag: 'flag_c2_dimitri_weg',
-                            text: 'Na toll – Dimitri sitzt schon gemütlich im Hafencafé, und wir suchen immer noch den Mörder… Moment, warum winken uns die Higginsons da vorn so hektisch zu?!',
+                            text: 'Na toll – Dimitri sitzt schon gemütlich im Hafencafé, draußen schimpfen alle Passagiere wegen der Ausgangssperre, und ob es wirklich Selbstmord war, wissen wir immer noch nicht… Moment, warum winkt uns Familie Higginson da vorn so hektisch zu?!',
                           },
                         ],
                       },
@@ -2159,7 +3178,7 @@ export const CRETE_CASE: GameCase = {
                       emotion: 'facepalm',
                       animation: 'facepalm',
                       sfx: 'facepalm',
-                      text: 'Was soll das über unsere Position um 02:15 Uhr beweisen?! Schauen Sie auf die Schiffsroute, Sterling!',
+                      text: 'Was soll das über unsere Position um 02:15 Uhr beweisen?! Schauen Sie auf die Schiffsroute des Kapitäns, Sterling!',
                     },
                   ],
                 },
@@ -2175,14 +3194,14 @@ export const CRETE_CASE: GameCase = {
           animation: 'facepalm',
           sfx: 'facepalm',
           shake: true,
-          text: 'Widerlegen Sie gefälligst die 21-°C-Annahme oder die 07:30-Uhr-Tatzeit mit technischen Fakten, Sterling!',
+          text: 'Widerlegen Sie gefälligst die 07:30-Uhr-Tatzeit direkt mit harten technischen oder nächtlichen Fakten, Sterling!',
         },
         {
           speakerId: 'pendelton',
           emotion: 'headshake',
           animation: 'headshake',
           sfx: 'headshake',
-          text: 'Dieser Einwand überzeugt das Tribunal nicht, Mr. Sterling.',
+          text: 'Dieser Einwand überzeugt das Tribunal an dieser Stelle noch nicht, Mr. Sterling.',
         },
       ],
     },
@@ -2427,7 +3446,7 @@ export const CRETE_CASE: GameCase = {
                       shout: 'VOLLTREFFER!',
                       shake: true,
                       sfx: 'gavel_double',
-                      text: 'DAS HIER IST DIE ANDERE HÄLFTE!! Die Bruchkante aus Conrads Rucksack passt millimetergenau auf Ihre Karte SEC-04!! Deshalb haben Sie dem kleinen Jungen seinen Rucksack gestohlen – und deshalb verstellten Sie die Kühlung auf 9 °C!',
+                      text: 'DAS HIER IST DIE ANDERE HÄLFTE!! Die Bruchkante aus Conrads Rucksack passt millimetergenau auf Ihre Karte SEC-04!! Deshalb haben Sie dem kleinen Jungen seinen Rucksack gestohlen – und deshalb verstellten Sie um 03:00 Uhr die Zellentemperatur!',
                     },
                     {
                       speakerId: 'brandt',

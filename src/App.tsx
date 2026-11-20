@@ -23,6 +23,7 @@ import type {
   GameCase,
   GameCheckpointSnapshot,
   GameSaveState,
+  MiniGameId,
   ShoutType,
 } from './types/game';
 import { soundFx } from './utils/soundFx';
@@ -164,12 +165,12 @@ function createCreteAct22Checkpoint(): CheckpointEntry {
     {
       speakerId: 'maya',
       emotion: 'thinking',
-      text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation und das Rettungsboot-Deck für unsere Fragen offen stehen.',
+      text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation für unsere Fragen offen steht – bis zur Mittagsanhörung bleibt nicht viel Zeit.',
     },
     {
       speakerId: 'nate',
       emotion: 'thinking',
-      text: 'Gut – fangen wir ohne wilde Spekulationen bei der Schiffsärztin Dr. Vance an. Sie müsste den Zustand von Arthur heute Morgen ja als Erste gesehen haben.',
+      text: 'Fangen wir in der Krankenstation bei Dr. Vance an und hören uns ganz unvoreingenommen um, was die Akten über die Nacht sagen.',
     },
   ];
   const snapshot: GameCheckpointSnapshot = {
@@ -187,7 +188,6 @@ function createCreteAct22Checkpoint(): CheckpointEntry {
       'vip_salon',
       'brig_cell',
       'infirmary',
-      'lifeboat_deck',
     ],
     collectedEvidence: ['ausweis_nate', 'higginson_notiz'],
     unlockedThoughts: ['thought_c2_blockade'],
@@ -257,6 +257,7 @@ function createCreteAct24Checkpoint(): CheckpointEntry {
       'ausweis_nate',
       'higginson_notiz',
       'obduktion_vorlaeufig',
+      'brandt_wachbuch',
       'zellen_klima_protokoll',
       'lueftung_streich',
       'bruecken_log',
@@ -273,6 +274,22 @@ function createCreteAct24Checkpoint(): CheckpointEntry {
       flag_c2_a1_vip: true,
       flag_c2_brig_freigeschaltet: true,
       flag_c2_a1_rauswurf: true,
+      flag_c2_a1_angenommen: true,
+      flag_c2_a2_vance_befragt: true,
+      flag_c2_a2_21grad_notiz: true,
+      flag_c2_a2_brandt_protokoll: true,
+      flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_brandt_widerspruch_geloest: true,
+      flag_c2_a2_zelle_offen: true,
+      flag_c2_a2_seil_gesehen: true,
+      flag_c2_a2_schloss_gesehen: true,
+      flag_c2_a2_klima_geloest: true,
+      flag_c2_a2_eleonore_klima_idee: true,
+      flag_c2_a2_brandt_deck_done: true,
+      flag_c2_a2_vance_klimaschock: true,
+      flag_c2_a2_warum_zeit_wichtig: true,
+      flag_c2_a2_hafenregel_gelesen: true,
+      flag_c2_a2_bruecke_geloest: true,
       flag_c2_tatzeit_geloest: true,
       flag_c2_dimitri_weg: true,
       flag_c2_a3_start: true,
@@ -385,6 +402,7 @@ export default function App() {
   const [muted, setMuted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showRestartModal, setShowRestartModal] = useState(false);
+  const [activeMiniGame, setActiveMiniGame] = useState<MiniGameId | null>(null);
   const [devShortcutsUnlocked, setDevShortcutsUnlocked] = useState(false);
   const devTapRef = useRef<{ count: number; lastAt: number }>({ count: 0, lastAt: 0 });
 
@@ -433,14 +451,15 @@ export default function App() {
   const topLine = dialogQueue[0] ?? null;
 
   useEffect(() => {
-    if (!topLine) return;
-
-    if (topLine.shout) {
-      setActiveShout(topLine.shout);
-      soundFx.playShout(topLine.shout);
-      const t = window.setTimeout(() => setActiveShout(null), 1150);
-      return () => window.clearTimeout(t);
+    if (!topLine || !topLine.shout) {
+      setActiveShout(null);
+      return;
     }
+
+    setActiveShout(topLine.shout);
+    soundFx.playShout(topLine.shout);
+    const t = window.setTimeout(() => setActiveShout(null), 1150);
+    return () => window.clearTimeout(t);
   }, [topLine]);
 
   useEffect(() => {
@@ -519,6 +538,8 @@ export default function App() {
         !prev.unlockedLocations.includes(topLine.unlocksLocation)
       ) {
         next.unlockedLocations = [...prev.unlockedLocations, topLine.unlocksLocation];
+        const unlockedLoc = activeCase.locations[topLine.unlocksLocation];
+        if (unlockedLoc) showToast(`Schauplatz freigeschaltet: ${unlockedLoc.name}`);
         if (!unlockAudio) unlockAudio = 'door_lock';
         changed = true;
       }
@@ -700,6 +721,15 @@ export default function App() {
       return;
     }
 
+    if (finished.startsMiniGameId) {
+      justFoundHotspotRef.current = false;
+      setDialogQueue([]);
+      setPresentMode(false);
+      setInvestigationMenu('none');
+      setActiveMiniGame(finished.startsMiniGameId);
+      return;
+    }
+
     if (finished.startsTestimonyId) {
       const testimonyId = finished.startsTestimonyId;
       const testimony = activeCase.testimonies[testimonyId];
@@ -829,6 +859,118 @@ export default function App() {
     setDialogQueue([...choice.nextLines, ...dialogQueue.slice(1)]);
   };
 
+  const handleCompleteMiniGame = (miniGameId: MiniGameId) => {
+    setActiveMiniGame(null);
+    if (miniGameId === 'dimitri_pantomime') {
+      enqueueLines([
+        {
+          speakerId: 'dimitri',
+          emotion: 'shocked',
+          shake: true,
+          text: 'Αξιωματικέ Brandt!! Στις 02:10 ακούστηκε θόρυβος στο κελί κατά τη βάρδιά σας! Ανοίξτε τη σφραγισμένη πόρτα ΤΩΡΑ!!',
+        },
+        {
+          speakerId: 'brandt',
+          emotion: 'sweating',
+          sfx: 'door_lock',
+          setsFlag: 'flag_c2_a2_zelle_offen',
+          text: 'Tch… verstanden, Kommissar! Hier – das Schloss ist entriegelt. Ich… gehe dann nach oben auf das Rettungsboot-Deck und prüfe eine klemmende Lüftungsklappe.',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          text: 'YES!! Dein Pantomime-Griechisch hat perfekt funktioniert, Nate – die Tür zu Zelle 08 steht endlich offen!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          text: 'Die Tür zu Zelle 08 steht endlich offen. Gehen wir hinein und sehen uns in aller Ruhe genau um, was uns dort drinnen erwartet.',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'cooling_pipes') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          text: 'Die Diagnose-Leitung steht! Schau dir den Sensor-Ausdruck an, Maya: Punkt 03:00 Uhr nachts hat jemand manuell hier am Regel-Ventil gedreht und die Temperatur von Zelle 08 verändert!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'shocked',
+          text: 'Mitten in der Nacht um 03:00 Uhr hat jemand absichtlich an der Klimaregelung geschraubt?! Kein Wunder, dass einem hier drin fast die Finger abfrieren… aber wozu dreht man eine Zelle nachts herunter?',
+        },
+        {
+          speakerId: 'dimitri',
+          emotion: 'thinking',
+          text: 'Τι κάνετε εκεί με τους σωλήνες, κύριε Στέρλινγκ;; Κρυώνετε; Μην ανησυχείτε, σε λίγο θα ανάψω τη θέρμανση και θα πιούμε ένα ζεστό ελληνικό καφεδάκι – όλα καλά!!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'sweating',
+          text: 'Ähm… danke, Kommissar… (Ich glaube, er hat wieder kein einziges Wort verstanden und denkt bloß, wir wollen die kaputte Klimaanlage reparieren und einen heißen Kaffee trinken…)',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          unlocksEvidence: 'zellen_klima_protokoll',
+          unlocksThought: 'thought_c2_kuehlung_9grad',
+          setsFlag: 'flag_c2_a2_klima_geloest',
+          text: 'Ich schreibe mir diese Temperaturänderung um 03:00 Uhr sofort ins Notizbuch! Mit dem frischen Ausdruck gehen wir jetzt direkt hinauf zur Schiffsärztin Dr. Vance in die Krankenstation – mal sehen, was sie dazu sagt!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'sea_chart') {
+      const seaChartLines: DialogLine[] = [
+        {
+          speakerId: 'captain',
+          emotion: 'neutral',
+          unlocksEvidence: 'bruecken_log',
+          setsFlag: 'flag_c2_a2_bruecke_geloest',
+          text: 'Sauber abgelesen. Die griechische 12-Meilen-Zone haben wir exakt um 05:45 Uhr morgens passiert. Alles davor – auch 02:15 Uhr nachts bei 42 Seemeilen Abstand – war offene internationale See. Hier haben Sie die beglaubigte Kopie aus meinem Brücken-Logbuch.',
+        },
+        {
+          speakerId: 'dimitri',
+          emotion: 'confident',
+          text: 'Πολύ καλά, καπετάνιε! Σημειώστε το ακριβώς: μετά τις 05:45 η υπόθεση ανήκει στην Εισαγγελία Ηρακλείου. Αν όμως το έγκλημα έγινε νωρίτερα, στα διεθνή ύδατα… τότε δεν έχω καμία απολύτως δικαιοδοσία!',
+        },
+        {
+          speakerId: 'captain',
+          emotion: 'neutral',
+          text: 'Ab 05:45 Uhr ist Kreta zuständig. Vorher liegt der Fall allein beim Schiff. Punkt.',
+        },
+      ];
+
+      const autoTransition =
+        state.flags['flag_c2_tatzeit_geloest']
+          ? activeCase.autoChapterTransitions?.find((t) => t.id === 'c2_a2_to_court')
+          : null;
+
+      if (autoTransition) {
+        if (autoTransition.toast) {
+          showToast(autoTransition.toast);
+        }
+        enqueueLines([...seaChartLines, ...autoTransition.lines]);
+      } else {
+        enqueueLines([
+          ...seaChartLines,
+          {
+            speakerId: 'maya',
+            emotion: 'thinking',
+            text: 'Hast du das gehört, Nate?! Wenn wir jetzt beweisen können, dass Arthur wirklich schon um 02:15 Uhr starb, war die MS Aurora noch gar nicht in griechischen Gewässern! Schau mal unten in der Zelle und auf dem Rettungsboot-Deck nach Hinweisen und verbinde alles im Notizbuch!',
+          },
+        ]);
+      }
+    }
+  };
+
   const currentLocation =
     activeCase.locations[state.currentLocationId] ??
     activeCase.locations[activeCase.initialLocationId];
@@ -864,6 +1006,8 @@ export default function App() {
   const handleInspectHotspot = (hotspotId: string) => {
     const hotspot = currentLocation.hotspots.find((h) => h.id === hotspotId);
     if (!hotspot) return;
+
+    setInvestigationMenu('none');
 
     const alreadyVisited = state.inspectedHotspots.includes(hotspotId);
     if (alreadyVisited) {
@@ -1088,7 +1232,23 @@ export default function App() {
 
     if (!match) {
       soundFx.play('penalty');
-      showToast('Diese beiden Hinweise ergeben noch keine neue Schlussfolgerung.');
+      const pair = [thoughtA, thoughtB];
+      if (
+        (pair.includes('thought_c2_0210_poltern') && pair.includes('thought_c2_brandt_dienst')) ||
+        (pair.includes('thought_c2_0210_poltern') && pair.includes('thought_c2_0730_hafen'))
+      ) {
+        showToast(
+          state.solvedDeductions.includes('c2_logic_brandt_zeit')
+            ? 'Verbinde das 02:10-Uhr-Krachen direkt mit deiner Schlussfolgerung „06:00 Uhr gefunden vs. 07:30 Uhr tot?!“!'
+            : 'Gute Spur! Vergleiche aber zuerst Brandts Wachprotokoll (06:00) mit dem Arztbericht (07:30)!'
+        );
+      } else if (pair.includes('thought_c2_0210_poltern') && pair.includes('thought_c2_kuehlung_9grad')) {
+        showToast(
+          'Sprich erst auf dem Promenadendeck mit Eleonore über die Temperaturänderung, um ihre Krimi-Erkenntnis freizuschalten!'
+        );
+      } else {
+        showToast('Diese beiden Hinweise ergeben noch keine neue Schlussfolgerung.');
+      }
       return;
     }
 
@@ -1229,7 +1389,15 @@ export default function App() {
           ]
         : autoTransition
           ? [...autoTransition.lines]
-          : [];
+          : match.id === 'c2_logic_tatzeit' && !nextFlags['flag_c2_a2_bruecke_geloest']
+            ? [
+                {
+                  speakerId: 'maya',
+                  emotion: 'thinking',
+                  text: 'Falk und Vance tun einfach so, als wäre diese fünf Stunden frühere Uhrzeit völlig egal! Aber irgendetwas sagt mir, dass genau hinter dieser 07:30-Uhr-Lüge ein Grund steckt. Schauen wir im VIP-Salon an der Bord-Funk-Konsole oder bei Kapitän Brammer nach den Hafen-Vorschriften!',
+                },
+              ]
+            : [];
 
     setState((prev) => {
       const unlockedLocs = [...prev.unlockedLocations];
@@ -1673,6 +1841,19 @@ export default function App() {
           onReturnToTitleMenu={() =>
             setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }))
           }
+          activeMiniGameId={activeMiniGame}
+          onCompleteMiniGame={handleCompleteMiniGame}
+          onCancelMiniGame={() => {
+            if (activeMiniGame === 'cooling_pipes') {
+              setState((prev) => ({
+                ...prev,
+                inspectedHotspots: prev.inspectedHotspots.filter(
+                  (id) => id !== 'c2_a2_klima_panel'
+                ),
+              }));
+            }
+            setActiveMiniGame(null);
+          }}
         />
       </main>
 

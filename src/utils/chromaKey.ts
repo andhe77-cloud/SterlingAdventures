@@ -4,16 +4,16 @@ const processedCache = new Map<string, string>();
 const inflightCache = new Map<string, Promise<string>>();
 
 /**
- * Checks whether a pixel is part of the bright chroma-key green backdrop.
- * Requires strong green channel dominance so muted greens/teals on clothing are spared.
+ * Checks whether a pixel is part of the bright neon chroma-key green backdrop (#00FF00).
+ * Keeps thresholds tight so forest-green or teal clothing (e.g., striped shirts) is spared.
  */
 function isChromaGreen(r: number, g: number, b: number, strict = false): boolean {
   const maxRB = r > b ? r : b;
   const dominance = g - maxRB;
   if (strict) {
-    return g > 140 && dominance > 55;
+    return g > 158 && dominance > 88 && r < 115 && b < 115;
   }
-  return g > 92 && dominance > 34;
+  return g > 140 && dominance > 68 && r < 125 && b < 125;
 }
 
 /**
@@ -79,15 +79,14 @@ function processImageElement(img: HTMLImageElement): string {
     }
   };
 
-  // Seed 4-neighbor BFS from all 4 outer edges so enclosed pockets touching any edge are cleared,
-  // while interior clothing details (e.g. green palm leaves) stay protected by ink outlines.
+  // Seed strictly neon-green pixels from outer edges so clothing touching the bottom edge stays intact
   for (let x = 0; x < width; x++) {
-    trySeed(x, 0, false);
-    trySeed(x, height - 1, false);
+    trySeed(x, 0, true);
+    trySeed(x, height - 1, true);
   }
   for (let y = 0; y < height; y++) {
-    trySeed(0, y, false);
-    trySeed(width - 1, y, false);
+    trySeed(0, y, true);
+    trySeed(width - 1, y, true);
   }
 
   // Also seed pure neon #00FF00 islands (e.g. gap enclosed between bent arm and torso)
@@ -103,7 +102,7 @@ function processImageElement(img: HTMLImageElement): string {
     }
   }
 
-  // BFS expansion through connected green pixels
+  // BFS expansion strictly through neon chroma-green pixels
   while (head < tail) {
     const pos = queue[head++];
     const x = pos % width;
@@ -114,7 +113,7 @@ function processImageElement(img: HTMLImageElement): string {
       const n = pos - 1;
       if (!isBg[n]) {
         const idx = n * 4;
-        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], false)) {
+        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], true)) {
           isBg[n] = 1;
           queue[tail++] = n;
         }
@@ -125,7 +124,7 @@ function processImageElement(img: HTMLImageElement): string {
       const n = pos + 1;
       if (!isBg[n]) {
         const idx = n * 4;
-        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], false)) {
+        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], true)) {
           isBg[n] = 1;
           queue[tail++] = n;
         }
@@ -136,7 +135,7 @@ function processImageElement(img: HTMLImageElement): string {
       const n = pos - width;
       if (!isBg[n]) {
         const idx = n * 4;
-        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], false)) {
+        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], true)) {
           isBg[n] = 1;
           queue[tail++] = n;
         }
@@ -147,7 +146,7 @@ function processImageElement(img: HTMLImageElement): string {
       const n = pos + width;
       if (!isBg[n]) {
         const idx = n * 4;
-        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], false)) {
+        if (isChromaGreen(data[idx], data[idx + 1], data[idx + 2], true)) {
           isBg[n] = 1;
           queue[tail++] = n;
         }
