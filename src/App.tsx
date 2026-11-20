@@ -15,18 +15,29 @@ import { AnimatedOutro } from './components/AnimatedOutro';
 import { CaseBinder, type BinderTab } from './components/CaseBinder';
 import { GameStage, type InvestigationMenu } from './components/GameStage';
 import { CRUISE_CASE } from './data/cruiseCase';
+import { CRETE_CASE } from './data/creteCase';
 import type {
   Character,
   CheckpointEntry,
   DialogLine,
+  GameCase,
   GameCheckpointSnapshot,
   GameSaveState,
   ShoutType,
 } from './types/game';
 import { soundFx } from './utils/soundFx';
 
-const ACTIVE_CASE = CRUISE_CASE;
-const STORAGE_KEY = 'advokat_engine_save_v4';
+const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE];
+const CASE_MAP: Record<string, GameCase> = {
+  [CRUISE_CASE.id]: CRUISE_CASE,
+  [CRETE_CASE.id]: CRETE_CASE,
+};
+
+function getStorageKey(caseId: string): string {
+  return caseId === CRUISE_CASE.id
+    ? 'advokat_engine_save_v4'
+    : `advokat_engine_save_v4_${caseId}`;
+}
 
 function extractCheckpointSnapshot(s: GameSaveState): GameCheckpointSnapshot {
   const { trialCheckpoint: _t, chapterCheckpoint: _c, ...rest } = s;
@@ -42,18 +53,19 @@ function extractCheckpointSnapshot(s: GameSaveState): GameCheckpointSnapshot {
   };
 }
 
-function createInitialState(): GameSaveState {
+function createInitialState(caseDef: GameCase = CRUISE_CASE): GameSaveState {
   return {
+    caseId: caseDef.id,
     screen: 'TITLE_MENU',
     phase: 'investigation',
-    currentChapterId: ACTIVE_CASE.initialChapterId ?? 'kap1_tag1_abend',
+    currentChapterId: caseDef.initialChapterId ?? 'kap1_tag1_abend',
     pendingChapterTransition: null,
     credibility: 5,
     maxCredibility: 5,
-    currentLocationId: ACTIVE_CASE.initialLocationId,
-    unlockedLocations: [...ACTIVE_CASE.initialUnlockedLocations],
-    collectedEvidence: [...ACTIVE_CASE.initialEvidenceIds],
-    unlockedThoughts: [...ACTIVE_CASE.initialThoughtIds],
+    currentLocationId: caseDef.initialLocationId,
+    unlockedLocations: [...caseDef.initialUnlockedLocations],
+    collectedEvidence: [...caseDef.initialEvidenceIds],
+    unlockedThoughts: [...caseDef.initialThoughtIds],
     solvedDeductions: [],
     flags: {},
     visitedTopics: [],
@@ -88,6 +100,7 @@ const KAP4_MORGEN_INTRO_LINES: DialogLine[] = [
 
 function createFinalTrialCheckpoint(): CheckpointEntry {
   const snapshot: GameCheckpointSnapshot = {
+    caseId: CRUISE_CASE.id,
     screen: 'PLAYING',
     phase: 'court',
     currentChapterId: 'kap4_tag3_morgen',
@@ -109,8 +122,8 @@ function createFinalTrialCheckpoint(): CheckpointEntry {
       'kabine_312_log',
       'schuldschein_brief',
     ],
-    unlockedThoughts: Object.keys(ACTIVE_CASE.thoughts),
-    solvedDeductions: ACTIVE_CASE.logicCombinations.map((c) => c.id),
+    unlockedThoughts: Object.keys(CRUISE_CASE.thoughts),
+    solvedDeductions: CRUISE_CASE.logicCombinations.map((c) => c.id),
     flags: {
       flag_glocke_gefunden: true,
       flag_wein_gefunden: true,
@@ -140,19 +153,101 @@ function createFinalTrialCheckpoint(): CheckpointEntry {
     statementIndex: 0,
   };
   return {
-    label: ACTIVE_CASE.chapters?.kap4_tag3_morgen?.dayLabel ?? 'Tag 3 · Morgen',
+    label: CRUISE_CASE.chapters?.kap4_tag3_morgen?.dayLabel ?? 'Tag 3 · Morgen',
     introLines: [...KAP4_MORGEN_INTRO_LINES],
     snapshot,
   };
 }
 
-function loadSavedState(): GameSaveState | null {
+function createCreteAct24Checkpoint(): CheckpointEntry {
+  const introLines: DialogLine[] = [
+    {
+      speakerId: 'pendelton',
+      emotion: 'neutral',
+      animation: 'slam',
+      sfx: 'gavel_double',
+      text: 'Ruhe im Ballsaal! Die Abendsitzung des Not-Tribunals wird eröffnet. Staatsanwalt von Falk – wen rufen Sie zu dem gefundenen Seidenschal in den Zeugenstand?',
+    },
+    {
+      speakerId: 'falk',
+      emotion: 'smug',
+      text: 'Mit zweifelhaftem Vergnügen rufe ich die Eigentümerin des Tat-Hilfsmittels: Mrs. Eleonore Higginson!',
+    },
+    {
+      speakerId: 'eleonore',
+      emotion: 'shocked',
+      animation: 'shock',
+      sfx: 'evidence_chime',
+      text: 'OH MEIN GOTT!! EIN ECHTER GERICHTSSAAL!! Andrew, mach schnell ein Foto – ich stehe genau an DEM Zeugenpult!! Hallo, Euer Ehren! Hallo, Herr Verteidiger!!',
+      startsTestimonyId: 'testimony_c2_eleonore',
+    },
+  ];
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CRETE_CASE.id,
+    screen: 'PLAYING',
+    phase: 'court',
+    currentChapterId: 'c2_akt4_abend',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'courtroom',
+    unlockedLocations: [
+      'promenade',
+      'music_salon',
+      'vip_salon',
+      'brig_cell',
+      'infirmary',
+      'lifeboat_deck',
+      'courtroom',
+    ],
+    collectedEvidence: [
+      'ausweis_nate',
+      'higginson_notiz',
+      'obduktion_vorlaeufig',
+      'zellen_klima_protokoll',
+      'lueftung_streich',
+      'bruecken_log',
+      'seidenschal_spur',
+      'keycard_fragment',
+    ],
+    unlockedThoughts: Object.keys(CRETE_CASE.thoughts).filter(
+      (id) => id !== 'thought_c2_flashback_schacht'
+    ),
+    solvedDeductions: CRETE_CASE.logicCombinations.map((c) => c.id),
+    flags: {
+      flag_c2_a1_promenade: true,
+      flag_c2_a1_music: true,
+      flag_c2_a1_vip: true,
+      flag_c2_brig_freigeschaltet: true,
+      flag_c2_a1_rauswurf: true,
+      flag_c2_tatzeit_geloest: true,
+      flag_c2_dimitri_weg: true,
+      flag_c2_a3_start: true,
+      flag_c2_a3_rucksack_gesichtet: true,
+      flag_c2_rucksack_gefunden: true,
+      flag_c2_conrad_flucht: true,
+      flag_c2_conrad_geloest: true,
+      flag_c2_a3_bereit: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: CRETE_CASE.chapters?.c2_akt4_abend?.dayLabel ?? 'Tag 4 · Abend (Akt 2.4)',
+    introLines,
+    snapshot,
+  };
+}
+
+function loadSavedState(caseId: string): GameSaveState | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(getStorageKey(caseId));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as GameSaveState;
     if (!parsed || !parsed.currentLocationId) return null;
-    return parsed;
+    return { ...parsed, caseId: parsed.caseId ?? caseId };
   } catch {
     return null;
   }
@@ -220,8 +315,11 @@ function buildRepeatInspectLine(label: string, repeatCount: number): DialogLine[
 }
 
 export default function App() {
-  const [state, setState] = useState<GameSaveState>(() => createInitialState());
-  const [hasSave, setHasSave] = useState<boolean>(() => Boolean(loadSavedState()));
+  const [state, setState] = useState<GameSaveState>(() => createInitialState(CRUISE_CASE));
+  const [savedCaseIds, setSavedCaseIds] = useState<Record<string, boolean>>(() => ({
+    [CRUISE_CASE.id]: Boolean(loadSavedState(CRUISE_CASE.id)),
+    [CRETE_CASE.id]: Boolean(loadSavedState(CRETE_CASE.id)),
+  }));
   const [dialogQueue, setDialogQueue] = useState<DialogLine[]>([]);
   const [activeShout, setActiveShout] = useState<ShoutType | null>(null);
   const [stageShake, setStageShake] = useState(false);
@@ -235,6 +333,8 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showRestartModal, setShowRestartModal] = useState(false);
 
+  const activeCase = CASE_MAP[state.caseId ?? CRUISE_CASE.id] ?? CRUISE_CASE;
+
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
   }, []);
@@ -245,12 +345,13 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [toastMessage]);
 
-  // Persist playing state automatically
+  // Persist playing state automatically per case
   useEffect(() => {
     if (state.screen === 'PLAYING') {
+      const cid = state.caseId ?? CRUISE_CASE.id;
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        setHasSave(true);
+        localStorage.setItem(getStorageKey(cid), JSON.stringify(state));
+        setSavedCaseIds((prev) => (prev[cid] ? prev : { ...prev, [cid]: true }));
       } catch {
         // Ignore storage quota issues
       }
@@ -316,7 +417,7 @@ export default function App() {
         !prev.collectedEvidence.includes(topLine.unlocksEvidence)
       ) {
         next.collectedEvidence = [...prev.collectedEvidence, topLine.unlocksEvidence];
-        const ev = ACTIVE_CASE.evidence[topLine.unlocksEvidence];
+        const ev = activeCase.evidence[topLine.unlocksEvidence];
         if (ev) showToast(`Beweis erhalten: ${ev.name}`);
         unlockAudio = 'evidence_chime';
         changed = true;
@@ -330,7 +431,7 @@ export default function App() {
         next.collectedEvidence = baseList.filter(
           (id) => id !== topLine.removesEvidence
         );
-        const ev = ACTIVE_CASE.evidence[topLine.removesEvidence];
+        const ev = activeCase.evidence[topLine.removesEvidence];
         if (ev) showToast(`Zurückgelegt: ${ev.name}`);
         if (!unlockAudio) unlockAudio = 'page_turn';
         changed = true;
@@ -341,7 +442,7 @@ export default function App() {
         !prev.unlockedThoughts.includes(topLine.unlocksThought)
       ) {
         next.unlockedThoughts = [...prev.unlockedThoughts, topLine.unlocksThought];
-        const th = ACTIVE_CASE.thoughts[topLine.unlocksThought];
+        const th = activeCase.thoughts[topLine.unlocksThought];
         if (th) showToast(`Notizbuch aktualisiert: ${th.title}`);
         if (!unlockAudio) unlockAudio = 'thought_pop';
         changed = true;
@@ -379,10 +480,49 @@ export default function App() {
     if (unlockAudio && !topLine.sfx && !topLine.shout) {
       soundFx.play(unlockAudio);
     }
-  }, [topLine, showToast]);
+  }, [topLine, showToast, activeCase]);
 
-  const startNewGame = () => {
-    const fresh = createInitialState();
+  // Progressive location unlocks (e.g., unlock Arrestzelle in Fall 2 once all upper decks were searched)
+  useEffect(() => {
+    if (state.screen !== 'PLAYING' || dialogQueue.length > 0) return;
+    const unlocks = activeCase.progressiveLocationUnlocks;
+    if (!unlocks || unlocks.length === 0) return;
+
+    const match = unlocks.find(
+      (u) =>
+        u.requiredFlags.every((f) => Boolean(state.flags[f])) &&
+        (!u.setsFlag || !state.flags[u.setsFlag]) &&
+        !state.unlockedLocations.includes(u.unlockLocationId)
+    );
+
+    if (!match) return;
+
+    setState((prev) => ({
+      ...prev,
+      unlockedLocations: prev.unlockedLocations.includes(match.unlockLocationId)
+        ? prev.unlockedLocations
+        : [...prev.unlockedLocations, match.unlockLocationId],
+      flags: match.setsFlag ? { ...prev.flags, [match.setsFlag]: true } : prev.flags,
+    }));
+    soundFx.play('door_lock');
+    if (match.toast) {
+      showToast(match.toast);
+    }
+    if (match.lines && match.lines.length > 0) {
+      setDialogQueue(match.lines);
+    }
+  }, [
+    state.screen,
+    state.flags,
+    state.unlockedLocations,
+    dialogQueue.length,
+    activeCase,
+    showToast,
+  ]);
+
+  const startNewGame = (targetCaseId?: string) => {
+    const caseDef = CASE_MAP[targetCaseId ?? activeCase.id] ?? CRUISE_CASE;
+    const fresh = createInitialState(caseDef);
     fresh.screen = 'INTRO_CUTSCENE';
     setState(fresh);
     setDialogQueue([]);
@@ -396,23 +536,25 @@ export default function App() {
 
   const handleFinishIntro = useCallback(() => {
     setState((prev) => {
+      const caseDef = CASE_MAP[prev.caseId ?? CRUISE_CASE.id] ?? CRUISE_CASE;
       const playingState: GameSaveState = { ...prev, screen: 'PLAYING' };
       const chapterCheckpoint: CheckpointEntry = {
         label:
-          ACTIVE_CASE.chapters?.[playingState.currentChapterId]?.dayLabel ??
+          caseDef.chapters?.[playingState.currentChapterId]?.dayLabel ??
           'Tag 1 · Abend',
-        introLines: [...ACTIVE_CASE.introLines],
+        introLines: [...caseDef.introLines],
         snapshot: extractCheckpointSnapshot(playingState),
       };
       return { ...playingState, chapterCheckpoint };
     });
-    setDialogQueue([...ACTIVE_CASE.introLines]);
-  }, []);
+    setDialogQueue([...activeCase.introLines]);
+  }, [activeCase]);
 
-  const continueGame = () => {
-    const saved = loadSavedState();
+  const continueGame = (targetCaseId?: string) => {
+    const cid = targetCaseId ?? activeCase.id;
+    const saved = loadSavedState(cid);
     if (!saved) {
-      startNewGame();
+      startNewGame(cid);
       return;
     }
     saved.screen = 'PLAYING';
@@ -494,7 +636,7 @@ export default function App() {
 
     if (finished.startsTestimonyId) {
       const testimonyId = finished.startsTestimonyId;
-      const testimony = ACTIVE_CASE.testimonies[testimonyId];
+      const testimony = activeCase.testimonies[testimonyId];
       setState((prev) => {
         const nextState: GameSaveState = {
           ...prev,
@@ -575,6 +717,9 @@ export default function App() {
         phase: transition.nextPhase,
         credibility: prev.maxCredibility,
         unlockedLocations: nextUnlocked,
+        flags: transition.setsFlag
+          ? { ...prev.flags, [transition.setsFlag]: true }
+          : prev.flags,
         pendingChapterTransition: null,
         activeTestimonyId:
           transition.nextPhase === 'court' ? prev.activeTestimonyId : null,
@@ -582,7 +727,7 @@ export default function App() {
       };
 
       const chapterLabel =
-        ACTIVE_CASE.chapters?.[transition.nextChapterId]?.dayLabel ??
+        activeCase.chapters?.[transition.nextChapterId]?.dayLabel ??
         transition.completedChapterTitle;
 
       const chapterCheckpoint: CheckpointEntry = {
@@ -619,8 +764,8 @@ export default function App() {
   };
 
   const currentLocation =
-    ACTIVE_CASE.locations[state.currentLocationId] ??
-    ACTIVE_CASE.locations[ACTIVE_CASE.initialLocationId];
+    activeCase.locations[state.currentLocationId] ??
+    activeCase.locations[activeCase.initialLocationId];
 
   const presentCharacters = useMemo<Character[]>(() => {
     if (currentLocation.charactersPresent && currentLocation.charactersPresent.length > 0) {
@@ -630,17 +775,17 @@ export default function App() {
             (!entry.visibleIfFlag || Boolean(state.flags[entry.visibleIfFlag])) &&
             (!entry.hideIfFlag || !state.flags[entry.hideIfFlag])
         )
-        .map((entry) => ACTIVE_CASE.characters[entry.characterId])
+        .map((entry) => activeCase.characters[entry.characterId])
         .filter((char): char is Character => Boolean(char));
     }
-    if (currentLocation.characterId && ACTIVE_CASE.characters[currentLocation.characterId]) {
-      return [ACTIVE_CASE.characters[currentLocation.characterId]];
+    if (currentLocation.characterId && activeCase.characters[currentLocation.characterId]) {
+      return [activeCase.characters[currentLocation.characterId]];
     }
     return [];
-  }, [currentLocation, state.flags]);
+  }, [currentLocation, state.flags, activeCase]);
 
   const activeTestimony = state.activeTestimonyId
-    ? ACTIVE_CASE.testimonies[state.activeTestimonyId]
+    ? activeCase.testimonies[state.activeTestimonyId]
     : null;
 
   const visibleStatements = useMemo(() => {
@@ -690,7 +835,7 @@ export default function App() {
   };
 
   const handleTravelTo = (locationId: string) => {
-    const target = ACTIVE_CASE.locations[locationId];
+    const target = activeCase.locations[locationId];
     if (!target) return;
     justFoundHotspotRef.current = false;
     setState((prev) => ({
@@ -732,7 +877,7 @@ export default function App() {
           }
           return { ...prev, credibility: nextCred };
         });
-        showToast('Staatsanwalt Falk schlägt sich die Hand vor den Kopf – kein Motivbeweis!');
+        showToast('Staatsanwalt Falk schlägt sich die Hand vor den Kopf – falscher Beweis!');
       }
       return;
     }
@@ -774,7 +919,7 @@ export default function App() {
           text: 'Wem möchte ich dieses Beweisstück hier im Raum zeigen?',
           choices: targetedMatches.map((rule) => {
             const targetChar = rule.targetCharacterId
-              ? ACTIVE_CASE.characters[rule.targetCharacterId]
+              ? activeCase.characters[rule.targetCharacterId]
               : null;
             return {
               label: targetChar
@@ -806,7 +951,7 @@ export default function App() {
   };
 
   const handleInspectEvidence = (evidenceId: string) => {
-    const item = ACTIVE_CASE.evidence[evidenceId];
+    const item = activeCase.evidence[evidenceId];
     if (!item) return;
 
     setActiveBinderTab(null);
@@ -868,7 +1013,7 @@ export default function App() {
   };
 
   const handleCombineThoughts = (thoughtA: string, thoughtB: string) => {
-    const match = ACTIVE_CASE.logicCombinations.find(
+    const match = activeCase.logicCombinations.find(
       (combo) =>
         !state.solvedDeductions.includes(combo.id) &&
         ((combo.thoughtA === thoughtA && combo.thoughtB === thoughtB) ||
@@ -886,15 +1031,22 @@ export default function App() {
       : state.flags;
 
     const shouldUnlockCourtroom =
-      ACTIVE_CASE.courtroomLocationId &&
-      ACTIVE_CASE.courtroomUnlockFlags &&
-      ACTIVE_CASE.courtroomUnlockFlags.every((flag) => Boolean(nextFlags[flag])) &&
-      !state.unlockedLocations.includes(ACTIVE_CASE.courtroomLocationId);
+      activeCase.courtroomLocationId &&
+      activeCase.courtroomUnlockFlags &&
+      activeCase.courtroomUnlockFlags.every((flag) => Boolean(nextFlags[flag])) &&
+      !state.unlockedLocations.includes(activeCase.courtroomLocationId);
 
     const shouldFinishChapter3 =
+      activeCase.id === CRUISE_CASE.id &&
       state.currentChapterId === 'kap3_tag2_abend' &&
       Boolean(nextFlags['flag_kap3_trick_geloest']) &&
       Boolean(nextFlags['flag_kap3_motiv_geloest']);
+
+    const autoTransition = activeCase.autoChapterTransitions?.find(
+      (t) =>
+        t.chapterId === state.currentChapterId &&
+        t.requiredFlags.every((f) => Boolean(nextFlags[f]))
+    );
 
     const extraUnlockLine: DialogLine[] = shouldUnlockCourtroom
       ? [
@@ -993,7 +1145,7 @@ export default function App() {
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Stimmt… morgen früh legen wir ihm vor Judge Pendelton endgültig das Handwerk. Und sobald das Urteil steht, schaut sich Frank seine Bankunterlagen an – irgendetwas Größeres steckt da noch dahinter.',
+              text: 'Stimmt… morgen früh legen wir ihm vor Judge Pendelton endgültig das Handwerk.',
               completesChapter: {
                 completedChapterTitle: 'Kapitel 3 abgeschlossen',
                 completedTimeLabel: 'Tag 2 · Abend beendet',
@@ -1009,7 +1161,9 @@ export default function App() {
               },
             },
           ]
-        : [];
+        : autoTransition
+          ? [...autoTransition.lines]
+          : [];
 
     setState((prev) => {
       const unlockedLocs = [...prev.unlockedLocations];
@@ -1018,10 +1172,10 @@ export default function App() {
       }
       if (
         shouldUnlockCourtroom &&
-        ACTIVE_CASE.courtroomLocationId &&
-        !unlockedLocs.includes(ACTIVE_CASE.courtroomLocationId)
+        activeCase.courtroomLocationId &&
+        !unlockedLocs.includes(activeCase.courtroomLocationId)
       ) {
-        unlockedLocs.push(ACTIVE_CASE.courtroomLocationId);
+        unlockedLocs.push(activeCase.courtroomLocationId);
       }
 
       return {
@@ -1039,6 +1193,8 @@ export default function App() {
       showToast('Seegericht im Ballsaal freigeschaltet!');
     } else if (shouldFinishChapter3) {
       showToast('Alle Beweise für das große Finale gesammelt!');
+    } else if (autoTransition?.toast) {
+      showToast(autoTransition.toast);
     }
 
     setActiveBinderTab(null);
@@ -1073,37 +1229,47 @@ export default function App() {
         </header>
 
         <main className="flex-1 flex items-center justify-center px-6 py-10">
-          <div className="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-xl p-8 sm:p-10 flex flex-col justify-between gap-8 shadow-2xl">
-            <div className="space-y-4">
-              <div className="text-xs font-medium text-amber-400">
-                Kreuzfahrt-Fall · MS Aurora
-              </div>
-              <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-50 leading-tight text-balance">
-                {ACTIVE_CASE.title}
-              </h1>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                {ACTIVE_CASE.description}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={startNewGame}
-                className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-bold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                Neues Spiel starten
-              </button>
-              {hasSave && (
-                <button
-                  type="button"
-                  onClick={continueGame}
-                  className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 text-sm font-semibold rounded-lg border border-slate-700 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+            {ALL_CASES.map((caseItem) => {
+              const hasCaseSave = Boolean(savedCaseIds[caseItem.id]);
+              return (
+                <div
+                  key={caseItem.id}
+                  className="bg-slate-900 border border-slate-800 rounded-xl p-7 sm:p-8 flex flex-col justify-between gap-7 shadow-2xl"
                 >
-                  Spielstand fortsetzen
-                </button>
-              )}
-            </div>
+                  <div className="space-y-3">
+                    <div className="text-xs font-medium text-amber-400">
+                      {caseItem.badgeLabel ?? caseItem.subtitle}
+                    </div>
+                    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-50 leading-tight text-balance">
+                      {caseItem.title}
+                    </h1>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      {caseItem.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => startNewGame(caseItem.id)}
+                      className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    >
+                      Neues Spiel starten
+                    </button>
+                    {hasCaseSave && (
+                      <button
+                        type="button"
+                        onClick={() => continueGame(caseItem.id)}
+                        className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        Fortsetzen
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </main>
       </div>
@@ -1114,7 +1280,8 @@ export default function App() {
   if (state.screen === 'INTRO_CUTSCENE') {
     return (
       <AnimatedIntro
-        caseTitle={ACTIVE_CASE.title}
+        caseTitle={activeCase.title}
+        slides={activeCase.introSlides}
         onComplete={handleFinishIntro}
       />
     );
@@ -1145,11 +1312,12 @@ export default function App() {
 
           <div className="space-y-2">
             <h1 className="font-display text-3xl font-bold text-slate-50">
-              {isWin ? 'FALL 1 ABGESCHLOSSEN!' : 'Verfahren vertagt'}
+              {isWin ? (activeCase.victoryTitle ?? 'FALL 1 ABGESCHLOSSEN!') : 'Verfahren vertagt'}
             </h1>
             <p className="text-sm text-slate-300 leading-relaxed">
               {isWin
-                ? 'Anya Brooks wurde endgültig freigesprochen und Arthur Morgan verhaftet – doch als vor dem Hafen von Kreta plötzlich alle Ausgänge abgeriegelt werden, beginnt erst das wahre Rätsel… (Fortsetzung folgt in Fall 2!)'
+                ? (activeCase.victorySummary ??
+                  'Anya Brooks wurde endgültig freigesprochen und Arthur Morgan verhaftet – doch als vor dem Hafen von Kreta plötzlich alle Ausgänge abgeriegelt werden, beginnt erst das wahre Rätsel… (Fortsetzung folgt in Fall 2!)')
                 : 'Deine Glaubwürdigkeit vor Gericht ist aufgebraucht. Du kannst direkt ab dem letzten Checkpoint weitermachen – mit voller Glaubwürdigkeit!'}
             </p>
           </div>
@@ -1158,13 +1326,13 @@ export default function App() {
             <div>
               <div className="text-slate-400">Beweise</div>
               <div className="font-mono-num text-base font-bold text-slate-100 mt-0.5">
-                {state.collectedEvidence.length}/{Object.keys(ACTIVE_CASE.evidence).length}
+                {state.collectedEvidence.length}/{Object.keys(activeCase.evidence).length}
               </div>
             </div>
             <div>
               <div className="text-slate-400">Deduktionen</div>
               <div className="font-mono-num text-base font-bold text-slate-100 mt-0.5">
-                {state.solvedDeductions.length}/{ACTIVE_CASE.logicCombinations.length}
+                {state.solvedDeductions.length}/{activeCase.logicCombinations.length}
               </div>
             </div>
             <div>
@@ -1198,7 +1366,7 @@ export default function App() {
               <div className="flex items-center justify-center gap-3 pt-1">
                 <button
                   type="button"
-                  onClick={startNewGame}
+                  onClick={() => startNewGame(activeCase.id)}
                   className="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-300 text-xs font-medium rounded-lg border border-slate-800 transition-colors whitespace-nowrap cursor-pointer"
                 >
                   Neues Spiel
@@ -1208,17 +1376,26 @@ export default function App() {
                   onClick={() => setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }))}
                   className="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-300 text-xs font-medium rounded-lg border border-slate-800 transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Zum Hauptmenü
+                  Zur Fallauswahl
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex flex-col gap-2.5">
+              {activeCase.id === CRUISE_CASE.id && (
+                <button
+                  type="button"
+                  onClick={() => startNewGame(CRETE_CASE.id)}
+                  className="w-full px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors cursor-pointer"
+                >
+                  Weiter zu Fall 2: Schatten über Kreta
+                </button>
+              )}
               {trialCp && (
                 <button
                   type="button"
                   onClick={() => restoreCheckpoint(trialCp)}
-                  className="w-full px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors cursor-pointer"
+                  className="w-full px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold rounded-lg border border-slate-700 transition-colors cursor-pointer"
                 >
                   Letzte Verhandlung prüfen ({trialCp.label})
                 </button>
@@ -1226,7 +1403,7 @@ export default function App() {
               <div className="flex items-center justify-center gap-3 pt-1">
                 <button
                   type="button"
-                  onClick={startNewGame}
+                  onClick={() => startNewGame(activeCase.id)}
                   className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold rounded-lg border border-slate-700 transition-colors whitespace-nowrap cursor-pointer"
                 >
                   Nochmal spielen
@@ -1236,7 +1413,7 @@ export default function App() {
                   onClick={() => setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }))}
                   className="px-5 py-2.5 bg-slate-950 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-lg border border-slate-800 transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Zum Hauptmenü
+                  Zur Fallauswahl
                 </button>
               </div>
             </div>
@@ -1260,7 +1437,7 @@ export default function App() {
             <div className="hidden xl:flex items-center gap-2.5 text-xs text-slate-300">
               <span className="text-slate-600">·</span>
               <span className="font-semibold text-amber-300 whitespace-nowrap">
-                {ACTIVE_CASE.chapters?.[state.currentChapterId]?.dayLabel ?? 'Tag 1 · Abend'}
+                {activeCase.chapters?.[state.currentChapterId]?.dayLabel ?? 'Tag 1 · Abend'}
               </span>
               <span className="text-slate-600">·</span>
               <div className="flex items-center gap-1.5 whitespace-nowrap">
@@ -1372,7 +1549,7 @@ export default function App() {
       {/* Full-Width Centered Game Stage */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
         <GameStage
-          gameCase={ACTIVE_CASE}
+          gameCase={activeCase}
           state={state}
           location={currentLocation}
           presentCharacters={presentCharacters}
@@ -1399,7 +1576,7 @@ export default function App() {
       {/* Slide-Over Binder Drawer (Gerichtsakte / Notizbuch / Struktur) */}
       {activeBinderTab && (
         <CaseBinder
-          gameCase={ACTIVE_CASE}
+          gameCase={activeCase}
           state={state}
           activeTab={activeBinderTab}
           presentMode={presentMode}
@@ -1435,7 +1612,7 @@ export default function App() {
                   Neustart wählen
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Starte ab dem aktuellen Kapitelanfang, dem letzten Verhör oder beginne den kompletten Fall von vorn.
+                  Starte ab dem aktuellen Kapitelanfang, dem letzten Verhör oder kehre zur Fallauswahl zurück.
                 </p>
               </div>
               <button
@@ -1479,29 +1656,60 @@ export default function App() {
                 </button>
               )}
 
+              {activeCase.id === CRUISE_CASE.id ? (
+                <button
+                  type="button"
+                  onClick={() => restoreCheckpoint(createFinalTrialCheckpoint(), true)}
+                  className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div className="text-xs font-semibold">
+                    Zur letzten Verhandlung springen (Tag 3 · Morgen)
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">
+                    Direkt zum Hauptverfahren · ab Kommissar Marston
+                  </div>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
+                  className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div className="text-xs font-semibold">
+                    Zu Akt 2.4 springen (Eleonore im Zeugenstand)
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">
+                    Direkt ab Tag 4 · Abend & danach Akt 2.5
+                  </div>
+                </button>
+              )}
+
               <button
                 type="button"
-                onClick={() => restoreCheckpoint(createFinalTrialCheckpoint(), true)}
-                className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                onClick={() => startNewGame(activeCase.id)}
+                className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors cursor-pointer"
               >
                 <div className="text-xs font-semibold">
-                  Zur letzten Verhandlung springen (Tag 3 · Morgen)
+                  Aktuellen Fall komplett neu starten
                 </div>
                 <div className="text-[11px] text-slate-400 mt-0.5">
-                  Direkt zum Hauptverfahren · ab Kommissar Marston
+                  Zurück zum Intro von {activeCase.title}
                 </div>
               </button>
 
               <button
                 type="button"
-                onClick={startNewGame}
-                className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors cursor-pointer"
+                onClick={() => {
+                  setShowRestartModal(false);
+                  setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }));
+                }}
+                className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 rounded-lg transition-colors cursor-pointer"
               >
                 <div className="text-xs font-semibold">
-                  Komplettes Spiel neu starten
+                  Zurück zur Fallauswahl
                 </div>
                 <div className="text-[11px] text-slate-400 mt-0.5">
-                  Zurück zum Intro & Tag 1 · Abend
+                  Zwischen Fall 1 und Fall 2 wechseln
                 </div>
               </button>
             </div>

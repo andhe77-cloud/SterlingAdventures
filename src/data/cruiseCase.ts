@@ -3432,7 +3432,7 @@ export const CRUISE_CASE: GameCase = {
                   completedChapterTitle: 'Verhandlung gewonnen!',
                   completedTimeLabel: 'Tag 3 · Morgen beendet',
                   summary:
-                    'Du hast den Fall vor dem Tribunal gelöst und Anya Brooks endgültig freigesprochen. Arthur Morgan beteuerte bis zuletzt seine Unschuld am 45.000-€-Brief, wurde jedoch verhaftet. Am Abend wartet ein ruhiger Ausklang im Musiksalon – doch Marstons Nachforschungen werfen bereits neue Fragen auf…',
+                    'Du hast den Fall vor dem Tribunal gelöst und Anya Brooks endgültig freigesprochen. Arthur Morgan beteuerte bis zuletzt seine Unschuld, wurde jedoch verhaftet. Am Abend wartet ein ruhiger Ausklang im Musiksalon…',
                   nextChapterId: 'kap4_tag3_abend',
                   nextLocationId: 'music_salon',
                   nextPhase: 'investigation',
@@ -3464,27 +3464,22 @@ export const CRUISE_CASE: GameCase = {
                     {
                       speakerId: 'marston',
                       emotion: 'thinking',
-                      text: 'Tja… genießt es bloß, ihr zwei. Aber unter uns gesagt: Ich hab vorhin über Funk noch Arthur Morgans Bankunterlagen geprüft… und irgendwas mit dem Motiv kann einfach nicht stimmen.',
+                      text: 'Tja… genießt es bloß, ihr zwei. Mir geht nur Arthur Morgans verzweifelter Blick vorhin bei seiner Verhaftung nicht ganz aus dem Kopf.',
                     },
                     {
                       speakerId: 'nate',
                       emotion: 'thinking',
-                      text: 'Wie meinst du das, Frank? Immerhin lag da diese 45.000-Euro-Forderung an „A. M.“!',
+                      text: 'Wie meinst du das, Frank? Seine letzten Worte vor dem Pult klangen ziemlich panisch – fast so, als hätte er Angst vor jemand ganz anderem gehabt…',
                     },
                     {
                       speakerId: 'marston',
                       emotion: 'sweating',
-                      text: 'Eben das ist ja so verrückt! Seine Konten sind völlig makellos – keine Schulden, keine Spielverluste, kein einziger zweifelhafter Kredit. Woher also dieser Brief, und vor wem hatte er solche Angst?!',
-                    },
-                    {
-                      speakerId: 'nate',
-                      emotion: 'thinking',
-                      text: '(„Ich bin unschuldig! Jemand hat mir diesen Brief untergeschoben… Wenn die herausfinden, dass es vorbei ist…“ Wenn nicht Geld sein Motiv war, wer hat dann wirklich im Hintergrund die Fäden gezogen?)',
+                      text: 'Genau das meine ich. Irgendwas stimmt hier trotzdem nicht – aber da sollen sich ab morgen Vormittag andere drum kümmern.',
                     },
                     {
                       speakerId: 'marston',
                       emotion: 'confident',
-                      text: 'Ach, grüble heute Abend nicht mehr drüber nach, Nate! Sollen sich morgen Vormittag die Kollegen der Polizei vor Ort auf Kreta um diese Hintergründe kümmern. Ich bin ehrlich gesagt heilfroh, den Täter morgen sauber zu übergeben!',
+                      text: 'Wir übergeben ihn beim Einlaufen auf Kreta sauber an die Hafenpolizei, und dann ist endlich Feierabend. Genießt heute Abend das Konzert!',
                     },
                     {
                       speakerId: 'maya',

@@ -70,7 +70,8 @@ export interface EvidenceItem {
     | 'thermometer'
     | 'door'
     | 'wine'
-    | 'search';
+    | 'search'
+    | 'bag';
   summary: string;
   detail: string;
   updatedByFlag?: {
@@ -124,6 +125,7 @@ export interface ChapterTransition {
   nextTimeOfDay?: 'abend' | 'tag';
   unlocksLocations?: string[];
   locksLocations?: string[];
+  setsFlag?: string;
   nextIntroLines: DialogLine[];
 }
 
@@ -228,11 +230,45 @@ export interface Testimony {
   wrongObjectionLines: DialogLine[];
 }
 
+export interface IntroSlideConfig {
+  id: string;
+  imageUrl?: string;
+  kicker: string;
+  caption: string;
+  sfx?: 'foghorn' | 'alarm' | 'gavel' | 'tension';
+  durationMs: number;
+  panFrom: { scale: number; x: number; y: number };
+  panTo: { scale: number; x: number; y: number };
+  isTitleCard?: boolean;
+}
+
+export interface ProgressiveLocationUnlock {
+  id: string;
+  requiredFlags: string[];
+  unlockLocationId: string;
+  setsFlag?: string;
+  toast?: string;
+  lines?: DialogLine[];
+}
+
+export interface AutoChapterTransition {
+  id: string;
+  chapterId: string;
+  requiredFlags: string[];
+  toast?: string;
+  lines: DialogLine[];
+}
+
 export interface GameCase {
   id: string;
   title: string;
   subtitle: string;
   description: string;
+  badgeLabel?: string;
+  victoryTitle?: string;
+  victorySummary?: string;
+  supportsOutro?: boolean;
+  introSlides?: IntroSlideConfig[];
   initialChapterId?: string;
   chapters?: Record<string, ChapterInfo>;
   initialLocationId: string;
@@ -241,6 +277,8 @@ export interface GameCase {
   initialThoughtIds: string[];
   courtroomUnlockFlags?: string[];
   courtroomLocationId?: string;
+  progressiveLocationUnlocks?: ProgressiveLocationUnlock[];
+  autoChapterTransitions?: AutoChapterTransition[];
   introLines: DialogLine[];
   characters: Record<string, Character>;
   evidence: Record<string, EvidenceItem>;
@@ -262,6 +300,7 @@ export interface CheckpointEntry {
 }
 
 export interface GameSaveState {
+  caseId?: string;
   screen:
     | 'TITLE_MENU'
     | 'INTRO_CUTSCENE'

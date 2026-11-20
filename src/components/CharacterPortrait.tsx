@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { User } from 'lucide-react';
 import type { Character, Emotion, PortraitAnimation } from '../types/game';
 import { getCachedCutoutUrl, removeChromaBackground } from '../utils/chromaKey';
+import { resolveAssetPath } from '../utils/assetPath';
 
 interface CharacterPortraitProps {
   character: Character;
@@ -14,7 +15,7 @@ interface CharacterPortraitProps {
 }
 
 export function resolvePortraitUrl(character: Character, emotion: Emotion = 'neutral'): string {
-  return character.portraits?.[emotion] ?? character.portraitUrl;
+  return resolveAssetPath(character.portraits?.[emotion] ?? character.portraitUrl);
 }
 
 function resolveAnimationClass(

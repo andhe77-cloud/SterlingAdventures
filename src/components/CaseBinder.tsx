@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   BookOpen,
   Brain,
+  Briefcase,
   Clock,
   DoorOpen,
   FileText,
@@ -58,6 +59,8 @@ function EvidenceIcon({ iconName }: { iconName: EvidenceItem['iconName'] }) {
       return <Wine className={cls} />;
     case 'search':
       return <Search className={cls} />;
+    case 'bag':
+      return <Briefcase className={cls} />;
     default:
       return <User className={cls} />;
   }

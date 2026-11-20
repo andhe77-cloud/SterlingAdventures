@@ -2,25 +2,17 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, Scale, SkipForward } from 'lucide-react';
 import { soundFx } from '../utils/soundFx';
+import { resolveAssetPath } from '../utils/assetPath';
+
+import type { IntroSlideConfig } from '../types/game';
 
 interface AnimatedIntroProps {
   caseTitle: string;
+  slides?: IntroSlideConfig[];
   onComplete: () => void;
 }
 
-interface IntroSlide {
-  id: string;
-  imageUrl?: string;
-  kicker: string;
-  caption: string;
-  sfx?: 'foghorn' | 'alarm' | 'gavel';
-  durationMs: number;
-  panFrom: { scale: number; x: number; y: number };
-  panTo: { scale: number; x: number; y: number };
-  isTitleCard?: boolean;
-}
-
-const INTRO_SLIDES: IntroSlide[] = [
+const INTRO_SLIDES: IntroSlideConfig[] = [
   {
     id: 'slide_ship',
     imageUrl: '/src/assets/images/intro_ship_sunset_1795043375929.jpg',
@@ -65,9 +57,14 @@ const INTRO_SLIDES: IntroSlide[] = [
   },
 ];
 
-export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
+export function AnimatedIntro({ caseTitle, slides, onComplete }: AnimatedIntroProps) {
+  const activeSlides = slides && slides.length > 0 ? slides : INTRO_SLIDES;
   const [index, setIndex] = useState(0);
-  const current = INTRO_SLIDES[index];
+  const current = activeSlides[index];
+
+  useEffect(() => {
+    setIndex(0);
+  }, [slides]);
 
   useEffect(() => {
     if (!current) return;
@@ -76,7 +73,7 @@ export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
     }
 
     const timer = window.setTimeout(() => {
-      if (index + 1 < INTRO_SLIDES.length) {
+      if (index + 1 < activeSlides.length) {
         setIndex((i) => i + 1);
       } else {
         onComplete();
@@ -84,10 +81,10 @@ export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
     }, current.durationMs);
 
     return () => window.clearTimeout(timer);
-  }, [index, current, onComplete]);
+  }, [index, current, activeSlides.length, onComplete]);
 
   const handleNext = () => {
-    if (index + 1 < INTRO_SLIDES.length) {
+    if (index + 1 < activeSlides.length) {
       setIndex((i) => i + 1);
     } else {
       onComplete();
@@ -100,7 +97,7 @@ export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
         {/* Top Skip & Progress Bar */}
         <div className="flex items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
-            {INTRO_SLIDES.map((s, idx) => (
+            {activeSlides.map((s, idx) => (
               <span
                 key={s.id}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -161,7 +158,7 @@ export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
                 <>
                   {current.imageUrl && (
                     <motion.img
-                      src={current.imageUrl}
+                      src={resolveAssetPath(current.imageUrl)}
                       alt={current.kicker}
                       referrerPolicy="no-referrer"
                       initial={{
@@ -216,7 +213,7 @@ export function AnimatedIntro({ caseTitle, onComplete }: AnimatedIntroProps) {
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer"
           >
             <span>
-              {index + 1 < INTRO_SLIDES.length ? 'Nächste Szene' : 'Akt 1 starten'}
+              {index + 1 < activeSlides.length ? 'Nächste Szene' : 'Akt 1 starten'}
             </span>
             <ChevronRight className="w-4 h-4 shrink-0" />
           </button>

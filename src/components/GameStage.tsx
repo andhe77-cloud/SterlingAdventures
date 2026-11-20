@@ -23,6 +23,7 @@ import type {
 import { CharacterPortrait } from './CharacterPortrait';
 import { ShoutOverlay } from './ShoutOverlay';
 import { preloadCharacterSprites } from '../utils/chromaKey';
+import { resolveAssetPath } from '../utils/assetPath';
 import { soundFx } from '../utils/soundFx';
 
 export type InvestigationMenu = 'none' | 'inspect' | 'talk' | 'travel';
@@ -78,10 +79,11 @@ export function GameStage({
   const currentLine = dialogQueue[0] ?? null;
   const [typedCount, setTypedCount] = useState(0);
 
-  const activeBackgroundUrl =
+  const activeBackgroundUrl = resolveAssetPath(
     location.alternateBackground && state.flags[location.alternateBackground.flag]
       ? location.alternateBackground.backgroundUrl
-      : location.backgroundUrl;
+      : location.backgroundUrl
+  );
 
   // Reset image error state when location or background variant changes
   useEffect(() => {

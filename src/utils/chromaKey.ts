@@ -1,3 +1,5 @@
+import { resolveAssetPath } from './assetPath';
+
 const processedCache = new Map<string, string>();
 const inflightCache = new Map<string, Promise<string>>();
 
@@ -205,17 +207,18 @@ function processImageElement(img: HTMLImageElement): string {
 }
 
 export function getCachedCutoutUrl(imageUrl: string): string | null {
-  return processedCache.get(imageUrl) ?? null;
+  return processedCache.get(resolveAssetPath(imageUrl)) ?? null;
 }
 
 /**
  * Removes the solid chroma-key green backdrop from a sprite image and caches a transparent PNG data URL.
  */
 export function removeChromaBackground(imageUrl: string): Promise<string> {
-  const cached = processedCache.get(imageUrl);
+  const resolvedUrl = resolveAssetPath(imageUrl);
+  const cached = processedCache.get(resolvedUrl);
   if (cached) return Promise.resolve(cached);
 
-  const existing = inflightCache.get(imageUrl);
+  const existing = inflightCache.get(resolvedUrl);
   if (existing) return existing;
 
   const promise = new Promise<string>((resolve) => {
@@ -224,22 +227,22 @@ export function removeChromaBackground(imageUrl: string): Promise<string> {
     img.onload = () => {
       try {
         const result = processImageElement(img);
-        processedCache.set(imageUrl, result);
-        inflightCache.delete(imageUrl);
+        processedCache.set(resolvedUrl, result);
+        inflightCache.delete(resolvedUrl);
         resolve(result);
       } catch {
-        inflightCache.delete(imageUrl);
-        resolve(imageUrl);
+        inflightCache.delete(resolvedUrl);
+        resolve(resolvedUrl);
       }
     };
     img.onerror = () => {
-      inflightCache.delete(imageUrl);
-      resolve(imageUrl);
+      inflightCache.delete(resolvedUrl);
+      resolve(resolvedUrl);
     };
-    img.src = imageUrl;
+    img.src = resolvedUrl;
   });
 
-  inflightCache.set(imageUrl, promise);
+  inflightCache.set(resolvedUrl, promise);
   return promise;
 }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { AlertTriangle, ChevronRight, Music, SkipForward } from 'lucide-react';
 import { soundFx } from '../utils/soundFx';
+import { resolveAssetPath } from '../utils/assetPath';
 
 interface AnimatedOutroProps {
   muted: boolean;
@@ -42,7 +43,7 @@ const OUTRO_SLIDES: OutroSlide[] = [
     kicker: 'Tag 3 · Abend · Nachklang',
     speaker: 'Nate Sterling (Gedanke)',
     caption:
-      '(Die Melodie klingt wunderschön… und trotzdem lässt mich dieser eine Gedanke nicht los: Wer hat Arthur diesen Brief untergeschoben – und was steht wohl morgen in seinen Bankunterlagen?)',
+      '(Die Melodie klingt wunderschön… und trotzdem lässt mich dieser Gedanke nicht ganz los: Irgendwas stimmt hier trotzdem nicht – aber da sollen sich ab morgen Vormittag andere drum kümmern.)',
     playsPiano: true,
     durationMs: 9200,
     panFrom: { scale: 1.08, x: 10, y: -4 },
@@ -223,7 +224,7 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
                 <>
                   {current.imageUrl && (
                     <motion.img
-                      src={current.imageUrl}
+                      src={resolveAssetPath(current.imageUrl)}
                       alt={current.kicker}
                       referrerPolicy="no-referrer"
                       initial={{
