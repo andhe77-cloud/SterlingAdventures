@@ -24,6 +24,10 @@ class SoundEngine {
   private pianoFadeTimer: number | null = null;
   private pianoMasterGain: GainNode | null = null;
   private pianoStep = 0;
+  private greekTimer: number | null = null;
+  private greekFadeTimer: number | null = null;
+  private greekMasterGain: GainNode | null = null;
+  private greekStep = 0;
   private rawShoutBytes = new Map<ShoutType, ArrayBuffer>();
   private decodedShouts = new Map<ShoutType, AudioBuffer>();
   private shoutPreloadStarted = false;
@@ -587,6 +591,159 @@ class SoundEngine {
     oscHarm.start(startTime);
     oscFund.stop(startTime + duration + 0.03);
     oscHarm.stop(startTime + duration + 0.03);
+  }
+
+  public startGreekBouzouki(): void {
+    if (this.muted || typeof window === 'undefined') return;
+    if (this.greekFadeTimer !== null) {
+      window.clearTimeout(this.greekFadeTimer);
+      this.greekFadeTimer = null;
+    }
+
+    const ctx = this.getContext();
+    if (ctx) {
+      if (!this.greekMasterGain) {
+        this.greekMasterGain = ctx.createGain();
+        this.greekMasterGain.connect(ctx.destination);
+      }
+      this.greekMasterGain.gain.cancelScheduledValues(ctx.currentTime);
+      this.greekMasterGain.gain.setValueAtTime(1.0, ctx.currentTime);
+    }
+
+    if (this.greekTimer !== null) return;
+
+    // Warm Aegean Bouzouki / Sirtaki progression in D Harmonic Minor / Hijaz ([bassHz, melodyHz])
+    const sequence: Array<[number | null, number | null]> = [
+      [146.83, 587.33], // D3 + D5
+      [null, 554.37], // C#5
+      [220.0, 587.33], // A3 + D5
+      [null, 440.0], // A4
+      [146.83, 466.16], // D3 + Bb4
+      [null, 440.0], // A4
+      [220.0, 392.0], // A3 + G4
+      [null, 349.23], // F4
+      [146.83, 329.63], // D3 + E4
+      [null, 349.23], // F4
+      [220.0, 392.0], // A3 + G4
+      [null, 440.0], // A4
+      [146.83, 466.16], // D3 + Bb4
+      [null, 440.0], // A4
+      [220.0, 392.0], // A3 + G4
+      [null, 349.23], // F4
+      [196.0, 392.0], // G3 + G4
+      [null, 466.16], // Bb4
+      [146.83, 587.33], // D3 + D5
+      [null, 523.25], // C5
+      [196.0, 466.16], // G3 + Bb4
+      [null, 440.0], // A4
+      [220.0, 392.0], // A3 + G4
+      [null, 349.23], // F4
+      [220.0, 329.63], // A3 + E4
+      [null, 349.23], // F4
+      [164.81, 392.0], // E3 + G4
+      [null, 349.23], // F4
+      [146.83, 329.63], // D3 + E4
+      [null, 277.18], // C#4
+      [220.0, 293.66], // A3 + D4
+      [null, null],
+    ];
+
+    this.greekStep = 0;
+
+    const triggerPluck = () => {
+      const activeCtx = this.getContext();
+      if (!activeCtx) return;
+      const [bassFreq, melodyFreq] = sequence[this.greekStep % sequence.length];
+      this.greekStep += 1;
+      const now = activeCtx.currentTime;
+
+      if (bassFreq) {
+        this.bouzoukiPluck(activeCtx, bassFreq, 0.55, 0.06, now, false);
+      }
+      if (melodyFreq) {
+        this.bouzoukiPluck(activeCtx, melodyFreq, 0.42, 0.068, now, true);
+      }
+    };
+
+    triggerPluck();
+    this.greekTimer = window.setInterval(triggerPluck, 250);
+  }
+
+  public fadeOutGreekBouzouki(durationMs = 1800): void {
+    if (this.greekFadeTimer !== null) {
+      window.clearTimeout(this.greekFadeTimer);
+      this.greekFadeTimer = null;
+    }
+    const ctx = this.ctx;
+    if (ctx && this.greekMasterGain && !this.muted) {
+      const now = ctx.currentTime;
+      const currentVal = Math.max(0.001, this.greekMasterGain.gain.value);
+      this.greekMasterGain.gain.cancelScheduledValues(now);
+      this.greekMasterGain.gain.setValueAtTime(currentVal, now);
+      this.greekMasterGain.gain.exponentialRampToValueAtTime(
+        0.0005,
+        now + durationMs / 1000
+      );
+    }
+    this.greekFadeTimer = window.setTimeout(() => {
+      this.greekFadeTimer = null;
+      this.stopGreekBouzouki();
+    }, durationMs);
+  }
+
+  public stopGreekBouzouki(): void {
+    if (this.greekFadeTimer !== null) {
+      window.clearTimeout(this.greekFadeTimer);
+      this.greekFadeTimer = null;
+    }
+    if (this.greekTimer !== null) {
+      window.clearInterval(this.greekTimer);
+      this.greekTimer = null;
+    }
+  }
+
+  private bouzoukiPluck(
+    ctx: AudioContext,
+    freq: number,
+    duration: number,
+    volume: number,
+    startTime: number,
+    doubled = true
+  ): void {
+    const oscA = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+
+    oscA.type = 'triangle';
+    oscA.frequency.setValueAtTime(freq, startTime);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(doubled ? 2600 : 1100, startTime);
+    filter.frequency.exponentialRampToValueAtTime(doubled ? 950 : 480, startTime + duration);
+
+    gain.gain.setValueAtTime(0.001, startTime);
+    gain.gain.linearRampToValueAtTime(volume, startTime + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0007, startTime + duration);
+
+    oscA.connect(filter);
+
+    if (doubled) {
+      const oscB = ctx.createOscillator();
+      const chorusGain = ctx.createGain();
+      oscB.type = 'sine';
+      oscB.frequency.setValueAtTime(freq * 1.004, startTime);
+      chorusGain.gain.setValueAtTime(0.45, startTime);
+      oscB.connect(chorusGain);
+      chorusGain.connect(filter);
+      oscB.start(startTime);
+      oscB.stop(startTime + duration + 0.03);
+    }
+
+    filter.connect(gain);
+    gain.connect(this.greekMasterGain ?? ctx.destination);
+
+    oscA.start(startTime);
+    oscA.stop(startTime + duration + 0.03);
   }
 
   private tone(

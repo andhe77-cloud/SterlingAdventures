@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
   CheckCircle2,
   Clock,
   Compass,
@@ -9,8 +13,11 @@ import {
   RotateCw,
   Ship,
   Snowflake,
+  Undo2,
   UserCheck,
+  Users,
   X,
+  Zap,
 } from 'lucide-react';
 import type { MiniGameId } from '../types/game';
 import { soundFx } from '../utils/soundFx';
@@ -358,63 +365,189 @@ function CoolingPipesMiniGame({
   );
 }
 
-interface RadarWaypoint {
-  time: string;
-  distanceNm: number;
-  zoneLabel: string;
-  isGreekWaters: boolean;
-  xPct: number;
-  note: string;
+interface PositionQuizOption {
+  id: string;
+  label: string;
+  correct?: boolean;
+  feedback?: string;
 }
 
-const WAYPOINTS: RadarWaypoint[] = [
+interface PositionQuizStep {
+  id: 'pos_0730' | 'pos_0600' | 'pos_0210' | 'whats_different' | 'conclusion';
+  badge: string;
+  question: string;
+  greekPrompt: string;
+  mayaPrompt: string;
+  greekSuccess: string;
+  mayaSuccess: string;
+  options: PositionQuizOption[];
+}
+
+const POSITION_QUIZ_STEPS: PositionQuizStep[] = [
   {
-    time: '01:00 Uhr',
-    distanceNm: 55,
-    zoneLabel: 'Internationale Gewässer',
-    isGreekWaters: false,
-    xPct: 12,
-    note: 'Offene Ägäis · weit außerhalb jeder Küstenhoheit',
+    id: 'pos_0730',
+    badge: '1. 07:30 Uhr',
+    question: 'Wo war die MS Aurora um 07:30 Uhr (Dr. Vances offizieller Todeszeitpunkt)?',
+    greekPrompt:
+      '«07:30 Uhr… Ο γιατρός έγραψε 07:30! Πού ήταν το πλοίο μας στις 07:30 το πρωί;;»',
+    mayaPrompt:
+      'Dimitri deutet auf Dr. Vances Bericht. Wo befand sich die MS Aurora um 07:30 Uhr morgens?',
+    greekSuccess: '«Σωστά! Στις 07:30 ήμασταν ήδη έξω από το λιμάνι του Ηρακλείου!»',
+    mayaSuccess: 'Treffer! Um 07:30 Uhr waren wir schon direkt vor dem Hafen von Heraklion!',
+    options: [
+      {
+        id: 'p0730_pir',
+        label: 'Noch im Ausgangshafen von Piräus bei Athen',
+        feedback: 'Aus Piräus ist die MS Aurora schon gestern ausgelaufen!',
+      },
+      {
+        id: 'p0730_heraklion',
+        label: 'In unmittelbarer Küstennähe vor der Hafeneinfahrt von Heraklion (ca. 2 sm vor Kreta)',
+        correct: true,
+      },
+      {
+        id: 'p0730_highsea',
+        label: 'Mitten auf hoher See in internationalen Gewässern (über 40 sm entfernt)',
+        feedback: 'Nein! Um 08:15 Uhr haben wir schon angelegt – um 07:30 Uhr war die Küste direkt voraus.',
+      },
+      {
+        id: 'p0730_rhodes',
+        label: 'Auf halber Strecke vor der Ostküste von Rhodos',
+        feedback: 'Unser Kurs führte direkt nach Kreta, nicht nach Rhodos!',
+      },
+    ],
   },
   {
-    time: '02:15 Uhr',
-    distanceNm: 42,
-    zoneLabel: 'Internationale Gewässer',
-    isGreekWaters: false,
-    xPct: 30,
-    note: '42 Seemeilen vor Kreta · noch auf hoher See',
+    id: 'pos_0600',
+    badge: '2. 06:00 Uhr',
+    question: 'Wo war die MS Aurora um 06:00 Uhr (Officer Brandts Schichtende & Fund)?',
+    greekPrompt:
+      '«Καλά, στις 07:30 φτάναμε! Και στις 06:00, όταν τελείωσε η βάρδια του Brandt;;»',
+    mayaPrompt:
+      'Jetzt fragt er nach 06:00 Uhr morgens: Wo lag das Schiff bei Officer Brandts Kontrollgang?',
+    greekSuccess: '«Ναι! Στις 06:00 είχαμε ήδη περάσει το όριο των 12 μιλίων της Κρήτης!»',
+    mayaSuccess: 'Richtig! Um 06:00 Uhr lag das Schiff schon innerhalb der griechischen 12-Meilen-Zone!',
+    options: [
+      {
+        id: 'p0600_far',
+        label: 'Noch über 50 Seemeilen weit draußen in internationalen Gewässern',
+        feedback: 'Zu weit weg! Knapp zwei Stunden später lag das Schiff bereits fest am Kai von Heraklion.',
+      },
+      {
+        id: 'p0600_docked',
+        label: 'Bereits fest vertäut am Passagier-Kai von Heraklion',
+        feedback: 'Angelegt hat die MS Aurora erst um 08:15 Uhr – um 06:00 Uhr fuhr sie noch auf Kreta zu.',
+      },
+      {
+        id: 'p0600_12nm',
+        label: 'Bereits innerhalb der griechischen 12-Meilen-Zone vor Kreta (ca. 10 sm)',
+        correct: true,
+      },
+      {
+        id: 'p0600_cyprus',
+        label: 'Vor der Westküste von Zypern',
+        feedback: 'Falscher Kurs – wir liefen von Norden auf Heraklion zu.',
+      },
+    ],
   },
   {
-    time: '04:00 Uhr',
-    distanceNm: 25,
-    zoneLabel: 'Internationale Gewässer',
-    isGreekWaters: false,
-    xPct: 49,
-    note: 'Annäherung an Nord-Kreta · noch außerhalb der 12-sm-Zone',
+    id: 'pos_0210',
+    badge: '3. 02:10 Uhr',
+    question: 'Und wo war die MS Aurora um 02:10 Uhr nachts (wahrer Todeszeitpunkt)?',
+    greekPrompt:
+      '«Ωραία… και στις 02:10 τη νύχτα;; Πού βρισκόταν το πλοίο στις 02:10;;»',
+    mayaPrompt:
+      'Jetzt zum entscheidenden Zeitpunkt: Wo befand sich die MS Aurora mitten in der Nacht um 02:10 Uhr?',
+    greekSuccess: '«ΤΙ;; 42 ναυτικά μίλια έξω από την Κρήτη;; Πέρα από τα 12 μίλια!!»',
+    mayaSuccess: 'Genau! Um 02:10 Uhr lag das Schiff rund 42 Seemeilen vor Kreta auf offener See!',
+    options: [
+      {
+        id: 'p0210_highsea',
+        label: 'Weit draußen auf offener See (ca. 42 sm vor Kreta · außerhalb der 12-Meilen-Grenze)',
+        correct: true,
+      },
+      {
+        id: 'p0210_pilot',
+        label: 'Direkt an der Lotsenstation vor Heraklion (ca. 3 sm vor Kreta)',
+        feedback: 'Unmöglich – bis zur Ankunft am Morgen lagen noch sechs Stunden Fahrtzeit dazwischen!',
+      },
+      {
+        id: 'p0210_inside',
+        label: 'Bereits sicher innerhalb griechischer Hoheitsgewässer',
+        feedback: 'Nein! In die 12-Meilen-Zone vor Kreta ist das Schiff erst kurz vor 06:00 Uhr eingefahren.',
+      },
+      {
+        id: 'p0210_harbor',
+        label: 'Schon am Anleger im Hafen von Heraklion',
+        feedback: 'Mitten in der Nacht um 02:10 Uhr waren wir noch lange nicht im Hafen!',
+      },
+    ],
   },
   {
-    time: '05:45 Uhr',
-    distanceNm: 12,
-    zoneLabel: '12-Meilen-Grenze · Kreta',
-    isGreekWaters: true,
-    xPct: 68,
-    note: 'Exakter Eintritt in griechische Hoheitsgewässer!',
+    id: 'whats_different',
+    badge: '4. Was ist anders?',
+    question: 'Was ist bei 02:10 Uhr im Vergleich zu 06:00 & 07:30 Uhr entscheidend anders?',
+    greekPrompt:
+      '«ΠΕΡΙΜΕΝΕ!! 07:30 Κρήτη… 06:00 Κρήτη… Μα στις 02:10;; Τι είναι διαφορετικό;;»',
+    mayaPrompt:
+      'Dimitri vergleicht die Uhrzeiten! Was ist um 02:10 Uhr gegenüber 06:00 und 07:30 Uhr anders?',
+    greekSuccess: '«ΑΑΑ!! Στις 02:10 ΔΕΝ ήμασταν στην Ελλάδα – ήμασταν σε διεθνή ύδατα!!»',
+    mayaSuccess: 'Er hat es begriffen! Um 02:10 Uhr waren es internationale Gewässer, ab 06:00 Uhr griechische!',
+    options: [
+      {
+        id: 'diff_closer',
+        label: 'Um 02:10 Uhr lag das Schiff näher am Hafen als um 07:30 Uhr',
+        feedback: 'Umgekehrt! Im Laufe der Nacht hat sich das Schiff der Küste genähert.',
+      },
+      {
+        id: 'diff_anchored',
+        label: 'Zwischen 02:10 Uhr und 06:00 Uhr stand das Schiff komplett still auf dem Wasser',
+        feedback: 'Dann hätten wir morgens niemals rechtzeitig Kreta erreicht.',
+      },
+      {
+        id: 'diff_police',
+        label: 'Um 02:10 Uhr war die Hafenpolizei von Heraklion bereits offiziell an Bord',
+        feedback: 'Die Hafenpolizei kam erst beim Einlaufen in Heraklion an Bord!',
+      },
+      {
+        id: 'diff_intl',
+        label: 'Um 02:10 Uhr lag das Schiff noch in INTERNATIONALEN GEWÄSSERN statt in griechischen Hoheitsgewässern!',
+        correct: true,
+      },
+    ],
   },
   {
-    time: '07:30 Uhr',
-    distanceNm: 2,
-    zoneLabel: 'Griechisches Hafengebiet',
-    isGreekWaters: true,
-    xPct: 83,
-    note: 'Küstennähe vor Heraklion (Dr. Vances geschätzte Uhrzeit)',
-  },
-  {
-    time: '08:15 Uhr',
-    distanceNm: 0,
-    zoneLabel: 'Hafen von Heraklion (Kai)',
-    isGreekWaters: true,
-    xPct: 92,
-    note: 'MS Aurora fest vertäut · Hafenpolizei geht an Bord',
+    id: 'conclusion',
+    badge: '5. Schlussfolgerung',
+    question: 'Welche Schlussfolgerung ziehen Dimitri und du aus diesem Unterschied?',
+    greekPrompt:
+      '«ΔΙΕΘΝΗ ΥΔΑΤΑ στις 02:10!! Γιατί το έκρυψαν αυτό;; Ποιο είναι το συμπέρασμα;;»',
+    mayaPrompt:
+      'Letzter Schritt! Welche Schlussfolgerung ergibt sich jetzt für euch beide?',
+    greekSuccess: '«ΚΑΤΑΛΑΒΑ ΤΑ ΠΑΝΤΑ!! Δεν μένει έτσι αυτό!!»',
+    mayaSuccess: 'VOLLTREFFER!! Jetzt hat Kommissar Dimitri endlich begriffen, worum es geht!',
+    options: [
+      {
+        id: 'conc_irrelevant',
+        label: 'Der Todesort auf See spielt keine Rolle, Hauptsache das Schiff hat angelegt',
+        feedback: 'Wenn es egal wäre, warum wurden dann Uhrzeit und Kühlung heimlich manipuliert?',
+      },
+      {
+        id: 'conc_coverup',
+        label: 'Der wahre Todeszeitpunkt lag in internationalen Gewässern – jemand hat ein starkes Interesse daran, dass der Tod erst vor Kreta stattfand!',
+        correct: true,
+      },
+      {
+        id: 'conc_brandt_mistake',
+        label: 'Officer Brandt hat nur zufällig seine Uhr um fünf Stunden falsch abgelesen',
+        feedback: 'Wachprotokoll, Kühl-Manipulation und Arztbericht passen für einen Zufall viel zu genau zusammen!',
+      },
+      {
+        id: 'conc_return',
+        label: 'Die MS Aurora muss ohne Befragung sofort alle Gäste von Bord lassen',
+        feedback: 'Im Gegenteil – solange diese Verschleierung nicht geklärt ist, greift Dimitri erst recht durch!',
+      },
+    ],
   },
 ];
 
@@ -425,173 +558,179 @@ function SeaChartMiniGame({
   onComplete: () => void;
   onCancel: () => void;
 }) {
-  const [selectedIdx, setSelectedIdx] = useState(5);
-  const [step, setStep] = useState<'find_border' | 'check_0215' | 'done'>('find_border');
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [stepIdx, setStepIdx] = useState(0);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{
+    greek: string;
+    maya: string;
+    isError?: boolean;
+  }>({
+    greek: POSITION_QUIZ_STEPS[0].greekPrompt,
+    maya: POSITION_QUIZ_STEPS[0].mayaPrompt,
+  });
 
-  const wp = WAYPOINTS[selectedIdx];
+  const isDone = stepIdx >= POSITION_QUIZ_STEPS.length;
+  const currentStep = POSITION_QUIZ_STEPS[Math.min(stepIdx, POSITION_QUIZ_STEPS.length - 1)];
 
-  const handleConfirm = () => {
-    setErrorMsg(null);
-    if (step === 'find_border') {
-      if (wp.time === '05:45 Uhr') {
+  const completedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  const finishQuiz = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onCompleteRef.current();
+  };
+
+  useEffect(() => {
+    if (!isDone) return;
+    soundFx.play('deduction');
+    const timer = window.setTimeout(() => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      onCompleteRef.current();
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [isDone]);
+
+  const handleSelectOption = (option: PositionQuizOption) => {
+    if (isDone) return;
+    setSelectedOptionId(option.id);
+
+    if (option.correct) {
+      const nextIdx = stepIdx + 1;
+      if (nextIdx >= POSITION_QUIZ_STEPS.length) {
+        setFeedback({
+          greek: currentStep.greekSuccess,
+          maya: currentStep.mayaSuccess,
+        });
+        setStepIdx(nextIdx);
+      } else {
         soundFx.play('evidence_chime');
-        setStep('check_0215');
-      } else {
-        soundFx.play('penalty');
-        setErrorMsg(
-          `Bei ${wp.time} betrug der Abstand ${wp.distanceNm} sm. Suche exakt die 12-Seemeilen-Grenze!`
-        );
+        const nextStep = POSITION_QUIZ_STEPS[nextIdx];
+        setStepIdx(nextIdx);
+        setSelectedOptionId(null);
+        setFeedback({
+          greek: nextStep.greekPrompt,
+          maya: `${currentStep.mayaSuccess} ${nextStep.mayaPrompt}`,
+        });
       }
-      return;
-    }
-
-    if (step === 'check_0215') {
-      if (wp.time === '02:15 Uhr') {
-        soundFx.play('deduction');
-        setStep('done');
-      } else {
-        soundFx.play('penalty');
-        setErrorMsg(
-          'Wähle jetzt zum Abgleich die Position um 02:15 Uhr auf dem Radar-Kurs aus!'
-        );
-      }
+    } else {
+      soundFx.play('penalty');
+      setFeedback({
+        greek: '«Όχι, όχι! Σκεφτείτε ξανά τις ώρες και τη θέση του πλοίου, κύριε Στέρλινγκ!»',
+        maya:
+          option.feedback ??
+          'Das passt nicht zu den Uhrzeiten und Fahrtdaten aus unserem Fall.',
+        isError: true,
+      });
     }
   };
 
   return (
-    <div className="absolute inset-0 z-30 bg-slate-950/92 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="max-w-xl w-full bg-slate-900 border border-amber-500/40 rounded-xl p-5 shadow-2xl space-y-4">
+    <div className="absolute inset-0 z-30 bg-slate-950/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+      <div className="max-w-xl w-full max-h-full overflow-y-auto bg-slate-900 border border-sky-500/40 rounded-xl p-4 sm:p-5 shadow-2xl space-y-3.5">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-300">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-sky-300">
               <Compass className="w-4 h-4" />
-              <span>Brücken-Seekarte · Hoheitsgrenze vor Kreta</span>
+              <span>Positions-Abgleich mit Kommissar Dimitri</span>
             </div>
-            <p className="text-xs text-slate-300 mt-1">
-              {step === 'find_border'
-                ? 'Schritt 1/2: Bewege den Schiffskurs auf die exakte Uhrzeit, zu der die MS Aurora die griechische 12-Meilen-Grenze erreicht hat.'
-                : step === 'check_0215'
-                  ? 'Schritt 2/2: Prüfe jetzt zum Vergleich die Schiffsposition um 02:15 Uhr nachts!'
-                  : 'Kursabgleich vollständig! Beide Zeitpunkte sind im Brücken-Logbuch markiert.'}
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              {isDone
+                ? 'Alle fünf Punkte geklärt!'
+                : `Schritt ${stepIdx + 1}/${POSITION_QUIZ_STEPS.length} · Multiple-Choice-Deduction`}
             </p>
           </div>
           <button
             type="button"
-            onClick={onCancel}
-            aria-label="Seekarte schließen"
+            onClick={isDone ? finishQuiz : onCancel}
+            aria-label="Abgleich schließen"
             className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Radar / Sea Chart Canvas */}
-        <div className="relative h-44 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden px-4 py-3">
-          {/* Sea vs Greek Zone shading */}
-          <div className="absolute inset-y-0 left-0 w-[68%] bg-blue-950/25" />
-          <div className="absolute inset-y-0 right-0 w-[32%] bg-emerald-950/30 border-l-2 border-dashed border-amber-400/70" />
-
-          <div className="relative z-10 flex justify-between text-[10px] font-semibold uppercase tracking-wider">
-            <span className="text-sky-300">Internationale Gewässer (&gt; 12 sm)</span>
-            <span className="text-emerald-300">12-sm-Zone · Kreta</span>
-          </div>
-
-          {/* Course Track */}
-          <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-0.5 bg-slate-700" />
-
-          {/* Waypoint dots */}
-          {WAYPOINTS.map((point, idx) => (
-            <button
-              key={point.time}
-              type="button"
-              onClick={() => {
-                soundFx.play('blip');
-                setSelectedIdx(idx);
-                setErrorMsg(null);
-              }}
-              style={{ left: `${point.xPct}%` }}
-              className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
-            >
-              <span
-                className={`w-4 h-4 rounded-full border-2 transition-transform ${
-                  selectedIdx === idx
-                    ? 'bg-amber-400 border-slate-950 scale-125 shadow-lg shadow-amber-500/40'
-                    : 'bg-slate-800 border-slate-400 group-hover:border-amber-300'
-                }`}
-              />
-              <span
-                className={`mt-2 text-[10px] font-mono-num whitespace-nowrap ${
-                  selectedIdx === idx ? 'text-amber-300 font-bold' : 'text-slate-400'
+        {/* Step Progress Strip */}
+        <div className="grid grid-cols-5 gap-1.5 text-[10px]">
+          {POSITION_QUIZ_STEPS.map((s, idx) => {
+            const done = idx < stepIdx || isDone;
+            const active = idx === stepIdx && !isDone;
+            return (
+              <div
+                key={s.id}
+                className={`px-2 py-1.5 rounded-md border text-center font-semibold truncate ${
+                  done
+                    ? 'bg-emerald-950/50 border-emerald-500/50 text-emerald-200'
+                    : active
+                      ? 'bg-sky-950/60 border-sky-400 text-sky-200'
+                      : 'bg-slate-950/70 border-slate-800 text-slate-500'
                 }`}
               >
-                {point.time.replace(' Uhr', '')}
+                {s.badge}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Dimitri & Maya Live Feedback Box */}
+        <div
+          className={`rounded-lg border p-3 space-y-1 text-xs ${
+            feedback.isError
+              ? 'bg-red-950/40 border-red-700/50'
+              : 'bg-slate-950/80 border-slate-800'
+          }`}
+        >
+          <div className="font-semibold text-sky-300">{feedback.greek}</div>
+          <div className="text-[11px] text-amber-200/90">
+            <span className="font-bold">Maya:</span> {feedback.maya}
+          </div>
+        </div>
+
+        {!isDone ? (
+          <div className="space-y-2">
+            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+              <Ship className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>{currentStep.question}</span>
+            </div>
+            <div className="space-y-2">
+              {currentStep.options.map((opt) => {
+                const isSelected = selectedOptionId === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => handleSelectOption(opt)}
+                    className={`w-full text-left px-3 py-2.5 rounded-lg border text-xs transition-colors cursor-pointer ${
+                      isSelected && feedback.isError
+                        ? 'bg-red-950/50 border-red-500 text-red-100'
+                        : 'bg-slate-950/60 border-slate-800 hover:border-amber-400/70 hover:bg-slate-950 text-slate-200'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between gap-3 bg-emerald-950/60 border border-emerald-500/60 rounded-lg px-3.5 py-2.5 text-xs text-emerald-200">
+            <div className="flex items-center gap-2 font-semibold">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                VOLLTREFFER! Positions-Abgleich (07:30 · 06:00 · 02:10 Uhr) &amp; Schlussfolgerung bestätigt!
               </span>
-            </button>
-          ))}
-
-          {/* Moving Ship Indicator */}
-          <div
-            style={{ left: `${wp.xPct}%` }}
-            className="absolute top-9 -translate-x-1/2 transition-all duration-200 pointer-events-none"
-          >
-            <div className="px-2 py-1 rounded-md bg-amber-500 text-slate-950 flex items-center gap-1 shadow-md">
-              <Ship className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-bold">{wp.distanceNm} sm</span>
             </div>
-          </div>
-        </div>
-
-        {/* Live Telemetry Readout */}
-        <div className="grid grid-cols-3 gap-2 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs">
-          <div>
-            <div className="text-slate-400 text-[11px]">Radar-Zeit</div>
-            <div className="font-bold text-slate-100 mt-0.5">{wp.time}</div>
-          </div>
-          <div>
-            <div className="text-slate-400 text-[11px]">Abstand zu Kreta</div>
-            <div className="font-mono-num font-bold text-amber-300 mt-0.5">
-              {wp.distanceNm} Seemeilen
-            </div>
-          </div>
-          <div>
-            <div className="text-slate-400 text-[11px]">Hoheitsgebiet</div>
-            <div
-              className={`font-semibold mt-0.5 ${
-                wp.isGreekWaters ? 'text-emerald-300' : 'text-sky-300'
-              }`}
+            <button
+              type="button"
+              onClick={finishQuiz}
+              className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-md whitespace-nowrap cursor-pointer"
             >
-              {wp.zoneLabel}
-            </div>
-          </div>
-        </div>
-
-        {errorMsg && (
-          <div className="text-xs text-red-300 bg-red-950/40 border border-red-700/50 rounded-lg px-3 py-2">
-            {errorMsg}
+              Weiter
+            </button>
           </div>
         )}
-
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-[11px] text-slate-400">{wp.note}</span>
-          {step === 'done' ? (
-            <button
-              type="button"
-              onClick={onComplete}
-              className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors whitespace-nowrap cursor-pointer"
-            >
-              Brücken-Log sichern
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleConfirm}
-              className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors whitespace-nowrap cursor-pointer"
-            >
-              {step === 'find_border' ? 'Grenze bestätigen' : '02:15-Position prüfen'}
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -985,6 +1124,680 @@ function DimitriPantomimeMiniGame({
   );
 }
 
+type KidTokenId = 'leo' | 'rick' | 'conrad';
+
+interface SokobanPos {
+  r: number;
+  c: number;
+}
+
+interface SokobanSnapshot {
+  player: SokobanPos;
+  kids: Record<KidTokenId, SokobanPos>;
+}
+
+const SOKOBAN_ROWS = 7;
+const SOKOBAN_COLS = 8;
+
+// '#' = obstacle/railing, '.' = walk/play floor
+const SOKOBAN_BOARD = [
+  '########',
+  '#...#..#',
+  '#......#',
+  '#..#...#',
+  '#......#',
+  '#......#',
+  '########',
+];
+
+const SOKOBAN_TARGETS: SokobanPos[] = [
+  { r: 2, c: 6 },
+  { r: 3, c: 6 },
+  { r: 4, c: 6 },
+];
+
+const INITIAL_SOKOBAN: SokobanSnapshot = {
+  player: { r: 4, c: 2 },
+  kids: {
+    leo: { r: 2, c: 2 },
+    rick: { r: 3, c: 4 },
+    conrad: { r: 4, c: 4 },
+  },
+};
+
+const KID_META: Record<
+  KidTokenId,
+  { short: string; name: string; colorClass: string }
+> = {
+  leo: {
+    short: 'L',
+    name: 'Leo',
+    colorClass: 'bg-sky-500 border-sky-200 text-slate-950',
+  },
+  rick: {
+    short: 'R',
+    name: 'Rick',
+    colorClass: 'bg-emerald-500 border-emerald-200 text-slate-950',
+  },
+  conrad: {
+    short: 'C',
+    name: 'Conrad',
+    colorClass: 'bg-amber-400 border-amber-100 text-slate-950',
+  },
+};
+
+function isSokobanWall(r: number, c: number): boolean {
+  if (r < 0 || r >= SOKOBAN_ROWS || c < 0 || c >= SOKOBAN_COLS) return true;
+  return SOKOBAN_BOARD[r][c] === '#';
+}
+
+function isTargetCell(r: number, c: number): boolean {
+  return SOKOBAN_TARGETS.some((t) => t.r === r && t.c === c);
+}
+
+function KidsSokobanMiniGame({
+  onComplete,
+  onCancel,
+}: {
+  onComplete: () => void;
+  onCancel: () => void;
+}) {
+  const [boardState, setBoardState] = useState<SokobanSnapshot>(() => ({
+    player: { ...INITIAL_SOKOBAN.player },
+    kids: {
+      leo: { ...INITIAL_SOKOBAN.kids.leo },
+      rick: { ...INITIAL_SOKOBAN.kids.rick },
+      conrad: { ...INITIAL_SOKOBAN.kids.conrad },
+    },
+  }));
+  const [history, setHistory] = useState<SokobanSnapshot[]>([]);
+  const [statusMsg, setStatusMsg] = useState(
+    'Hilf Maya! Schiebe Leo (L), Rick (R) und Conrad (C) in die drei grünen Spiel-Ecken rechts.'
+  );
+
+  const completedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  const kidsPlacedCount = (Object.keys(boardState.kids) as KidTokenId[]).filter((id) => {
+    const pos = boardState.kids[id];
+    return isTargetCell(pos.r, pos.c);
+  }).length;
+
+  const isSolved = kidsPlacedCount === SOKOBAN_TARGETS.length;
+
+  const finishSokoban = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onCompleteRef.current();
+  };
+
+  useEffect(() => {
+    if (!isSolved) return;
+    soundFx.play('deduction');
+    const timer = window.setTimeout(() => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      onCompleteRef.current();
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [isSolved]);
+
+  const tryMove = (dr: number, dc: number) => {
+    if (isSolved) return;
+    const nr = boardState.player.r + dr;
+    const nc = boardState.player.c + dc;
+    if (isSokobanWall(nr, nc)) {
+      soundFx.play('penalty');
+      setStatusMsg('Da steht eine Liege oder Reling im Weg!');
+      return;
+    }
+
+    const kidIds = Object.keys(boardState.kids) as KidTokenId[];
+    const pushedKidId = kidIds.find(
+      (id) => boardState.kids[id].r === nr && boardState.kids[id].c === nc
+    );
+
+    if (pushedKidId) {
+      const br = nr + dr;
+      const bc = nc + dc;
+      const occupiedByOtherKid = kidIds.some(
+        (id) => boardState.kids[id].r === br && boardState.kids[id].c === bc
+      );
+      if (isSokobanWall(br, bc) || occupiedByOtherKid) {
+        soundFx.play('penalty');
+        setStatusMsg(
+          `${KID_META[pushedKidId].name} weicht aus – da hinter ist kein Platz zum Schieben!`
+        );
+        return;
+      }
+
+      soundFx.play('blip');
+      setHistory((prev) => [
+        ...prev,
+        {
+          player: { ...boardState.player },
+          kids: {
+            leo: { ...boardState.kids.leo },
+            rick: { ...boardState.kids.rick },
+            conrad: { ...boardState.kids.conrad },
+          },
+        },
+      ]);
+      setBoardState({
+        player: { r: nr, c: nc },
+        kids: {
+          ...boardState.kids,
+          [pushedKidId]: { r: br, c: bc },
+        },
+      });
+      setStatusMsg(
+        isTargetCell(br, bc)
+          ? `Klasse! ${KID_META[pushedKidId].name} sitzt in seiner Spiel-Ecke!`
+          : `Maya schiebt ${KID_META[pushedKidId].name} weiter Richtung Spielecke.`
+      );
+      return;
+    }
+
+    soundFx.play('blip');
+    setHistory((prev) => [
+      ...prev,
+      {
+        player: { ...boardState.player },
+        kids: {
+          leo: { ...boardState.kids.leo },
+          rick: { ...boardState.kids.rick },
+          conrad: { ...boardState.kids.conrad },
+        },
+      },
+    ]);
+    setBoardState((prev) => ({
+      ...prev,
+      player: { r: nr, c: nc },
+    }));
+  };
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        e.preventDefault();
+        tryMove(-1, 0);
+      } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        tryMove(1, 0);
+      } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        e.preventDefault();
+        tryMove(0, -1);
+      } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        e.preventDefault();
+        tryMove(0, 1);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
+
+  const handleUndo = () => {
+    if (history.length === 0 || isSolved) return;
+    const last = history[history.length - 1];
+    setHistory((prev) => prev.slice(0, -1));
+    setBoardState(last);
+    soundFx.play('page_turn');
+    setStatusMsg('Einen Schritt zurückgesetzt.');
+  };
+
+  const handleReset = () => {
+    if (isSolved) return;
+    setHistory([]);
+    setBoardState({
+      player: { ...INITIAL_SOKOBAN.player },
+      kids: {
+        leo: { ...INITIAL_SOKOBAN.kids.leo },
+        rick: { ...INITIAL_SOKOBAN.kids.rick },
+        conrad: { ...INITIAL_SOKOBAN.kids.conrad },
+      },
+    });
+    soundFx.play('page_turn');
+    setStatusMsg('Neuer Versuch! Denk dran: zuerst den unteren Gang frei machen.');
+  };
+
+  return (
+    <div className="absolute inset-0 z-30 bg-slate-950/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+      <div className="max-w-lg w-full max-h-full overflow-y-auto bg-slate-900 border border-amber-500/40 rounded-xl p-4 sm:p-5 shadow-2xl space-y-3.5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-300">
+              <Users className="w-4 h-4" />
+              <span>Kinder-Einfangen (Sokoban) · Promenadendeck</span>
+            </div>
+            <p className="text-xs text-slate-300 mt-1">
+              Maya muss die drei Higginson-Jungs einsammeln, damit Andrew mit nach unten kommen
+              kann! Steuere mit den Pfeilen oder <strong>WASD</strong>.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={isSolved ? finishSokoban : onCancel}
+            aria-label="Minispiel schließen"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between gap-2 text-[11px] bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-2">
+          <span className="text-slate-200">{statusMsg}</span>
+          <span className="font-mono-num font-bold text-emerald-300 whitespace-nowrap">
+            {kidsPlacedCount}/3 Kids
+          </span>
+        </div>
+
+        {/* 8x7 Sokoban Board */}
+        <div className="bg-slate-950 p-2.5 sm:p-3 rounded-xl border border-slate-800 max-w-[360px] mx-auto">
+          <div className="grid grid-cols-8 gap-1">
+            {SOKOBAN_BOARD.map((rowStr, r) =>
+              rowStr.split('').map((cell, c) => {
+                const wall = cell === '#';
+                const target = isTargetCell(r, c);
+                const isPlayer = boardState.player.r === r && boardState.player.c === c;
+                const kidId = (Object.keys(boardState.kids) as KidTokenId[]).find(
+                  (id) => boardState.kids[id].r === r && boardState.kids[id].c === c
+                );
+
+                return (
+                  <div
+                    key={`${r}-${c}`}
+                    className={`aspect-square rounded-md flex items-center justify-center text-xs font-bold select-none transition-colors ${
+                      wall
+                        ? 'bg-slate-800 border border-slate-700/80'
+                        : target
+                          ? 'bg-emerald-950/60 border border-dashed border-emerald-400/70'
+                          : 'bg-slate-900/70 border border-slate-800/50'
+                    }`}
+                  >
+                    {isPlayer && (
+                      <div
+                        title="Maya"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-fuchsia-500 border-2 border-fuchsia-200 text-white flex items-center justify-center text-[11px] font-black shadow"
+                      >
+                        M
+                      </div>
+                    )}
+                    {!isPlayer && kidId && (
+                      <div
+                        title={KID_META[kidId].name}
+                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 flex items-center justify-center text-[11px] font-black shadow ${
+                          KID_META[kidId].colorClass
+                        } ${target ? 'ring-2 ring-emerald-300' : ''}`}
+                      >
+                        {KID_META[kidId].short}
+                      </div>
+                    )}
+                    {!isPlayer && !kidId && target && (
+                      <span className="text-[9px] text-emerald-400/80 font-bold">ZIEL</span>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {isSolved ? (
+          <div className="bg-emerald-950/50 border border-emerald-500/50 rounded-lg p-3 text-center space-y-2">
+            <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-200">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>VOLLTREFFER! Alle drei Jungs sind beschäftigt – Maya holt Andrew!</span>
+            </div>
+            <button
+              type="button"
+              onClick={finishSokoban}
+              className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+            >
+              Weiter
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleUndo}
+                disabled={history.length === 0}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200 text-xs rounded-lg border border-slate-700 cursor-pointer"
+              >
+                <Undo2 className="w-3.5 h-3.5" />
+                <span>Zurück</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Neustart</span>
+              </button>
+            </div>
+
+            {/* Compact D-Pad */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => tryMove(0, -1)}
+                aria-label="Nach links"
+                className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <div className="flex flex-col gap-1">
+                <button
+                  type="button"
+                  onClick={() => tryMove(-1, 0)}
+                  aria-label="Nach oben"
+                  className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 cursor-pointer"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => tryMove(1, 0)}
+                  aria-label="Nach unten"
+                  className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 cursor-pointer"
+                >
+                  <ArrowDown className="w-4 h-4" />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => tryMove(0, 1)}
+                aria-label="Nach rechts"
+                className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 cursor-pointer"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Circuit routing puzzle to intentionally crash the MS-400 magnetic lock controller
+const INITIAL_CABLE_GRID: PipeTile[] = [
+  { row: 0, col: 0, shape: 'source', rot: 0, locked: true }, // East [1]
+  { row: 0, col: 1, shape: 'corner', rot: 3 }, // solve: 1 (S-W)
+  { row: 0, col: 2, shape: 'straight', rot: 1 },
+  { row: 0, col: 3, shape: 'corner', rot: 2 },
+
+  { row: 1, col: 0, shape: 'corner', rot: 0 },
+  { row: 1, col: 1, shape: 'straight', rot: 0 }, // solve: 1 or 3 (N-S)
+  { row: 1, col: 2, shape: 'corner', rot: 1 },
+  { row: 1, col: 3, shape: 'straight', rot: 0 },
+
+  { row: 2, col: 0, shape: 'straight', rot: 1 },
+  { row: 2, col: 1, shape: 'corner', rot: 1, isValve: true }, // solve: 3 (N-E)
+  { row: 2, col: 2, shape: 'corner', rot: 2 }, // solve: 1 (S-W)
+  { row: 2, col: 3, shape: 'corner', rot: 0 },
+
+  { row: 3, col: 0, shape: 'corner', rot: 1 },
+  { row: 3, col: 1, shape: 'straight', rot: 0 },
+  { row: 3, col: 2, shape: 'corner', rot: 0 }, // solve: 3 (N-E)
+  { row: 3, col: 3, shape: 'sink', rot: 0, locked: true }, // West [3]
+];
+
+function CableTileSvg({
+  shape,
+  rot,
+  powered,
+  isValve,
+}: {
+  shape: PipeShape;
+  rot: number;
+  powered: boolean;
+  isValve?: boolean;
+}) {
+  const openings = getOpenings(shape, rot);
+  const strokeColor = powered ? '#f59e0b' : '#64748b';
+  const glowColor = powered ? '#fde68a' : '#475569';
+
+  return (
+    <svg viewBox="0 0 100 100" className="w-full h-full">
+      {openings.includes(0) && (
+        <line x1="50" y1="50" x2="50" y2="0" stroke={strokeColor} strokeWidth="14" strokeLinecap="butt" />
+      )}
+      {openings.includes(1) && (
+        <line x1="50" y1="50" x2="100" y2="50" stroke={strokeColor} strokeWidth="14" strokeLinecap="butt" />
+      )}
+      {openings.includes(2) && (
+        <line x1="50" y1="50" x2="50" y2="100" stroke={strokeColor} strokeWidth="14" strokeLinecap="butt" />
+      )}
+      {openings.includes(3) && (
+        <line x1="50" y1="50" x2="0" y2="50" stroke={strokeColor} strokeWidth="14" strokeLinecap="butt" />
+      )}
+      <circle
+        cx="50"
+        cy="50"
+        r={shape === 'source' || shape === 'sink' ? 22 : 11}
+        fill={isValve ? (powered ? '#ef4444' : '#991b1b') : glowColor}
+        stroke="#0f172a"
+        strokeWidth="3"
+      />
+      {isValve && <circle cx="50" cy="50" r="5" fill="#fef2f2" />}
+    </svg>
+  );
+}
+
+function LockCablesMiniGame({
+  onComplete,
+  onCancel,
+}: {
+  onComplete: () => void;
+  onCancel: () => void;
+}) {
+  const [tiles, setTiles] = useState<PipeTile[]>(() =>
+    INITIAL_CABLE_GRID.map((t) => ({ ...t }))
+  );
+  const completedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  const { poweredSet, isSolved } = useMemo(() => {
+    const map = new Map<string, PipeTile>();
+    for (const t of tiles) {
+      map.set(`${t.row},${t.col}`, t);
+    }
+
+    const visited = new Set<string>(['0,0']);
+    const queue: [number, number][] = [[0, 0]];
+    const dr = [-1, 0, 1, 0];
+    const dc = [0, 1, 0, -1];
+    const opp = [2, 3, 0, 1];
+
+    while (queue.length > 0) {
+      const [r, c] = queue.shift()!;
+      const cur = map.get(`${r},${c}`);
+      if (!cur) continue;
+      const curOpen = getOpenings(cur.shape, cur.rot);
+
+      for (const dir of curOpen) {
+        const nr = r + dr[dir];
+        const nc = c + dc[dir];
+        const key = `${nr},${nc}`;
+        if (visited.has(key)) continue;
+        const nb = map.get(key);
+        if (!nb) continue;
+        const nbOpen = getOpenings(nb.shape, nb.rot);
+        if (nbOpen.includes(opp[dir])) {
+          visited.add(key);
+          queue.push([nr, nc]);
+        }
+      }
+    }
+
+    const solved = visited.has('3,3') && visited.has('2,1');
+    return { poweredSet: visited, isSolved: solved };
+  }, [tiles]);
+
+  const finishCables = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onCompleteRef.current();
+  };
+
+  useEffect(() => {
+    if (!isSolved) return;
+    soundFx.play('deduction');
+    const timer = window.setTimeout(() => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      onCompleteRef.current();
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [isSolved]);
+
+  const handleRotateTile = (index: number) => {
+    const target = tiles[index];
+    if (!target || target.locked || isSolved) return;
+    soundFx.play('blip');
+    setTiles((prev) =>
+      prev.map((tile, i) =>
+        i === index ? { ...tile, rot: (tile.rot + 1) % 4 } : tile
+      )
+    );
+  };
+
+  const capacitorReached = poweredSet.has('2,1');
+  const lockReached = poweredSet.has('3,3');
+
+  return (
+    <div className="absolute inset-0 z-30 bg-slate-950/92 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="max-w-lg w-full bg-slate-900 border border-amber-500/40 rounded-xl p-5 shadow-2xl space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-300">
+              <Zap className="w-4 h-4" />
+              <span>Schloss-Überbrückung · MS-400 Controller</span>
+            </div>
+            <p className="text-xs text-slate-300 mt-1">
+              Hilf Andrew (der ja angeblich „keine Ahnung hat“) beim Test: Verbinde die{' '}
+              <strong>Bus-Platine</strong> über den{' '}
+              <span className="text-red-300 font-semibold">Überlast-Puffer</span> mit dem{' '}
+              <strong>Magnetschloss</strong>!
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={isSolved ? finishCables : onCancel}
+            aria-label="Schaltkreis schließen"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-[11px]">
+          <div
+            className={`px-3 py-1.5 rounded-lg border flex items-center justify-between ${
+              capacitorReached
+                ? 'bg-red-950/40 border-red-400/50 text-red-200'
+                : 'bg-slate-950/70 border-slate-800 text-slate-400'
+            }`}
+          >
+            <span>Überlast-Puffer</span>
+            <span className="font-bold">{capacitorReached ? 'Aktiv' : 'Offen'}</span>
+          </div>
+          <div
+            className={`px-3 py-1.5 rounded-lg border flex items-center justify-between ${
+              lockReached
+                ? 'bg-amber-950/50 border-amber-400/60 text-amber-200'
+                : 'bg-slate-950/70 border-slate-800 text-slate-400'
+            }`}
+          >
+            <span>Magnetschloss MS-400</span>
+            <span className="font-bold">{lockReached ? 'Abgestürzt!' : 'Gesichert'}</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-4 gap-2 max-w-[300px] mx-auto bg-slate-950 p-3 rounded-xl border border-slate-800">
+          {tiles.map((tile, idx) => {
+            const key = `${tile.row},${tile.col}`;
+            const powered = poweredSet.has(key);
+            return (
+              <button
+                key={key}
+                type="button"
+                disabled={tile.locked || isSolved}
+                onClick={() => handleRotateTile(idx)}
+                className={`relative aspect-square rounded-lg border transition-all flex items-center justify-center ${
+                  tile.locked
+                    ? 'bg-slate-900 border-amber-500/50 cursor-default'
+                    : isSolved
+                      ? 'bg-slate-900 border-emerald-400/60 cursor-default'
+                      : 'bg-slate-900/90 hover:bg-slate-800 border-slate-700 hover:border-amber-400 cursor-pointer'
+                }`}
+              >
+                <CableTileSvg
+                  shape={tile.shape}
+                  rot={tile.rot}
+                  powered={powered}
+                  isValve={tile.isValve}
+                />
+                {tile.shape === 'source' && (
+                  <span className="absolute bottom-0.5 left-1 text-[9px] font-bold text-amber-300">
+                    BUS
+                  </span>
+                )}
+                {tile.shape === 'sink' && (
+                  <span className="absolute bottom-0.5 right-1 text-[9px] font-bold text-amber-300">
+                    LOCK
+                  </span>
+                )}
+                {tile.isValve && (
+                  <span className="absolute top-0.5 left-1 text-[8px] font-bold text-red-300">
+                    CRASH
+                  </span>
+                )}
+                {!tile.locked && !isSolved && (
+                  <RotateCw className="w-2.5 h-2.5 text-slate-500 absolute bottom-1 right-1 pointer-events-none" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {isSolved ? (
+          <div className="bg-emerald-950/50 border border-emerald-500/50 rounded-lg p-3 text-center space-y-2">
+            <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-200">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>VOLLTREFFER! Controller stürzt ab – 15 Minuten ohne Tür-Log!!</span>
+            </div>
+            <button
+              type="button"
+              onClick={finishCables}
+              className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+            >
+              Weiter
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+            <button
+              type="button"
+              onClick={() => setTiles(INITIAL_CABLE_GRID.map((t) => ({ ...t })))}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Zurücksetzen</span>
+            </button>
+            <span>Tipp: Leite den Strom links über den roten CRASH-Knoten!</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function Case2MiniGame({
   miniGameId,
   onComplete,
@@ -1002,6 +1815,22 @@ export function Case2MiniGame({
     return (
       <CoolingPipesMiniGame
         onComplete={() => onComplete('cooling_pipes')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'kids_sokoban') {
+    return (
+      <KidsSokobanMiniGame
+        onComplete={() => onComplete('kids_sokoban')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'lock_cables') {
+    return (
+      <LockCablesMiniGame
+        onComplete={() => onComplete('lock_cables')}
         onCancel={onCancel}
       />
     );

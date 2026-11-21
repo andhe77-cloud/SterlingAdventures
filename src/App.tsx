@@ -11,11 +11,15 @@ import {
   X,
 } from 'lucide-react';
 import { AnimatedIntro } from './components/AnimatedIntro';
-import { AnimatedOutro } from './components/AnimatedOutro';
+import {
+  AnimatedOutro,
+  CRETE_ACT22_OUTRO_SLIDES,
+  CRETE_ACT23_OUTRO_SLIDES,
+} from './components/AnimatedOutro';
 import { CaseBinder, type BinderTab } from './components/CaseBinder';
 import { GameStage, type InvestigationMenu } from './components/GameStage';
 import { CRUISE_CASE } from './data/cruiseCase';
-import { CRETE_CASE } from './data/creteCase';
+import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './data/creteCase';
 import type {
   Character,
   CheckpointEntry,
@@ -165,12 +169,22 @@ function createCreteAct22Checkpoint(): CheckpointEntry {
     {
       speakerId: 'maya',
       emotion: 'thinking',
-      text: 'Tag 4, Mittag! Kommissar Dimitri hat gerade durchgesetzt, dass neben der Arrestzelle jetzt auch die Krankenstation für unsere Fragen offen steht – bis zur Mittagsanhörung bleibt nicht viel Zeit.',
+      text: 'Tag 4, Mittag! Kommissar Dimitri hat vorhin oben beim Kapitän tatsächlich ordentlich Druck gemacht.',
     },
     {
       speakerId: 'nate',
       emotion: 'thinking',
-      text: 'Fangen wir in der Krankenstation bei Dr. Vance an und hören uns ganz unvoreingenommen um, was die Akten über die Nacht sagen.',
+      text: 'Immerhin dürfen wir uns jetzt endlich offiziell umschauen, statt direkt von Falk vor die Tür gesetzt zu werden.',
+    },
+    {
+      speakerId: 'maya',
+      emotion: 'thinking',
+      text: 'Genau! Neben dem Gang vor Arrestzelle 08 steht uns ab sofort auch die Krankenstation offen – und bis zur Mittagsanhörung bleibt nicht mehr allzu viel Zeit.',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'thinking',
+      text: 'Gehen wir strukturiert vor: Schauen wir zuerst bei Dr. Vance in der Krankenstation vorbei und hören uns unvoreingenommen an, was die medizinischen Unterlagen zur Nacht sagen.',
     },
   ];
   const snapshot: GameCheckpointSnapshot = {
@@ -208,6 +222,56 @@ function createCreteAct22Checkpoint(): CheckpointEntry {
   return {
     label: CRETE_CASE.chapters?.c2_akt2_mittag?.dayLabel ?? 'Tag 4 · Mittag (Akt 2.2)',
     introLines,
+    snapshot,
+  };
+}
+
+function createCreteAct23Checkpoint(): CheckpointEntry {
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CRETE_CASE.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'c2_akt3_nachmittag',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'promenade',
+    unlockedLocations: ['promenade', 'brig_cell'],
+    collectedEvidence: ['ausweis_nate', 'zellen_klima_protokoll'],
+    unlockedThoughts: ['thought_c2_kuehlung_9grad'],
+    solvedDeductions: [],
+    flags: {
+      flag_c2_a1_promenade: true,
+      flag_c2_a1_music: true,
+      flag_c2_a1_vip: true,
+      flag_c2_brig_freigeschaltet: true,
+      flag_c2_a1_rauswurf: true,
+      flag_c2_a1_angenommen: true,
+      flag_c2_a2_rettungsdeck_offen: true,
+      flag_c2_a2_vance_befragt: true,
+      flag_c2_a2_21grad_notiz: true,
+      flag_c2_a2_brandt_protokoll: true,
+      flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_brandt_widerspruch_geloest: true,
+      flag_c2_a2_zelle_offen: true,
+      flag_c2_a2_seil_gesehen: true,
+      flag_c2_a2_schloss_gesehen: true,
+      flag_c2_a2_klima_geloest: true,
+      flag_c2_a2_vance_temp_gefragt: true,
+      flag_c2_a2_bruecke_freigeschaltet: true,
+      flag_c2_a2_brandt_deck_done: true,
+      flag_c2_a2_bruecke_geloest: true,
+      flag_c2_tatzeit_geloest: true,
+      flag_c2_dimitri_weg: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: CRETE_CASE.chapters?.c2_akt3_nachmittag?.dayLabel ?? 'Tag 4 · Nachmittag (Akt 2.3)',
+    introLines: [...CRETE_ACT23_INTRO_LINES],
     snapshot,
   };
 }
@@ -263,6 +327,8 @@ function createCreteAct24Checkpoint(): CheckpointEntry {
       'bruecken_log',
       'seidenschal_spur',
       'keycard_fragment',
+      'beweis_brandt_luegt',
+      'notiz_todeszeit_0210',
     ],
     unlockedThoughts: Object.keys(CRETE_CASE.thoughts).filter(
       (id) => id !== 'thought_c2_flashback_schacht'
@@ -275,6 +341,7 @@ function createCreteAct24Checkpoint(): CheckpointEntry {
       flag_c2_brig_freigeschaltet: true,
       flag_c2_a1_rauswurf: true,
       flag_c2_a1_angenommen: true,
+      flag_c2_a2_rettungsdeck_offen: true,
       flag_c2_a2_vance_befragt: true,
       flag_c2_a2_21grad_notiz: true,
       flag_c2_a2_brandt_protokoll: true,
@@ -284,11 +351,9 @@ function createCreteAct24Checkpoint(): CheckpointEntry {
       flag_c2_a2_seil_gesehen: true,
       flag_c2_a2_schloss_gesehen: true,
       flag_c2_a2_klima_geloest: true,
-      flag_c2_a2_eleonore_klima_idee: true,
+      flag_c2_a2_vance_temp_gefragt: true,
+      flag_c2_a2_bruecke_freigeschaltet: true,
       flag_c2_a2_brandt_deck_done: true,
-      flag_c2_a2_vance_klimaschock: true,
-      flag_c2_a2_warum_zeit_wichtig: true,
-      flag_c2_a2_hafenregel_gelesen: true,
       flag_c2_a2_bruecke_geloest: true,
       flag_c2_tatzeit_geloest: true,
       flag_c2_dimitri_weg: true,
@@ -607,6 +672,75 @@ export default function App() {
     showToast,
   ]);
 
+  // Andrew's farewell & Maya's return after finishing switchroom tasks in Akt 2.3
+  useEffect(() => {
+    if (
+      state.screen !== 'PLAYING' ||
+      dialogQueue.length > 0 ||
+      activeCase.id !== CRETE_CASE.id ||
+      state.currentChapterId !== 'c2_akt3_nachmittag' ||
+      !state.flags.flag_c2_a3_strom_geprueft ||
+      !state.flags.flag_c2_a3_kowalski_hinweis ||
+      state.flags.flag_c2_a3_andrew_verabschiedet
+    ) {
+      return;
+    }
+
+    setDialogQueue([
+      {
+        speakerId: 'andrew',
+        emotion: 'neutral',
+        text: 'So, mein Lieber – jetzt stehen wir hier unten also mit exaktem Uhrzeit-Protokoll, Brücken-Bypass und allem Drum und Dran! Meine vereinbarte halbe Stunde Urlaubspause ist damit offiziell vorbei… auch wenn ich zugeben muss, dass diese Fehlersuche fast spannender war als Sandburgenbauen.',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'confident',
+        text: 'Ganz ehrlich, Andrew: Ohne Ihren angeblichen „Nicht-Elektroniker“-Blick hätten wir dieses 15-Minuten-Fenster im Schloss niemals geknackt. Vielen Dank für Ihre Hilfe!',
+      },
+      {
+        speakerId: 'andrew',
+        emotion: 'grumpy',
+        text: 'Na schön, aber wehe Sie erzählen meiner Frau da oben, dass mir das Spaß gemacht hat – sonst darf ich zu Hause wieder die kaputte Spülmaschine aufschrauben! Machen Sie’s gut, Nate, ich löse Miss Maya wieder bei der Kinderwache ab.',
+      },
+      {
+        speakerId: 'maya',
+        emotion: 'confident',
+        setsFlag: 'flag_c2_a3_andrew_verabschiedet',
+        unlocksLocation: 'infirmary',
+        sfx: 'door_lock',
+        text: 'NATE!! Da bist du ja!! Puuh… Leo und Conrad haben mich fast zu einem Piratenschiff-Wettrennen um drei Sonnendecks gezwungen, aber jetzt hat Eleonore die Jungs mit Riesen-Bechern Schokoladeneis wieder übernommen – und Andrew schnauft oben schon im Liegestuhl!',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'confident',
+        text: 'Schön, dass du wieder an Bord meines Teams bist, Maya! Hör zu: Andrew und ich haben in der Schaltzentrale exakt zwischen 02:04 Uhr und 02:19 Uhr den heimlichen Strom-Absturz des Zellenschlosses gefunden – und eine noch wichtigere Überlegung gemacht.',
+      },
+      {
+        speakerId: 'maya',
+        emotion: 'thinking',
+        text: 'Oh?! Was denn für eine Überlegung? Hat der Elektriker etwa jemanden im Flur gesehen?',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'thinking',
+        text: 'Nein, der war hinten bei den Hauptgeneratoren. Aber wir haben überlegt, wer um zwei Uhr nachts überhaupt regulär Dienst hat und etwas bemerkt haben könnte – eigentlich bleibt da außer der Brücke nur die Krankenstation oben! Und wir müssen Dr. Vance ohnehin nach der ausstehenden Toxikologie fragen.',
+      },
+      {
+        speakerId: 'maya',
+        emotion: 'confident',
+        text: 'Stimmt!! Die Krankenstation hat rund um die Uhr Bereitschaft! Gehen wir sofort hoch zu Dr. Vance!',
+      },
+    ]);
+  }, [
+    state.screen,
+    state.currentChapterId,
+    state.flags.flag_c2_a3_strom_geprueft,
+    state.flags.flag_c2_a3_kowalski_hinweis,
+    state.flags.flag_c2_a3_andrew_verabschiedet,
+    dialogQueue.length,
+    activeCase.id,
+  ]);
+
   const startNewGame = (targetCaseId?: string) => {
     const caseDef = CASE_MAP[targetCaseId ?? activeCase.id] ?? CRUISE_CASE;
     const fresh = createInitialState(caseDef);
@@ -650,6 +784,24 @@ export default function App() {
       !saved.unlockedLocations.includes('cabin_312')
     ) {
       saved.unlockedLocations = [...saved.unlockedLocations, 'cabin_312'];
+    }
+    if (
+      (saved.caseId ?? cid) === CRETE_CASE.id &&
+      saved.currentChapterId === 'c2_akt2_mittag' &&
+      !saved.flags?.flag_c2_a2_rettungsdeck_offen
+    ) {
+      saved.unlockedLocations = saved.unlockedLocations.filter(
+        (id) => id !== 'lifeboat_deck'
+      );
+    }
+    if (
+      (saved.caseId ?? cid) === CRETE_CASE.id &&
+      saved.currentChapterId === 'c2_akt3_nachmittag' &&
+      !saved.flags?.flag_c2_a3_andrew_verabschiedet
+    ) {
+      saved.unlockedLocations = saved.unlockedLocations.filter(
+        (id) => id !== 'infirmary'
+      );
     }
     setState(saved);
     setDialogQueue([]);
@@ -769,12 +921,22 @@ export default function App() {
 
       if (allFound) {
         setInvestigationMenu('none');
+        const mayaAwayInCell =
+          state.currentLocationId === 'brig_cell' &&
+          Boolean(state.flags.flag_c2_a3_andrew_in_zelle) &&
+          !Boolean(state.flags.flag_c2_a3_andrew_verabschiedet);
         setDialogQueue([
-          {
-            speakerId: 'maya',
-            emotion: 'confident',
-            text: 'Ich denke, mehr gibt es hier gerade nicht zu finden, Nate!',
-          },
+          mayaAwayInCell
+            ? {
+                speakerId: 'nate',
+                emotion: 'confident',
+                text: 'Hier in der Zelle habe ich mir damit erst einmal alles genau angesehen.',
+              }
+            : {
+                speakerId: 'maya',
+                emotion: 'confident',
+                text: 'Ich denke, mehr gibt es hier gerade nicht zu finden, Nate!',
+              },
         ]);
         return;
       }
@@ -793,7 +955,11 @@ export default function App() {
         locks.add('courtroom');
       }
 
-      let nextUnlocked = prev.unlockedLocations.filter((id) => !locks.has(id));
+      const baseLocations = transition.resetLocations
+        ? [...transition.resetLocations]
+        : prev.unlockedLocations.filter((id) => !locks.has(id));
+
+      let nextUnlocked = [...baseLocations];
       const toUnlock = [
         transition.nextLocationId,
         ...(transition.unlocksLocations ?? []),
@@ -813,6 +979,15 @@ export default function App() {
         phase: transition.nextPhase,
         credibility: prev.maxCredibility,
         unlockedLocations: nextUnlocked,
+        collectedEvidence: transition.setEvidenceIds
+          ? [...transition.setEvidenceIds]
+          : prev.collectedEvidence,
+        unlockedThoughts: transition.setThoughtIds
+          ? [...transition.setThoughtIds]
+          : prev.unlockedThoughts,
+        solvedDeductions: transition.setSolvedDeductions
+          ? [...transition.setSolvedDeductions]
+          : prev.solvedDeductions,
         flags: transition.setsFlag
           ? { ...prev.flags, [transition.setsFlag]: true }
           : prev.flags,
@@ -874,17 +1049,27 @@ export default function App() {
           emotion: 'sweating',
           sfx: 'door_lock',
           setsFlag: 'flag_c2_a2_zelle_offen',
-          text: 'Tch… verstanden, Kommissar! Hier – das Schloss ist entriegelt. Ich… gehe dann nach oben auf das Rettungsboot-Deck und prüfe eine klemmende Lüftungsklappe.',
+          text: 'Tch… verstanden, Kommissar! Wenn Sie darauf bestehen… bitte sehr, das elektronische Schloss von Zelle 08 ist entriegelt.',
+        },
+        {
+          speakerId: 'brandt',
+          emotion: 'neutral',
+          text: 'Ich überlasse Ihnen und Mr. Sterling hier unten das Feld. Ich… gehe nach oben aufs Rettungsboot-Deck und sehe nach einer klemmenden Lüftungsklappe.',
         },
         {
           speakerId: 'maya',
           emotion: 'confident',
-          text: 'YES!! Dein Pantomime-Griechisch hat perfekt funktioniert, Nate – die Tür zu Zelle 08 steht endlich offen!!',
+          text: 'YES!! Dein Pantomime-Griechisch hat wirklich gesessen, Nate!! Selbst ohne ein einziges gemeinsames Wort hat Dimitri dich auf Anhieb verstanden!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'sweating',
+          text: 'Puh… ich glaube, so viel geschauspielert habe ich seit meiner ersten Gerichtsverhandlung nicht mehr. Aber es hat geklappt: Die Tür zu Zelle 08 steht endlich offen!',
         },
         {
           speakerId: 'nate',
           emotion: 'thinking',
-          text: 'Die Tür zu Zelle 08 steht endlich offen. Gehen wir hinein und sehen uns in aller Ruhe genau um, was uns dort drinnen erwartet.',
+          text: 'Treten wir ein und sehen uns drinnen ganz in Ruhe jeden einzelnen Winkel an – vielleicht entdecken wir etwas, das im ersten Schnellbericht übersehen wurde.',
         },
       ]);
       return;
@@ -898,12 +1083,17 @@ export default function App() {
           shout: 'VOLLTREFFER!',
           shake: true,
           sfx: 'deduction',
-          text: 'Die Diagnose-Leitung steht! Schau dir den Sensor-Ausdruck an, Maya: Punkt 03:00 Uhr nachts hat jemand manuell hier am Regel-Ventil gedreht und die Temperatur von Zelle 08 verändert!',
+          text: 'Die Diagnose-Leitung steht, Maya! Der Sensor-Drucker springt an und spuckt die kompletten Klimawerte der letzten Nacht aus!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'shocked',
+          text: 'Moment… schau dir diese Linie auf dem Protokollstreifen genau an: Punkt 03:00 Uhr nachts hat jemand manuell am Regel-Ventil gedreht und die Temperatur in Zelle 08 massiv heruntergeregelt!',
         },
         {
           speakerId: 'maya',
           emotion: 'shocked',
-          text: 'Mitten in der Nacht um 03:00 Uhr hat jemand absichtlich an der Klimaregelung geschraubt?! Kein Wunder, dass einem hier drin fast die Finger abfrieren… aber wozu dreht man eine Zelle nachts herunter?',
+          text: 'Mitten in der Nacht um 03:00 Uhr hat hier jemand absichtlich an der Kühlung gedreht?! Kein Wunder, dass einem hier drin fast der Atem gefriert… Aber warum sollte sich irgendjemand nachts an einer Arrestzelle zu schaffen machen?',
         },
         {
           speakerId: 'dimitri',
@@ -913,7 +1103,7 @@ export default function App() {
         {
           speakerId: 'maya',
           emotion: 'sweating',
-          text: 'Ähm… danke, Kommissar… (Ich glaube, er hat wieder kein einziges Wort verstanden und denkt bloß, wir wollen die kaputte Klimaanlage reparieren und einen heißen Kaffee trinken…)',
+          text: 'Ähm… danke sehr, Kommissar… (Er hat wieder kein Wort verstanden und denkt offenbar bloß, wir frieren wegen einer kaputten Bordheizung und wollen einen heißen Kaffee…)',
         },
         {
           speakerId: 'nate',
@@ -921,53 +1111,122 @@ export default function App() {
           unlocksEvidence: 'zellen_klima_protokoll',
           unlocksThought: 'thought_c2_kuehlung_9grad',
           setsFlag: 'flag_c2_a2_klima_geloest',
-          text: 'Ich schreibe mir diese Temperaturänderung um 03:00 Uhr sofort ins Notizbuch! Mit dem frischen Ausdruck gehen wir jetzt direkt hinauf zur Schiffsärztin Dr. Vance in die Krankenstation – mal sehen, was sie dazu sagt!',
+          text: 'Kommissar Dimitri merkt zum Glück nicht einmal, wie brisant dieser Ausdruck sein könnte. Seltsam ist diese manuelle Temperaturänderung um 03:00 Uhr auf jeden Fall – legen wir das Protokoll erst einmal sauber zu unserer Akte.',
         },
       ]);
       return;
     }
 
     if (miniGameId === 'sea_chart') {
-      const seaChartLines: DialogLine[] = [
+      enqueueLines([
         {
-          speakerId: 'captain',
-          emotion: 'neutral',
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
           unlocksEvidence: 'bruecken_log',
           setsFlag: 'flag_c2_a2_bruecke_geloest',
-          text: 'Sauber abgelesen. Die griechische 12-Meilen-Zone haben wir exakt um 05:45 Uhr morgens passiert. Alles davor – auch 02:15 Uhr nachts bei 42 Seemeilen Abstand – war offene internationale See. Hier haben Sie die beglaubigte Kopie aus meinem Brücken-Logbuch.',
+          text: 'JETZT fällt der Groschen, Maya!! Schau dir die Markierungen auf dem Navigations-Plotter und die Uhrzeiten dazu genau an!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          text: 'Um 07:30 Uhr und um 06:00 Uhr waren wir längst innerhalb der 12-Meilen-Grenze vor Heraklion. Aber um 02:10 Uhr nachts lag die MS Aurora noch rund 42 Seemeilen vor Kreta – draußen in internationalen Gewässern!!',
         },
         {
           speakerId: 'dimitri',
-          emotion: 'confident',
-          text: 'Πολύ καλά, καπετάνιε! Σημειώστε το ακριβώς: μετά τις 05:45 η υπόθεση ανήκει στην Εισαγγελία Ηρακλείου. Αν όμως το έγκλημα έγινε νωρίτερα, στα διεθνή ύδατα… τότε δεν έχω καμία απολύτως δικαιοδοσία!',
+          emotion: 'shocked',
+          text: 'Στις 02:10 στα 42 ναυτικά μίλια – διεθνή ύδατα?! Καπετάνιε, τι συμβαίνει εδώ;; Έκτακτη ακρόαση στη μεγάλη αίθουσα ΤΩΡΑ!!',
         },
         {
-          speakerId: 'captain',
-          emotion: 'neutral',
-          text: 'Ab 05:45 Uhr ist Kreta zuständig. Vorher liegt der Fall allein beim Schiff. Punkt.',
+          speakerId: 'maya',
+          emotion: 'confident',
+          text: 'Volltreffer!! Kommissar Dimitri hat jede einzelne Zahl sofort verstanden – deshalb hat er eben so aufgeregt aufs Meer hinausgezeigt! Er trommelt sofort alle Beteiligten in den Großen Ballsaal zusammen!',
         },
-      ];
+        {
+          speakerId: 'pendelton',
+          emotion: 'neutral',
+          sfx: 'gavel_double',
+          unlocksLocation: 'courtroom',
+          switchesLocationId: 'courtroom',
+          setsPhase: 'court',
+          text: 'Ruhe im Großen Ballsaal! Auf dringenden Antrag von Kommissar Dimitri eröffne ich hiermit eine außerordentliche Mittags-Anhörung zu den Vorgängen der letzten Nacht.',
+        },
+        {
+          speakerId: 'pendelton',
+          emotion: 'neutral',
+          text: 'Wir klären Punkt für Punkt, was in Zelle 08 wirklich geschehen ist. Als ersten Zeugen rufe ich in den Stand: Sicherheitsoffizier Lukas Brandt!',
+          startsTestimonyId: 'testimony_c2_brandt_kurz',
+        },
+      ]);
+      return;
+    }
 
-      const autoTransition =
-        state.flags['flag_c2_tatzeit_geloest']
-          ? activeCase.autoChapterTransitions?.find((t) => t.id === 'c2_a2_to_court')
-          : null;
+    if (miniGameId === 'kids_sokoban') {
+      enqueueLines([
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'victory',
+          text: 'Puh!! Geschafft – Leo, Rick und Conrad sitzen alle drei brav mit einer Riesenportion Wassermelone und Piraten-Malbüchern oben in der Spielecke auf dem Promenadendeck!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          text: 'Ich bleibe hier oben und passe auf die wilde Bande auf, versprochen! Viel Erfolg da unten mit unserem „Nicht-Technik-Experten“, Nate!',
+        },
+        {
+          speakerId: 'andrew',
+          emotion: 'neutral',
+          setsFlag: 'flag_c2_a3_andrew_in_zelle',
+          text: 'Endlich… so leise war es in meiner Nähe seit dem Einschiffen vor vier Tagen nicht mehr. Also gut, Nate – jetzt stehe ich allein mit Ihnen hier unten in Arrestzelle 08.',
+        },
+        {
+          speakerId: 'andrew',
+          emotion: 'grumpy',
+          text: 'Zeigen Sie mir einfach dieses blöde Elektronikschloss da drüben, aber versprechen Sie sich bloß keine Wunder von mir!',
+        },
+      ]);
+      return;
+    }
 
-      if (autoTransition) {
-        if (autoTransition.toast) {
-          showToast(autoTransition.toast);
-        }
-        enqueueLines([...seaChartLines, ...autoTransition.lines]);
-      } else {
-        enqueueLines([
-          ...seaChartLines,
-          {
-            speakerId: 'maya',
-            emotion: 'thinking',
-            text: 'Hast du das gehört, Nate?! Wenn wir jetzt beweisen können, dass Arthur wirklich schon um 02:15 Uhr starb, war die MS Aurora noch gar nicht in griechischen Gewässern! Schau mal unten in der Zelle und auf dem Rettungsboot-Deck nach Hinweisen und verbinde alles im Notizbuch!',
-          },
-        ]);
-      }
+    if (miniGameId === 'lock_cables') {
+      enqueueLines([
+        {
+          speakerId: 'andrew',
+          emotion: 'shocked',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          text: 'HALT DIE LUFT AN!! Schau auf meine Prüflampe, Nate!! Das glaub ich ja jetzt selber kaum – ES HAT TATSÄCHLICH GEKLAPPT!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'shocked',
+          text: 'Andrew?! Der schwere Magnetbolzen der Zellentür ist gerade völlig lautlos zurückgesprungen – und was steht da auf dem Status-Display?!',
+        },
+        {
+          speakerId: 'andrew',
+          emotion: 'shocked',
+          unlocksEvidence: 'magnet_crash_protokoll',
+          unlocksThought: 'thought_c2_a3_15min_luecke',
+          setsFlag: 'flag_c2_a3_lock_geknackt',
+          text: 'NULL!! KEIN EINZIGER EINTRAG!! Durch diese gezielte Bus-Überlastung stürzt der MS-400-Controller komplett ab und legt die Tür für geschlagene 15 Minuten frei – bis er neu startet und ohne ein einziges Bit im Zugriffs-Log wieder einrastet!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'shocked',
+          unlocksLocation: 'switchroom',
+          text: 'FÜNFZEHN MINUTEN SPURLOS OFFEN?! Wahnsinn, Andrew!! Aber Moment – selbst wenn der Tür-Speicher nichts protokolliert: Ein solcher Strom-Einbruch müsste doch unten in der zentralen Energieverteilung des Schiffes aufgezeichnet worden sein!',
+        },
+        {
+          speakerId: 'andrew',
+          emotion: 'grumpy',
+          text: 'Ich fass es nicht… jetzt steige ich auf meiner Urlaubsreise freiwillig auch noch in den Schiffs-Maschinenraum hinab! Kommen Sie, gehen wir in die Schaltzentrale & Bordtechnik zum Elektriker!',
+        },
+      ]);
     }
   };
 
@@ -1073,7 +1332,10 @@ export default function App() {
     // 1. Final Courtroom Evidence Prompt
     if (topLine?.requiresFinalEvidencePrompt) {
       const prompt = topLine.requiresFinalEvidencePrompt;
-      if (evidenceId === prompt.correctEvidenceId) {
+      const isMatch =
+        evidenceId === prompt.correctEvidenceId ||
+        Boolean(prompt.alternativeEvidenceIds?.includes(evidenceId));
+      if (isMatch) {
         setPresentMode(false);
         setActiveBinderTab(null);
         enqueueLines(prompt.successLines);
@@ -1244,7 +1506,14 @@ export default function App() {
         );
       } else if (pair.includes('thought_c2_0210_poltern') && pair.includes('thought_c2_kuehlung_9grad')) {
         showToast(
-          'Sprich erst auf dem Promenadendeck mit Eleonore über die Temperaturänderung, um ihre Krimi-Erkenntnis freizuschalten!'
+          'Diese zwei Hinweise gehören noch nicht zusammen – sprich zuerst mit Dr. Vance oder auf den Decks über deine Befunde.'
+        );
+      } else if (
+        pair.includes('thought_c2_a3_15min_luecke') &&
+        !state.unlockedThoughts.includes('thought_c2_a3_arthur_betaeubt')
+      ) {
+        showToast(
+          'Dir fehlt noch ein wichtiger medizinischer oder technischer Baustein zu dieser Spur.'
         );
       } else {
         showToast('Diese beiden Hinweise ergeben noch keine neue Schlussfolgerung.');
@@ -1389,15 +1658,7 @@ export default function App() {
           ]
         : autoTransition
           ? [...autoTransition.lines]
-          : match.id === 'c2_logic_tatzeit' && !nextFlags['flag_c2_a2_bruecke_geloest']
-            ? [
-                {
-                  speakerId: 'maya',
-                  emotion: 'thinking',
-                  text: 'Falk und Vance tun einfach so, als wäre diese fünf Stunden frühere Uhrzeit völlig egal! Aber irgendetwas sagt mir, dass genau hinter dieser 07:30-Uhr-Lüge ein Grund steckt. Schauen wir im VIP-Salon an der Bord-Funk-Konsole oder bei Kapitän Brammer nach den Hafen-Vorschriften!',
-                },
-              ]
-            : [];
+          : [];
 
     setState((prev) => {
       const unlockedLocs = [...prev.unlockedLocations];
@@ -1411,10 +1672,15 @@ export default function App() {
       ) {
         unlockedLocs.push(activeCase.courtroomLocationId);
       }
+      const nextEvidence =
+        match.unlocksEvidence && !prev.collectedEvidence.includes(match.unlocksEvidence)
+          ? [...prev.collectedEvidence, match.unlocksEvidence]
+          : prev.collectedEvidence;
 
       return {
         ...prev,
         solvedDeductions: [...prev.solvedDeductions, match.id],
+        collectedEvidence: nextEvidence,
         unlockedThoughts: prev.unlockedThoughts.includes(match.resultThoughtId)
           ? prev.unlockedThoughts
           : [...prev.unlockedThoughts, match.resultThoughtId],
@@ -1427,6 +1693,9 @@ export default function App() {
       showToast('Seegericht im Ballsaal freigeschaltet!');
     } else if (shouldFinishChapter3) {
       showToast('Alle Beweise für das große Finale gesammelt!');
+    } else if (match.unlocksEvidence) {
+      const ev = activeCase.evidence[match.unlocksEvidence];
+      if (ev) showToast(`Gerichtsakte aktualisiert: ${ev.name}`);
     } else if (autoTransition?.toast) {
       showToast(autoTransition.toast);
     }
@@ -1524,6 +1793,13 @@ export default function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => restoreCheckpoint(createCreteAct23Checkpoint(), true)}
+                  className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                >
+                  Akt 2.3 · Tag 4 Nachmittag
+                </button>
+                <button
+                  type="button"
                   onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
                   className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                 >
@@ -1555,8 +1831,74 @@ export default function App() {
     );
   }
 
-  // ANIMATED OUTRO CUTSCENE (Piano Epilog & Crete Cliffhanger)
+  // ANIMATED OUTRO CUTSCENE
   if (state.screen === 'OUTRO_CUTSCENE') {
+    if (activeCase.id === CRETE_CASE.id) {
+      if (state.currentChapterId === 'c2_akt3_nachmittag') {
+        return (
+          <AnimatedOutro
+            muted={muted}
+            slides={CRETE_ACT23_OUTRO_SLIDES}
+            cliffhangerTitle="Vorschau: Fall 3"
+            finishButtonLabel="Fall 2 abschließen"
+            onComplete={() =>
+              setState((prev) => ({
+                ...prev,
+                screen: 'PLAYING',
+                pendingChapterTransition: {
+                  completedChapterTitle: 'Fall 2 abgeschlossen',
+                  completedTimeLabel: 'Leinen los vor Kreta · Auf zu Fall 3',
+                  summary:
+                    'Gemeinsam mit Andrew Higginson hast du den lautlosen 15-Minuten-Absturz des Magnetschlosses und Dr. Vances Betäubungs-Gutachten bewiesen. Doch nach dem ersten Mord-Urteil bat Staatsanwalt von Falk um eine Pause – und ließ Andrew anhand von Überwachungskameras, gestandenen Schulden und dem „A. H.“-Brief verhaften, während die MS Aurora bereits von Kreta ablegt!',
+                  nextChapterId: 'c2_akt4_abend',
+                  nextLocationId: 'courtroom',
+                  nextPhase: 'court',
+                  nextTimeOfDay: 'abend',
+                  isComingSoon: true,
+                  nextButtonLabel: 'Demnächst: Fall 3 (Andrews Verteidigung auf hoher See)',
+                  comingSoonNote:
+                    'Fall 2 endet hier mit dem Ablegen von Kreta, Andrews Verhaftung und Frau Lindemanns Gerichts-LARP-Triumph! Die Fortsetzung folgt in Fall 3.',
+                  nextIntroLines: [],
+                },
+              }))
+            }
+          />
+        );
+      }
+
+      return (
+        <AnimatedOutro
+          muted={muted}
+          slides={CRETE_ACT22_OUTRO_SLIDES}
+          cliffhangerTitle="Vorschau: Akt 2.3"
+          finishButtonLabel="Weiter zu Akt 2.3"
+          onComplete={() =>
+            setState((prev) => ({
+              ...prev,
+              screen: 'PLAYING',
+              flags: { ...prev.flags, flag_c2_dimitri_weg: true },
+              pendingChapterTransition: {
+                completedChapterTitle: 'Akt 2.2 abgeschlossen',
+                completedTimeLabel: 'Strand von Kreta · Cliffhanger',
+                summary:
+                  'Im kurzen Tribunal hast du Brandts Lüge, die gekühlte Zelle und Kapitän Brammers Versteckspiel um die 02:10-Uhr-Position auf hoher See aufgedeckt. Ohne Beweis gegen einen Selbstmord endete das Verfahren – bis Nate am Strand von Kreta Eleonore Higginsons Schal sieht und ihn plötzlich als das „Seil“ aus Zelle 08 wiedererkennt!',
+                nextChapterId: 'c2_akt3_nachmittag',
+                nextLocationId: 'promenade',
+                nextPhase: 'investigation',
+                nextTimeOfDay: 'tag',
+                resetLocations: ['promenade', 'brig_cell'],
+                setEvidenceIds: ['ausweis_nate', 'zellen_klima_protokoll'],
+                setThoughtIds: ['thought_c2_kuehlung_9grad'],
+                setSolvedDeductions: [],
+                setsFlag: 'flag_c2_dimitri_weg',
+                nextButtonLabel: 'Weiter zu Akt 2.3 (Der blaue Schal)',
+                nextIntroLines: [...CRETE_ACT23_INTRO_LINES],
+              },
+            }))
+          }
+        />
+      );
+    }
     return (
       <AnimatedOutro
         muted={muted}
@@ -1968,6 +2310,18 @@ export default function App() {
                     </div>
                     <div className="text-[11px] text-amber-300/75 mt-0.5">
                       Entwickler-Shortcut · ab Krankenstation / Tatzeit-Ermittlung
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => restoreCheckpoint(createCreteAct23Checkpoint(), true)}
+                    className="w-full text-left px-4 py-2.5 bg-amber-950/50 hover:bg-amber-900/50 border border-amber-500/40 text-amber-200 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <div className="text-xs font-semibold">
+                      Zu Akt 2.3 springen (Tag 4 · Nachmittag)
+                    </div>
+                    <div className="text-[11px] text-amber-300/75 mt-0.5">
+                      Entwickler-Shortcut · blauer Schal, Kreuzfahrtmanagerin & Magnetschloss
                     </div>
                   </button>
                   <button

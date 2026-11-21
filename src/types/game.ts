@@ -19,7 +19,12 @@ export type PortraitAnimation =
 
 export type ShoutType = 'EINSPRUCH!' | 'MOMENT MAL!' | 'VOLLTREFFER!' | 'NICHT SCHULDIG!';
 
-export type MiniGameId = 'cooling_pipes' | 'sea_chart' | 'dimitri_pantomime';
+export type MiniGameId =
+  | 'cooling_pipes'
+  | 'sea_chart'
+  | 'dimitri_pantomime'
+  | 'kids_sokoban'
+  | 'lock_cables';
 
 export type SoundEffect =
   | 'blip'
@@ -99,6 +104,7 @@ export interface LogicCombination {
   thoughtB: string;
   resultThoughtId: string;
   setsFlag?: string;
+  unlocksEvidence?: string;
   unlocksLocationId?: string;
   requiresFlagForLocation?: string;
   feedbackLines: DialogLine[];
@@ -128,6 +134,10 @@ export interface ChapterTransition {
   nextTimeOfDay?: 'abend' | 'tag';
   unlocksLocations?: string[];
   locksLocations?: string[];
+  resetLocations?: string[];
+  setEvidenceIds?: string[];
+  setThoughtIds?: string[];
+  setSolvedDeductions?: string[];
   setsFlag?: string;
   isComingSoon?: boolean;
   comingSoonNote?: string;
@@ -154,11 +164,14 @@ export interface DialogLine {
   requiresFinalEvidencePrompt?: {
     question: string;
     correctEvidenceId: string;
+    alternativeEvidenceIds?: string[];
     successLines: DialogLine[];
     wrongLines: DialogLine[];
   };
   choices?: DialogChoice[];
   startsMiniGameId?: MiniGameId;
+  backgroundOverrideUrl?: string;
+  hideCharacters?: boolean;
   triggersOutro?: boolean;
   winGame?: boolean;
 }
@@ -206,6 +219,8 @@ export interface LocationScene {
   alternateBackground?: {
     flag: string;
     backgroundUrl: string;
+    outsideWhenFlag?: string;
+    reopenWhenFlag?: string;
   };
   characterId?: string;
   charactersPresent?: SceneCharacterPresence[];

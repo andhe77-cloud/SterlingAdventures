@@ -6,10 +6,13 @@ import { resolveAssetPath } from '../utils/assetPath';
 
 interface AnimatedOutroProps {
   muted: boolean;
+  slides?: OutroSlide[];
+  cliffhangerTitle?: string;
+  finishButtonLabel?: string;
   onComplete: () => void;
 }
 
-interface OutroSlide {
+export interface OutroSlide {
   id: string;
   imageUrl?: string;
   kicker: string;
@@ -17,12 +20,142 @@ interface OutroSlide {
   caption: string;
   playsPiano?: boolean;
   fadeOutEvening?: boolean;
-  sfx?: 'foghorn' | 'alarm' | 'tension';
+  playsGreekMusic?: boolean;
+  fadeOutGreekMusic?: boolean;
+  shoutBanner?: 'MOMENT MAL!';
+  sfx?: 'foghorn' | 'alarm' | 'tension' | 'page_turn';
   durationMs: number;
   panFrom: { scale: number; x: number; y: number };
   panTo: { scale: number; x: number; y: number };
   isCliffhangerCard?: boolean;
 }
+
+export const CRETE_ACT22_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'c2_outro_dimitri',
+    imageUrl: '/src/assets/images/outro_crete_harbor_1795089043540.jpg',
+    kicker: 'Tag 4 · Nach dem Tribunal · Hafen von Heraklion',
+    speaker: 'Kommissar Dimitri & Maya',
+    caption:
+      'Kommissar Dimitri nickt ruhig, verlässt die MS Aurora und organisiert die Überführung des Leichnams für die Beerdigung. Endlich öffnet sich die Gangway – für alle Passagiere geht es an Land!',
+    playsGreekMusic: true,
+    sfx: 'foghorn',
+    durationMs: 6500,
+    panFrom: { scale: 1.0, x: 0, y: 0 },
+    panTo: { scale: 1.08, x: 12, y: -4 },
+  },
+  {
+    id: 'c2_outro_beach',
+    imageUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
+    kicker: 'Tag 4 · Nachmittag · Strand von Kreta',
+    speaker: 'Maya & Nate',
+    caption:
+      'Endlich liegen Nate und Maya unter kretischen Sonnenschirmen im warmen Sand! Keine Sirenen, keine Akten – nur Meeresrauschen und Urlaubsruhe… bis Nates Blick kurz zu den Nachbarliegen wandert.',
+    playsGreekMusic: true,
+    sfx: 'page_turn',
+    durationMs: 6800,
+    panFrom: { scale: 1.0, x: -8, y: 0 },
+    panTo: { scale: 1.07, x: 10, y: -3 },
+  },
+  {
+    id: 'c2_outro_scarf_notice',
+    imageUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
+    kicker: 'Strand von Kreta · Familie Higginson',
+    speaker: 'Nate & Maya',
+    caption:
+      'Unter den Palmen sitzen tatsächlich Andrew, die Jungs und Eleonore Higginson – und um Eleonores Schultern fällt Nate sofort ein auffälliger, königsblauer Schal mit goldener Borte ins Auge…',
+    playsGreekMusic: true,
+    durationMs: 6800,
+    panFrom: { scale: 1.06, x: 10, y: -2 },
+    panTo: { scale: 1.14, x: -8, y: -5 },
+  },
+  {
+    id: 'c2_outro_flashback',
+    imageUrl: '/src/assets/images/scarf_flashback_split_1795257794337.jpg',
+    kicker: 'Erinnerungs-Blitz · Arrestzelle 08',
+    speaker: 'Nate Sterling (Gedanke)',
+    caption:
+      '(Dieses tiefe Blau… genau dieses kretische Muster! Das „Seidentuch“ oben am Zellengitter heute Morgen war niemals eines von Arthurs Kellner-Tüchern – DAS IST ELEONORES SCHAL!!)',
+    fadeOutGreekMusic: true,
+    sfx: 'tension',
+    durationMs: 6200,
+    panFrom: { scale: 1.0, x: 0, y: 0 },
+    panTo: { scale: 1.1, x: 0, y: -4 },
+  },
+  {
+    id: 'c2_outro_moment_mal',
+    imageUrl: '/src/assets/images/nate_beach_shock_1795265172574.jpg',
+    kicker: 'Tag 4 · Nachmittag · Plötzliche Erkenntnis!',
+    speaker: 'Nate Sterling',
+    caption:
+      '„MOMENT MAL!!“ — Wie vom Blitz getroffen springt Nate von der Strandliege auf! Wenn genau dieses Tuch in der verschlossenen Zelle hing, stimmt an diesem Selbstmord überhaupt nichts!!',
+    shoutBanner: 'MOMENT MAL!',
+    durationMs: 5600,
+    panFrom: { scale: 1.04, x: -6, y: 2 },
+    panTo: { scale: 1.0, x: 0, y: 0 },
+  },
+  {
+    id: 'c2_outro_preview',
+    kicker: 'Vorschau · Fall 2 · Akte MS Aurora',
+    caption:
+      'Zurück an Bord beginnt die Jagd nach einem verschwundenen Schal, verborgenen Nacht-Spuren und der Frage, wer wirklich Zugang zu Arrestzelle 08 hatte.',
+    sfx: 'alarm',
+    durationMs: 5600,
+    panFrom: { scale: 0.95, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
+
+export const CRETE_ACT23_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'c2_a3_outro_arrest',
+    imageUrl: '/src/assets/images/outro_andrew_arrest_1795276704503.jpg',
+    kicker: 'Tag 4 · Später Abend · Großer Ballsaal',
+    speaker: 'Eleonore Higginson',
+    caption:
+      'Handschellen klicken um Andrew Higginsons Handgelenke. Unter Tränen klammert sich Eleonore an Nates Ärmel: „Mr. Sterling, bitte!! Andrew würde niemals jemanden umbringen – Sie müssen ihm helfen!!“',
+    sfx: 'tension',
+    durationMs: 7400,
+    panFrom: { scale: 1.0, x: -10, y: 0 },
+    panTo: { scale: 1.08, x: 10, y: -4 },
+  },
+  {
+    id: 'c2_a3_outro_maya_pledge',
+    imageUrl: '/src/assets/images/outro_andrew_arrest_1795276704503.jpg',
+    kicker: 'Vor den Augen der Familie Higginson',
+    speaker: 'Maya & Nate',
+    caption:
+      'Maya blickt fassungslos auf den abgeführten Familienvater und flüstert bedrückt: „Nate… wir haben diese Abend-Show erst eingefordert. Jetzt ist es doch wieder unser Fall – denn irgendwie wäre es auch unsere Schuld!“',
+    sfx: 'page_turn',
+    durationMs: 7200,
+    panFrom: { scale: 1.08, x: 10, y: -3 },
+    panTo: { scale: 1.02, x: -6, y: 0 },
+  },
+  {
+    id: 'c2_a3_outro_manager_joy',
+    imageUrl: '/src/assets/images/outro_manager_scheme_1795276704195.jpg',
+    kicker: 'Bühnenrampe · MS Aurora',
+    speaker: 'Sabine Lindemann (Kreuzfahrtmanagerin)',
+    caption:
+      'Während die Menge noch fassungslos tuschelt, strahlt Kreuzfahrtmanagerin Sabine Lindemann selig ins Mikrofon: „Leinen los!! Wir legen sofort von Kreta ab – und auf hoher See geht unser großes Kreuzfahrt-Gerichts-LARP mit dem Prozess gegen Andrew weiter!!“',
+    sfx: 'alarm',
+    durationMs: 6800,
+    panFrom: { scale: 1.0, x: 0, y: 2 },
+    panTo: { scale: 1.09, x: -8, y: -4 },
+  },
+  {
+    id: 'c2_a3_outro_preview',
+    kicker: 'Ende von Fall 2 · Aufbruch zu Fall 3',
+    caption:
+      'Die MS Aurora verlässt den Hafen von Kreta, während Andrew Higginson in Haft sitzt – doch hinter dem „A. H.“-Brief und der 15-Minuten-Stromlücke wartet das wahre Geheimnis in Fall 3!',
+    sfx: 'tension',
+    durationMs: 5600,
+    panFrom: { scale: 0.96, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
 
 const OUTRO_SLIDES: OutroSlide[] = [
   {
@@ -104,9 +237,15 @@ const FLOATING_NOTES = [
   { id: 4, left: '75%', top: '54%', delay: 2.3 },
 ];
 
-export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
+export function AnimatedOutro({
+  muted,
+  slides = OUTRO_SLIDES,
+  cliffhangerTitle = 'Was ist unter Deck geschehen?',
+  finishButtonLabel = 'Fall 1 abschließen',
+  onComplete,
+}: AnimatedOutroProps) {
   const [index, setIndex] = useState(0);
-  const current = OUTRO_SLIDES[index];
+  const current = slides[index];
 
   useEffect(() => {
     if (!current) return;
@@ -119,15 +258,28 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
       soundFx.stopPianoBallad();
     }
 
+    if (current.fadeOutGreekMusic) {
+      soundFx.fadeOutGreekBouzouki(Math.max(1200, current.durationMs - 800));
+    } else if (current.playsGreekMusic && !muted) {
+      soundFx.startGreekBouzouki();
+    } else {
+      soundFx.stopGreekBouzouki();
+    }
+
+    if (current.shoutBanner && !muted) {
+      soundFx.playShout(current.shoutBanner);
+    }
+
     if (current.sfx) {
       soundFx.play(current.sfx);
     }
 
     const timer = window.setTimeout(() => {
-      if (index + 1 < OUTRO_SLIDES.length) {
+      if (index + 1 < slides.length) {
         setIndex((i) => i + 1);
       } else {
         soundFx.stopPianoBallad();
+        soundFx.stopGreekBouzouki();
         onComplete();
       }
     }, current.durationMs);
@@ -135,25 +287,28 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
     return () => {
       window.clearTimeout(timer);
     };
-  }, [index, current, muted, onComplete]);
+  }, [index, current, muted, onComplete, slides.length]);
 
   useEffect(() => {
     return () => {
       soundFx.stopPianoBallad();
+      soundFx.stopGreekBouzouki();
     };
   }, []);
 
   const handleNext = () => {
-    if (index + 1 < OUTRO_SLIDES.length) {
+    if (index + 1 < slides.length) {
       setIndex((i) => i + 1);
     } else {
       soundFx.stopPianoBallad();
+      soundFx.stopGreekBouzouki();
       onComplete();
     }
   };
 
   const handleSkip = () => {
     soundFx.stopPianoBallad();
+    soundFx.stopGreekBouzouki();
     onComplete();
   };
 
@@ -163,7 +318,7 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
         {/* Progress & Skip */}
         <div className="flex items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
-            {OUTRO_SLIDES.map((s, idx) => (
+            {slides.map((s, idx) => (
               <span
                 key={s.id}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -213,7 +368,7 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
                       {current.kicker}
                     </div>
                     <h1 className="font-display text-3xl sm:text-5xl font-bold text-slate-50 leading-tight text-balance">
-                      Was ist unter Deck geschehen?
+                      {cliffhangerTitle}
                     </h1>
                     <p className="text-sm sm:text-base text-amber-300 font-medium">
                       {current.caption}
@@ -285,6 +440,27 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
                     </div>
                   )}
 
+                  {/* Visual Ace Attorney Shout Banner Overlay */}
+                  {current.shoutBanner && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 1.9, rotate: -10 }}
+                      animate={{ opacity: 1, scale: 1, rotate: -6 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 420,
+                        damping: 20,
+                        delay: 0.12,
+                      }}
+                      className="pointer-events-none absolute top-7 right-6 sm:top-10 sm:right-12 z-20"
+                    >
+                      <div className="px-5 py-2.5 sm:px-7 sm:py-3 rounded-lg bg-gradient-to-r from-red-600 via-amber-500 to-red-600 border-2 border-amber-200 shadow-[0_0_28px_rgba(239,68,68,0.75)]">
+                        <span className="font-display text-xl sm:text-3xl font-black tracking-wider text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] uppercase">
+                          {current.shoutBanner}
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
+
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-slate-950/25" />
                   <div className="pointer-events-none absolute inset-x-0 top-0 h-8 sm:h-10 bg-slate-950/85" />
 
@@ -295,7 +471,9 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
                     className="absolute inset-x-0 bottom-0 p-5 sm:p-8 space-y-1.5"
                   >
                     <div className="flex items-center gap-2 text-xs font-semibold text-amber-400">
-                      {current.playsPiano && <Music className="w-3.5 h-3.5 shrink-0" />}
+                      {(current.playsPiano || current.playsGreekMusic) && (
+                        <Music className="w-3.5 h-3.5 shrink-0" />
+                      )}
                       <span>{current.kicker}</span>
                       {current.speaker && (
                         <>
@@ -321,7 +499,7 @@ export function AnimatedOutro({ muted, onComplete }: AnimatedOutroProps) {
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer"
           >
             <span>
-              {index + 1 < OUTRO_SLIDES.length ? 'Nächste Szene' : 'Fall 1 abschließen'}
+              {index + 1 < slides.length ? 'Nächste Szene' : finishButtonLabel}
             </span>
             <ChevronRight className="w-4 h-4 shrink-0" />
           </button>

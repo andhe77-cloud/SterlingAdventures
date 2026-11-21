@@ -90,10 +90,23 @@ export function GameStage({
   const currentLine = dialogQueue[0] ?? null;
   const [typedCount, setTypedCount] = useState(0);
 
+  const useAlternateBg =
+    Boolean(location.alternateBackground && state.flags[location.alternateBackground.flag]) &&
+    !(
+      location.alternateBackground?.outsideWhenFlag &&
+      state.flags[location.alternateBackground.outsideWhenFlag] &&
+      !(
+        location.alternateBackground.reopenWhenFlag &&
+        state.flags[location.alternateBackground.reopenWhenFlag]
+      )
+    );
+
   const activeBackgroundUrl = resolveAssetPath(
-    location.alternateBackground && state.flags[location.alternateBackground.flag]
-      ? location.alternateBackground.backgroundUrl
-      : location.backgroundUrl
+    currentLine?.backgroundOverrideUrl
+      ? currentLine.backgroundOverrideUrl
+      : useAlternateBg && location.alternateBackground
+        ? location.alternateBackground.backgroundUrl
+        : location.backgroundUrl
   );
 
   // Reset image error state when location or background variant changes
@@ -197,6 +210,7 @@ export function GameStage({
   const showActiveSpeaker =
     (Boolean(currentLine) || (state.phase === 'court' && investigationMenu !== 'inspect')) &&
     Boolean(activeSpeaker) &&
+    !currentLine?.hideCharacters &&
     !state.pendingChapterTransition;
 
   const currentStatement =
@@ -426,7 +440,7 @@ export function GameStage({
       {state.pendingChapterTransition ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
           {state.pendingChapterTransition.isComingSoon
-            ? 'Akt 2.1 abgeschlossen – Fortsetzung folgt ab Akt 2.2!'
+            ? `${state.pendingChapterTransition.completedChapterTitle} – Fortsetzung folgt!`
             : 'Kapitel abgeschlossen. Klicke oben auf „Weiter“, um den nächsten Tagesabschnitt zu beginnen.'}
         </div>
       ) : currentLine ? (
