@@ -427,6 +427,7 @@ export function GameStage({
         {activeMiniGameId && (
           <Case2MiniGame
             miniGameId={activeMiniGameId}
+            flags={state.flags}
             onComplete={onCompleteMiniGame}
             onCancel={onCancelMiniGame}
           />

@@ -1,6 +1,7 @@
 import type { CheckpointEntry, DialogLine, GameCheckpointSnapshot } from '../types/game';
 import { CRUISE_CASE } from './cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './creteCase';
+import { CASE3_SEETAG } from './case3Seetag';
 
 export interface ChapterPhaseJump {
   label: string;
@@ -506,6 +507,7 @@ export function createCreteAct22TrialCheckpoint(): CheckpointEntry {
       flag_c2_a2_21grad_notiz: true,
       flag_c2_a2_brandt_protokoll: true,
       flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_kids_suche_gestartet: true,
       flag_c2_a2_brandt_widerspruch_geloest: true,
       flag_c2_a2_zelle_offen: true,
       flag_c2_a2_seil_gesehen: true,
@@ -557,6 +559,7 @@ export function createCreteAct23Checkpoint(): CheckpointEntry {
       flag_c2_a2_21grad_notiz: true,
       flag_c2_a2_brandt_protokoll: true,
       flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_kids_suche_gestartet: true,
       flag_c2_a2_brandt_widerspruch_geloest: true,
       flag_c2_a2_zelle_offen: true,
       flag_c2_a2_seil_gesehen: true,
@@ -631,6 +634,7 @@ export function createCreteAct23TrialCheckpoint(): CheckpointEntry {
       flag_c2_a2_21grad_notiz: true,
       flag_c2_a2_brandt_protokoll: true,
       flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_kids_suche_gestartet: true,
       flag_c2_a2_brandt_widerspruch_geloest: true,
       flag_c2_a2_zelle_offen: true,
       flag_c2_a2_seil_gesehen: true,
@@ -735,6 +739,7 @@ export function createCreteAct24Checkpoint(): CheckpointEntry {
       flag_c2_a2_21grad_notiz: true,
       flag_c2_a2_brandt_protokoll: true,
       flag_c2_a2_walkie_indiz: true,
+      flag_c2_a2_kids_suche_gestartet: true,
       flag_c2_a2_brandt_widerspruch_geloest: true,
       flag_c2_a2_zelle_offen: true,
       flag_c2_a2_seil_gesehen: true,
@@ -807,6 +812,21 @@ export function getChapterJumpOptions(caseId: string): ChapterJumpOption[] {
     ];
   }
 
+  if (caseId === CASE3_SEETAG.id) {
+    return [
+      {
+        id: 'f3_st1_suche_andrew',
+        chapterLabel: 'Station 3.1 · Tag 5 (Seetag)',
+        chapterTitle: 'Suche nach Andrew',
+        investigation: {
+          label: 'Anfang der Ermittlung',
+          subtitle: 'Promenadendeck · Familienkabine & Rezeption',
+          createCheckpoint: createCase3St1Checkpoint,
+        },
+      },
+    ];
+  }
+
   return [
     {
       id: 'c2_akt1_morgen',
@@ -849,4 +869,31 @@ export function getChapterJumpOptions(caseId: string): ChapterJumpOption[] {
       },
     },
   ];
+}
+
+export function createCase3St1Checkpoint(): CheckpointEntry {
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE3_SEETAG.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'f3_st1_suche_andrew',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: CASE3_SEETAG.initialLocationId,
+    unlockedLocations: [...CASE3_SEETAG.initialUnlockedLocations],
+    collectedEvidence: [...CASE3_SEETAG.initialEvidenceIds],
+    unlockedThoughts: [...CASE3_SEETAG.initialThoughtIds],
+    solvedDeductions: [],
+    flags: {},
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: 'Station 3.1 · Suche nach Andrew (Tag 5 · Seetag)',
+    introLines: [...CASE3_SEETAG.introLines],
+    snapshot,
+  };
 }

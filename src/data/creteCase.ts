@@ -3817,12 +3817,13 @@ export const CRETE_CASE: GameCase = {
       ],
       hotspots: [
         {
-          id: 'c2_a2_deck_gitter',
+          id: 'c2_a2_schacht_vorab',
           label: 'Großes Metall-Lüftungsgitter',
           x: 78,
           y: 18,
           width: 17,
           height: 28,
+          hideIfFlag: 'flag_c2_a2_kids_suche_gestartet',
           lines: [
             {
               speakerId: 'maya',
@@ -3832,23 +3833,158 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Kein Wunder, dass sich Schall durch so eine Metallröhre über mehrere Decks überträgt… Moment – was klebt da außen am unteren Metallrand?!',
+              text: 'Beeindruckende Anlage… aber bevor wir hier einfach jede Luke absuchen, sollten wir erst einmal hören, was Leo und Rick dort drüben hier oben eigentlich treiben.',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_deck_tau',
+          label: 'Aufgerolltes Schiffstau auf dem Deck',
+          x: 50,
+          y: 74,
+          width: 15,
+          height: 18,
+          visibleIfFlag: 'flag_c2_a2_kids_suche_gestartet',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Moment… schauen wir doch als Erstes mal unter diese dicke aufgerollte Leine mitten auf dem Deck! Wenn hier jemandem etwas aus der Tasche gerutscht ist, rollt es gern darunter.',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'sweating',
+              text: '(Rick streckt unwillkürlich den Hals, um unter das Tau zu linsen, und tut dann sofort wieder völlig unbeteiligt.)',
             },
             {
               speakerId: 'nate',
-              emotion: 'confident',
-              setsFlag: 'flag_c2_a2_walkie_indiz',
-              text: 'Schau mal zwischen den Lamellen, Maya! Ein abgerissener grüner Gürtel-Clip mit Totenkopf-Sticker und einem dicken „L“ darauf! Genau so ein Walkie-Talkie hatte Leo vorhin am Gurt!',
+              emotion: 'neutral',
+              text: 'Hmm… unter dem Seil steckt bloß eine zerknüllte Salzcracker-Folie und ein alter Kabelbinder. Kein glänzendes Teil, kein Funkzubehör.',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'grumpy',
+              text: 'Pff! War ja klar, dass da nichts liegt… Ich meine: Na und? Uns gehört die Cracker-Tüte sowieso nicht!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'smug',
+              text: '(Hast du gesehen, wie enttäuscht Rick eben geguckt hat, Nate? Suchen wir weiter an den anderen Ecken des Decks!)',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_deck_kisten',
+          label: 'Gestapelte „Cruise Supply“-Vorratskisten',
+          x: 61,
+          y: 58,
+          width: 18,
+          height: 30,
+          visibleIfFlag: 'flag_c2_a2_kids_suche_gestartet',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Leuchten wir mal zwischen die silbernen Vorratskisten und hinter die Kanten an der Bordwand… Hier gibt es lauter schmale Ritzen.',
             },
             {
               speakerId: 'maya',
               emotion: 'shocked',
-              text: 'Aha!! Dann haben die zwei uns also nicht alles erzählt, und Leo und Rick haben heute Nacht hier am Schacht sehr wohl etwas getrieben!',
+              text: 'Nanu? Schau mal, was hier am unteren Kistengriff hängt — ein ausgefranstes Stück weißes Schnürsenkel-Garn! Genau so dick wie eine Kordel zum Festbinden!',
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'sweating',
+              text: 'Äh… das… das liegt bestimmt schon wochenlang da rum! Matrosen verlieren doch ständig irgendwelche Schnüre beim Kistenschleppen, stimmt’s, Rick?!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Ein sauber geknoteter Kinder-Schnürsenkel zwischen stählernen Bordkisten? Interessant… Aber das Gesuchte selbst ist hier wohl nicht mehr — schauen wir weiter!',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_deck_boot',
+          label: 'Orangenes Rettungsboot & Deck-Rohre',
+          x: 10,
+          y: 46,
+          width: 25,
+          height: 36,
+          visibleIfFlag: 'flag_c2_a2_kids_suche_gestartet',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Schauen wir auch vorsichtshalber hier links an der Reling und entlang der dicken Wasserrohre unter dem Rettungsboot… Nicht, dass ihnen etwas bis hier rüber gerollt ist!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'neutral',
+              text: 'Hier entlang der Leitungen liegen nur ein paar Regentropfen und etwas Meersalz. Zum Glück ist nichts über die Relingskante ins Wasser geflogen.',
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'sweating',
+              text: '(Leo wischt sich heimlich über die Stirn.) Puh… also auf der Meerseite ist schon mal gar nichts. Nicht, dass wir da was erwartet hätten!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Bleibt fast nur noch die Technikwand rechts drüben — schauen wir uns jetzt mal das große stählerne Lüftungsgitter ganz genau an!',
+            },
+          ],
+        },
+        {
+          id: 'c2_a2_deck_gitter',
+          label: 'Großes Metall-Lüftungsgitter',
+          x: 78,
+          y: 18,
+          width: 17,
+          height: 28,
+          visibleIfFlag: 'flag_c2_a2_kids_suche_gestartet',
+          hideIfFlag: 'flag_c2_dimitri_weg',
+          lines: [
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Wow, hier oben brummt richtig die Luft… Von hier aus führt ein mächtiger stählerner Belüftungsschacht schnurgerade nach unten ins Schiff!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Kein Wunder, dass sich Schall durch so eine Metallröhre über mehrere Decks überträgt… Moment – was klemmt da denn ganz links zwischen den unteren Stahl-Lamellen?!',
             },
             {
               speakerId: 'nate',
               emotion: 'confident',
-              text: 'Jetzt haben wir einen handfesten Beweis in der Tasche – stellen wir die beiden hier drüben zur Rede!',
+              sfx: 'evidence_chime',
+              setsFlag: 'flag_c2_a2_walkie_indiz',
+              text: 'Schau mal her, Maya! Ein abgerissener grüner Gürtel-Clip mit einem Totenkopf-Sticker und einem dicken „L“ darauf!!',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'shocked',
+              shake: true,
+              text: 'OHA!! LEO!! DA KLEMMT ER JA!! GENAU AM LÜFTUNGSGITTER!!',
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'sweating',
+              text: 'MIST!! HALT DIE KLAPPE, RICK!! … Ach, verdammt — na schön, Sie haben’s ja sowieso gerade herausgefischt, Mr. Sterling…',
+            },
+            {
+              speakerId: 'leo',
+              emotion: 'sweating',
+              text: 'Wir haben diesen blöden Clip von meinem Walkie-Talkie nämlich heute Nacht hier oben am Schacht verloren!! Und heute Vormittag sind wir überhaupt nur deshalb nochmal heimlich aufs Rettungsdeck geschlichen, weil wir ihn unbedingt vor Papa wiederfinden wollten!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'AHA!! Wir wussten doch, dass ihr zwei hier etwas gesucht habt! Und wenn ihr schon Mitten in der Nacht am Lüftungsschacht wart — dann reden wir jetzt unter „Sprechen“ ganz in Ruhe darüber!',
             },
           ],
         },
@@ -3932,32 +4068,32 @@ export const CRETE_CASE: GameCase = {
         },
         {
           id: 'leo_rick_streich',
-          title: 'Leo & Rick: Wart ihr heute Nacht hier oben unterwegs?',
+          title: 'Leo & Rick: Warum seid ihr eigentlich hier oben?',
           speakerId: 'leo',
-          hideIfFlag: 'flag_c2_a2_walkie_indiz',
+          hideIfFlag: 'flag_c2_a2_kids_suche_gestartet',
           lines: [
             {
               speakerId: 'nate',
               emotion: 'neutral',
-              text: 'Na, ihr zwei? Ihr habt vorhin unten auf dem Promenadendeck doch gewettet, wer zuerst etwas über den Polizeieinsatz herausfindet – wart ihr heute Nacht schon mal hier oben?',
+              text: 'Hallo, ihr zwei! Euer Vater hat uns erzählt, dass ihr ständig hoch aufs Rettungsboot-Deck schleicht und über euer grünes Walkie-Talkie tuschelt. Was führt ihr denn hier oben im Schilde?',
             },
             {
               speakerId: 'leo',
-              emotion: 'smug',
-              text: 'Wer, wir?! Niemals! Ab 22 Uhr haben wir wie die Engel in unseren Kabinenkojen geschlafen, stimmts, Rick?!',
+              emotion: 'grumpy',
+              text: 'Gar nichts!! Und wir reden mit keinem einzigen Erwachsenen darüber — schon gar nicht mit einem Anwalt! Stimmts, Rick?!',
             },
             {
               speakerId: 'rick',
-              emotion: 'smug',
-              text: 'Total! Nicht mal ein einziger Schritt vor die Tür! Warum fragen Sie überhaupt, Herr Anwalt?',
+              emotion: 'grumpy',
+              text: 'Genau! Wir machen hier überhaupt nichts Verbotenes, wir genießen bloß die Aussicht auf die Rettungsboote! Ab 22 Uhr haben wir außerdem bombenfest in unseren Kojen gepennt — Punkt, Aus, mehr sagen wir nicht!',
               choices: [
                 {
-                  label: '„Ich dachte, vielleicht habt ihr von hier oben Geräusche gehört.“',
+                  label: '„Kommt schon, vielleicht habt ihr nachts ja etwas Gehörtes mitbekommen?“',
                   nextLines: [
                     {
                       speakerId: 'leo',
                       emotion: 'neutral',
-                      text: 'Nö, hier pfeift höchstens der Wind durch die Lüftung. Solange Sie keinen Beweis haben, dass wir hier waren, sagen wir gar nichts!',
+                      text: '(Leo verschränkt stur die Arme.) Nö. Taub, stumm und ahnungslos. Wir sprechen kein Sterbenswort!',
                     },
                   ],
                 },
@@ -3967,22 +4103,57 @@ export const CRETE_CASE: GameCase = {
                     {
                       speakerId: 'rick',
                       emotion: 'sweating',
-                      text: 'Äh… Mamas Detektiv-Gespür wieder!! Nein, ehrlich, Mr. Sterling – ohne Beweis verraten wir uns doch nicht selbst vor Papa!',
+                      text: 'Trotzdem sagen wir überhaupt nichts!! Selbst wenn Mama noch so schlau rät — wir schweigen wie zwei Piraten vor Gericht!',
                     },
                   ],
                 },
               ],
             },
             {
-              speakerId: 'nate',
+              speakerId: 'maya',
               emotion: 'thinking',
-              text: '(Die zwei grinsen viel zu verschwörerisch… so unschuldig schaut niemand nach einer durchwachten Nacht.)',
+              text: 'Pssst, Nate… die beiden mauern komplett! Aber ist dir vorhin mal aufgefallen, wo die beiden die ganze Zeit hinschielen?!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'thinking',
+              text: 'Während du geredet hast, ist Rick ständig mit den Augen zwischen der Seilrolle, den Vorratskisten und dem Metallboden umhergewandert — und Leo scharrt nervös hinter den Rohren herum! Ich wette, die zwei suchen hier oben hektisch nach irgendetwas!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              setsFlag: 'flag_c2_a2_kids_suche_gestartet',
+              text: 'Du hast absolut recht, Maya! Mit Ausfragen beißen wir bei den beiden auf Granit — aber vielleicht reden sie endlich mit uns, wenn wir uns hier oben umsehen und ihnen einfach beim Suchen helfen! Schauen wir uns per „Untersuchen“ genau auf dem Deck um!',
+            },
+          ],
+        },
+        {
+          id: 'leo_rick_suche_status',
+          title: 'Leo & Rick: Sucht ihr etwas Bestimmtes hier auf dem Deck?',
+          speakerId: 'rick',
+          requiredFlag: 'flag_c2_a2_kids_suche_gestartet',
+          hideIfFlag: 'flag_c2_a2_walkie_indiz',
+          lines: [
+            {
+              speakerId: 'nate',
+              emotion: 'neutral',
+              text: 'Na, immer noch so schmallippig? Wenn ihr uns sagt, wonach ihr sucht, helfen wir euch direkt!',
+            },
+            {
+              speakerId: 'rick',
+              emotion: 'sweating',
+              text: 'Wir suchen überhaupt nix! … Habt ihr denn hinten beim Tau oder bei den Kisten zufällig was Glänzendes gesehen? Äh, ich meine — vergesst die Frage!!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Haha, ganz bestimmt gar nichts! Schauen wir einfach alle Ecken hier auf dem Deck ab, Nate — Tau, Kisten, Rettungsboot und natürlich die Wand mit dem Lüftungsgitter!',
             },
           ],
         },
         {
           id: 'leo_rick_gestaendnis',
-          title: 'Leo & Rick: Was macht euer Walkie-Talkie-Clip im Lüftungsgitter?!',
+          title: 'Leo & Rick: Jetzt rückt mit der ganzen Nacht-Geschichte raus!',
           speakerId: 'leo',
           requiredFlag: 'flag_c2_a2_walkie_indiz',
           hideIfFlag: 'flag_c2_dimitri_weg',
@@ -3990,12 +4161,12 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'confident',
-              text: 'Schaut mal her, ihr zwei „Schlafmützen“! Diesen grünen Piraten-Walkie-Talkie-Clip mit einem dicken „L“ darauf habe ich gerade aus den Lamellen dort am Lüftungsgitter gezogen!',
+              text: 'Jetzt liegt euer verlorener grüner Walkie-Talkie-Clip mit dem großen „L“ hier vor mir. Ihr habt also selbst zugegeben, dass ihr ihn heute Nacht am Lüftungsgitter verloren habt — jetzt erzählt uns auch, was um alles in der Welt ihr nachts an diesem Schacht gemacht habt!',
             },
             {
               speakerId: 'rick',
               emotion: 'shocked',
-              text: 'Oha!! Leo, ich hab dir doch gesagt, das Schnürsenkel-Seil reißt gleich!!',
+              text: 'Oha!! Leo, ich hab dir doch gesagt, das blöde Schnürsenkel-Seil hält das Gewicht nicht!!',
             },
             {
               speakerId: 'leo',
@@ -4039,7 +4210,7 @@ export const CRETE_CASE: GameCase = {
               emotion: 'sweating',
               unlocksEvidence: 'lueftung_streich',
               unlocksThought: 'thought_c2_0210_poltern',
-              text: 'Doch um exakt 02:10 Uhr – stand genau auf Leos leuchtender Armbanduhr! – hat es ganz tief unten im Schacht einen riesigen Schlag getan, als wäre ein schwerer Metallhocker umgefallen! Wir haben uns total erschrocken, der Clip ist abgerissen – und wir sind sofort weg in unsere Kabine gerannt!!',
+              text: 'Doch um exakt 02:10 Uhr – stand genau auf Leos leuchtender Armbanduhr! – hat es ganz tief unten im Schacht einen riesigen Schlag getan, als wäre ein schwerer Metallhocker umgefallen! Wir haben uns total erschrocken, der Clip ist abgerissen – und genau um ihn wiederzufinden, sind wir vorhin nochmal hergeschlichen!!',
             },
             {
               speakerId: 'nate',

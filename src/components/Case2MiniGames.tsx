@@ -21,9 +21,11 @@ import {
 } from 'lucide-react';
 import type { MiniGameId } from '../types/game';
 import { soundFx } from '../utils/soundFx';
+import { KidsDressupMiniGame, ShipPlanMiniGame } from './Case3MiniGames';
 
 interface Case2MiniGameProps {
   miniGameId: MiniGameId;
+  flags?: Record<string, boolean>;
   onComplete: (miniGameId: MiniGameId) => void;
   onCancel: () => void;
 }
@@ -1800,6 +1802,7 @@ function LockCablesMiniGame({
 
 export function Case2MiniGame({
   miniGameId,
+  flags,
   onComplete,
   onCancel,
 }: Case2MiniGameProps) {
@@ -1831,6 +1834,23 @@ export function Case2MiniGame({
     return (
       <LockCablesMiniGame
         onComplete={() => onComplete('lock_cables')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'kids_dressup') {
+    return (
+      <KidsDressupMiniGame
+        onComplete={() => onComplete('kids_dressup')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'ship_plan') {
+    return (
+      <ShipPlanMiniGame
+        flags={flags}
+        onComplete={() => onComplete('ship_plan')}
         onCancel={onCancel}
       />
     );

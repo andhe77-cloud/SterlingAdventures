@@ -25,6 +25,7 @@ import { PWAInstallButton } from './components/PWAInstallButton';
 import { useFullscreen } from './hooks/useFullscreen';
 import { CRUISE_CASE } from './data/cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './data/creteCase';
+import { CASE3_SEETAG } from './data/case3Seetag';
 import {
   KAP4_MORGEN_INTRO_LINES,
   createCreteAct22Checkpoint,
@@ -87,10 +88,11 @@ class GameErrorBoundary extends Component<
   }
 }
 
-const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE];
+const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE, CASE3_SEETAG];
 const CASE_MAP: Record<string, GameCase> = {
   [CRUISE_CASE.id]: CRUISE_CASE,
   [CRETE_CASE.id]: CRETE_CASE,
+  [CASE3_SEETAG.id]: CASE3_SEETAG,
 };
 
 function getStorageKey(caseId: string): string {
@@ -149,7 +151,39 @@ function loadSavedState(caseId: string): GameSaveState | null {
   }
 }
 
-function buildRepeatInspectLine(label: string, repeatCount: number): DialogLine[] {
+function buildRepeatInspectLine(
+  label: string,
+  repeatCount: number,
+  assistantId: 'maya' | 'eleonore' = 'maya'
+): DialogLine[] {
+  if (assistantId === 'eleonore') {
+    if (repeatCount <= 1) {
+      return [
+        {
+          speakerId: 'eleonore',
+          emotion: 'neutral',
+          text: `„${label}“ habe ich doch eben schon in meinem Block abgehakt, Nate. Schauen wir lieber weiter!`,
+        },
+      ];
+    }
+    if (repeatCount === 2) {
+      return [
+        {
+          speakerId: 'eleonore',
+          emotion: 'thinking',
+          text: `Ähm, Nate? „${label}“ verrät uns beim zweiten Draufschauen leider auch nicht mehr als vorhin…`,
+        },
+      ];
+    }
+    return [
+      {
+        speakerId: 'eleonore',
+        emotion: 'sweating',
+        text: `Also wirklich, Nate! Drei Kinder zu Hause reichen mir schon mit Wiederholungen — suchen wir bitte an einer neuen Stelle statt bei „${label}“!`,
+      },
+    ];
+  }
+
   if (repeatCount <= 1) {
     return [
       {
@@ -215,6 +249,7 @@ function AdvokatEngineApp() {
   const [savedCaseIds, setSavedCaseIds] = useState<Record<string, boolean>>(() => ({
     [CRUISE_CASE.id]: Boolean(loadSavedState(CRUISE_CASE.id)),
     [CRETE_CASE.id]: Boolean(loadSavedState(CRETE_CASE.id)),
+    [CASE3_SEETAG.id]: Boolean(loadSavedState(CASE3_SEETAG.id)),
   }));
   const [dialogQueue, setDialogQueue] = useState<DialogLine[]>([]);
   const [activeShout, setActiveShout] = useState<ShoutType | null>(null);
@@ -509,6 +544,13 @@ function AdvokatEngineApp() {
 
   const startNewGame = (targetCaseId?: string) => {
     const caseDef = CASE_MAP[targetCaseId ?? activeCase.id] ?? CRUISE_CASE;
+    if (caseDef.id === CASE3_SEETAG.id) {
+      try {
+        localStorage.removeItem('advokat_f3_ship_plan_excluded_v1');
+      } catch {
+        // ignore
+      }
+    }
     const fresh = createInitialState(caseDef);
     fresh.screen = 'INTRO_CUTSCENE';
     setState(fresh);
@@ -581,6 +623,16 @@ function AdvokatEngineApp() {
     checkpoint: CheckpointEntry,
     setAsChapterCheckpoint = false
   ) => {
+    if (
+      checkpoint.snapshot.caseId === CASE3_SEETAG.id &&
+      !checkpoint.snapshot.flags.flag_f3_marston_kabine_offen
+    ) {
+      try {
+        localStorage.removeItem('advokat_f3_ship_plan_excluded_v1');
+      } catch {
+        // ignore
+      }
+    }
     const restoredSnapshot: GameCheckpointSnapshot = {
       ...checkpoint.snapshot,
       flags: { ...checkpoint.snapshot.flags },
@@ -702,6 +754,9 @@ function AdvokatEngineApp() {
           state.currentLocationId === 'brig_cell' &&
           Boolean(state.flags.flag_c2_a3_andrew_in_zelle) &&
           !Boolean(state.flags.flag_c2_a3_andrew_verabschiedet);
+        const eleonoreAssistantActive =
+          activeCase.id === CASE3_SEETAG.id &&
+          Boolean(state.flags.flag_f3_maya_bei_kindern);
         setDialogQueue([
           mayaAwayInCell
             ? {
@@ -709,11 +764,17 @@ function AdvokatEngineApp() {
                 emotion: 'confident',
                 text: 'Hier in der Zelle habe ich mir damit erst einmal alles genau angesehen.',
               }
-            : {
-                speakerId: 'maya',
-                emotion: 'confident',
-                text: 'Ich denke, mehr gibt es hier gerade nicht zu finden, Nate!',
-              },
+            : eleonoreAssistantActive
+              ? {
+                  speakerId: 'eleonore',
+                  emotion: 'confident',
+                  text: 'Ich glaube, hier haben wir uns jeden Winkel genau angesehen und notiert, Nate!',
+                }
+              : {
+                  speakerId: 'maya',
+                  emotion: 'confident',
+                  text: 'Ich denke, mehr gibt es hier gerade nicht zu finden, Nate!',
+                },
         ]);
         return;
       }
@@ -725,6 +786,11 @@ function AdvokatEngineApp() {
   const handleConfirmChapterTransition = () => {
     const transition = state.pendingChapterTransition;
     if (!transition) return;
+
+    if (transition.nextChapterId === CASE3_SEETAG.id) {
+      startNewGame(CASE3_SEETAG.id);
+      return;
+    }
 
     setState((prev) => {
       const locks = new Set(transition.locksLocations ?? []);
@@ -1017,6 +1083,74 @@ function AdvokatEngineApp() {
           text: 'Ich fass es nicht… jetzt steige ich auf meiner Urlaubsreise freiwillig auch noch in den Schiffs-Maschinenraum hinab! Kommen Sie, gehen wir in die Schaltzentrale & Bordtechnik zum Elektriker!',
         },
       ]);
+      return;
+    }
+
+    if (miniGameId === 'kids_dressup') {
+      enqueueLines([
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'victory',
+          text: 'Geschafft!! Leo hat sein schwarzes Piraten-Shirt, die leuchtende Uhr und sein Messing-Fernrohr, Rick steckt im schlichten weißen Shirt samt Nachtisch-Wette und der silbernen Stoppuhr, und Conrad trägt stolz sein neongelbes Marathon-Shirt mit Medaille und seinem grünen Spielzeug-Dino!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          setsFlag: 'flag_f3_maya_bei_kindern',
+          text: 'So, Ihr zwei: Ich schnapp mir die drei Wirbelwinde jetzt für den Rest des Tages und belagere die Spielecke mit Piraten-Malbüchern! Und wehe einer verrät dem kleinen Schoko-Fan hier vor dem Mittagessen das Eis-Versprechen…',
+        },
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          unlocksThought: 'thought_f3_assistentin_eleonore',
+          unlocksLocation: 'brig_cell',
+          setsFlag: 'flag_f3_brig_offen',
+          text: 'Danke, Maya — du bist ein echter Engel!! Dann bin ich bis zum nächsten Gerichtstermin offiziell Ihre neue Assistentin, Nate! Schauen wir sofort hinunter in den Arrestbereich zu Andrew!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          switchesLocationId: 'brig_cell',
+          text: 'Auf in den Zellentrakt, Assistentin Eleonore — machen wir uns sofort auf den Weg zu Zelle 08!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'ship_plan') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          text: 'JETZT passt jedes einzelne Puzzleteil!! Alle VIP-Decks, Außenkabinen, lauten Decks, Restaurant-Decks, Familienbereiche, Bug, Heck, Steuerbord und Wartungsnummern sind gestrichen…',
+        },
+        {
+          speakerId: 'eleonore',
+          emotion: 'shocked',
+          unlocksEvidence: 'notiz_kabine_917',
+          unlocksThought: 'thought_f3_kabine_917',
+          unlocksLocation: 'marston_cabin',
+          setsFlag: 'flag_f3_marston_kabine_offen',
+          text: 'Übrig bleibt ganz allein… Deck 9, Innenkabine, Mittschiffs, Backbord — Kabine 917!!',
+        },
+        {
+          speakerId: 'miriam',
+          emotion: 'smug',
+          text: 'Oh, wirklich? Kabine 917? Na sowas… Welch erstaunliche Kombinationsgabe! Ich habe selbstverständlich überhaupt nichts gesagt und wünsche einen schönen Spaziergang auf Deck 9!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          switchesLocationId: 'marston_cabin',
+          text: 'Kommen Sie, Eleonore — gehen wir hoch zu Deck 9 und klopfen direkt an Kabine 917!',
+        },
+      ]);
     }
   };
 
@@ -1063,7 +1197,11 @@ function AdvokatEngineApp() {
       justFoundHotspotRef.current = false;
       const nextCount = (repeatInspectCounts[hotspotId] ?? 0) + 1;
       setRepeatInspectCounts((prev) => ({ ...prev, [hotspotId]: nextCount }));
-      enqueueLines(buildRepeatInspectLine(hotspot.label, nextCount));
+      const assistantId =
+        activeCase.id === CASE3_SEETAG.id && Boolean(state.flags.flag_f3_maya_bei_kindern)
+          ? 'eleonore'
+          : 'maya';
+      enqueueLines(buildRepeatInspectLine(hotspot.label, nextCount, assistantId));
       return;
     }
 
@@ -1563,7 +1701,7 @@ function AdvokatEngineApp() {
         )}
 
         <main className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-6">
-          <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {ALL_CASES.map((caseItem) => {
               const hasCaseSave = Boolean(savedCaseIds[caseItem.id]);
               return (
@@ -1678,14 +1816,12 @@ function AdvokatEngineApp() {
                   completedTimeLabel: 'Leinen los vor Kreta · Auf zu Fall 3',
                   summary:
                     'Gemeinsam mit Andrew Higginson hast du den lautlosen 15-Minuten-Absturz des Magnetschlosses und Dr. Vances Betäubungs-Gutachten bewiesen. Doch nach dem ersten Mord-Urteil bat Staatsanwalt von Falk um eine Pause – und ließ Andrew anhand von Überwachungskameras, gestandenen Schulden und dem „A. H.“-Brief verhaften, während die MS Aurora bereits von Kreta ablegt!',
-                  nextChapterId: 'c2_akt4_abend',
-                  nextLocationId: 'courtroom',
-                  nextPhase: 'court',
-                  nextTimeOfDay: 'abend',
-                  isComingSoon: true,
-                  nextButtonLabel: 'Demnächst: Fall 3 (Andrews Verteidigung auf hoher See)',
-                  comingSoonNote:
-                    'Fall 2 endet hier mit dem Ablegen von Kreta, Andrews Verhaftung und Frau Lindemanns Gerichts-LARP-Triumph! Die Fortsetzung folgt in Fall 3.',
+                  nextChapterId: CASE3_SEETAG.id,
+                  nextLocationId: 'promenade',
+                  nextPhase: 'investigation',
+                  nextTimeOfDay: 'tag',
+                  isComingSoon: false,
+                  nextButtonLabel: 'Weiter zu Fall 3: Unschuldig auf hoher See',
                   nextIntroLines: [],
                 },
               }))
@@ -2030,7 +2166,9 @@ function AdvokatEngineApp() {
           activeMiniGameId={activeMiniGame}
           onCompleteMiniGame={handleCompleteMiniGame}
           onCancelMiniGame={() => {
-            if (activeMiniGame === 'cooling_pipes') {
+            const canceledGame = activeMiniGame;
+            setActiveMiniGame(null);
+            if (canceledGame === 'cooling_pipes') {
               setState((prev) => ({
                 ...prev,
                 inspectedHotspots: prev.inspectedHotspots.filter(
@@ -2038,7 +2176,49 @@ function AdvokatEngineApp() {
                 ),
               }));
             }
-            setActiveMiniGame(null);
+            if (canceledGame === 'ship_plan') {
+              const firstAbortDone = Boolean(state.flags.flag_f3_plan_abbruch_1);
+              const secondAbortDone = Boolean(state.flags.flag_f3_plan_abbruch_2);
+              setState((prev) => ({
+                ...prev,
+                inspectedHotspots: prev.inspectedHotspots.filter(
+                  (id) => id !== 'hs_f3_schiffsplan'
+                ),
+                flags: {
+                  ...prev.flags,
+                  flag_f3_plan_abbruch_1: true,
+                  ...(firstAbortDone
+                    ? {
+                        flag_f3_plan_abbruch_2: true,
+                        flag_f3_eleonore_notizhilfe: true,
+                      }
+                    : {}),
+                },
+              }));
+              if (firstAbortDone && !secondAbortDone) {
+                enqueueLines([
+                  {
+                    speakerId: 'eleonore',
+                    emotion: 'blushing',
+                    sfx: 'thought_pop',
+                    text: 'Oh je, Nate… es tut mir ja so schrecklich leid! Ich wusste überhaupt nicht, dass man sich als Assistentin bei so vielen Angaben direkt Notizen machen muss!',
+                  },
+                  {
+                    speakerId: 'eleonore',
+                    emotion: 'confident',
+                    text: 'Aber eben beim Zuhören hab ich mir blitzschnell alle acht Ausschluss-Punkte von Miriam komplett in meinen kleinen Spiralblock gekritzelt! Beim nächsten Blick auf den Schiffsplan können Sie oben rechts einfach meine „8 Notizen“ aufklappen — und Ihre bisherige Auswahl bleibt natürlich gespeichert!',
+                  },
+                ]);
+              } else {
+                enqueueLines([
+                  {
+                    speakerId: 'nate',
+                    emotion: 'thinking',
+                    text: 'Keine Eile — unsere Markierungen am Schiffsplan bleiben gespeichert. Fragen wir Miriam einfach nochmal nach den Details, die uns noch fehlen!',
+                  },
+                ]);
+              }
+            }
           }}
         />
       </main>
@@ -2253,7 +2433,7 @@ function AdvokatEngineApp() {
                     Zurück zur Fallauswahl
                   </div>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    Zwischen Fall 1 und Fall 2 wechseln
+                    Zwischen allen Fällen wechseln
                   </div>
                 </button>
               </div>

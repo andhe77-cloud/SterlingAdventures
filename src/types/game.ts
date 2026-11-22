@@ -7,7 +7,8 @@ export type Emotion =
   | 'thinking'
   | 'facepalm'
   | 'headshake'
-  | 'grumpy';
+  | 'grumpy'
+  | 'blushing';
 
 export type PortraitAnimation =
   | 'facepalm'
@@ -24,7 +25,9 @@ export type MiniGameId =
   | 'sea_chart'
   | 'dimitri_pantomime'
   | 'kids_sokoban'
-  | 'lock_cables';
+  | 'lock_cables'
+  | 'kids_dressup'
+  | 'ship_plan';
 
 export type SoundEffect =
   | 'blip'
