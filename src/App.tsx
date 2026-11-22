@@ -4,6 +4,8 @@ import {
   Brain,
   Gavel,
   GitBranch,
+  Maximize2,
+  Minimize2,
   RotateCcw,
   Scale,
   Volume2,
@@ -18,6 +20,9 @@ import {
 } from './components/AnimatedOutro';
 import { CaseBinder, type BinderTab } from './components/CaseBinder';
 import { GameStage, type InvestigationMenu } from './components/GameStage';
+import { OfflineIndicator } from './components/OfflineIndicator';
+import { PWAInstallButton } from './components/PWAInstallButton';
+import { useFullscreen } from './hooks/useFullscreen';
 import { CRUISE_CASE } from './data/cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './data/creteCase';
 import {
@@ -226,6 +231,11 @@ function AdvokatEngineApp() {
   const [activeMiniGame, setActiveMiniGame] = useState<MiniGameId | null>(null);
   const [devShortcutsUnlocked, setDevShortcutsUnlocked] = useState(false);
   const devTapRef = useRef<{ count: number; lastAt: number }>({ count: 0, lastAt: 0 });
+  const {
+    isFullscreen,
+    isSupported: isFullscreenSupported,
+    toggleFullscreen,
+  } = useFullscreen();
 
   const handleSecretDevTap = () => {
     const now = Date.now();
@@ -1495,26 +1505,62 @@ function AdvokatEngineApp() {
     setMuted(next);
   };
 
+  const handleToggleFullscreen = async () => {
+    const ok = await toggleFullscreen();
+    if (!ok) {
+      showToast(
+        'Vollbild ist in diesem Browser-Fenster blockiert — öffne die App direkt im Tab oder installiere sie als App.'
+      );
+    }
+  };
+
   // TITLE SCREEN
   if (state.screen === 'TITLE_MENU') {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-        <header className="flex items-center justify-between gap-8 px-6 py-4 border-b border-slate-800/80 max-w-6xl w-full mx-auto">
+      <div className="min-h-screen min-h-dvh bg-slate-950 text-slate-100 flex flex-col">
+        <header className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800/80 max-w-6xl w-full mx-auto">
           <span
             onClick={handleSecretDevTap}
             className="font-display text-lg font-bold tracking-wide text-amber-400 whitespace-nowrap shrink-0 select-none"
           >
             Advokat-Engine
           </span>
-          <button
-            type="button"
-            onClick={toggleMute}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-900 border border-slate-800 rounded-lg hover:bg-slate-800 whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            <span>{muted ? 'Ton aus' : 'Ton an'}</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <PWAInstallButton />
+            {isFullscreenSupported && (
+              <button
+                type="button"
+                onClick={() => void handleToggleFullscreen()}
+                aria-label={isFullscreen ? 'Vollbild beenden' : 'Vollbild aktivieren'}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-200 bg-slate-900 border border-slate-800 rounded-lg hover:bg-slate-800 whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                ) : (
+                  <Maximize2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                )}
+                <span>{isFullscreen ? 'Vollbild aus' : 'Vollbild'}</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={toggleMute}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-900 border border-slate-800 rounded-lg hover:bg-slate-800 whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+              <span>{muted ? 'Ton aus' : 'Ton an'}</span>
+            </button>
+          </div>
         </header>
+
+        {toastMessage && (
+          <div
+            role="status"
+            className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-slate-900 border border-amber-500/70 text-amber-200 text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xl max-w-md text-center"
+          >
+            {toastMessage}
+          </div>
+        )}
 
         <main className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-6">
           <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1817,7 +1863,7 @@ function AdvokatEngineApp() {
 
   // MAIN GAMEPLAY VIEW
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen min-h-dvh bg-slate-950 text-slate-100 flex flex-col">
       {/* 3-Zone Top HUD Bar with Binder Menu */}
       <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
@@ -1908,6 +1954,22 @@ function AdvokatEngineApp() {
                 {state.credibility}/{state.maxCredibility}
               </span>
             </div>
+            <PWAInstallButton compact />
+            {isFullscreenSupported && (
+              <button
+                type="button"
+                onClick={() => void handleToggleFullscreen()}
+                aria-label={isFullscreen ? 'Vollbild beenden' : 'Vollbild aktivieren'}
+                title={isFullscreen ? 'Vollbild beenden' : 'Vollbild (wie Videoplayer)'}
+                className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 cursor-pointer"
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Maximize2 className="w-4 h-4" />
+                )}
+              </button>
+            )}
             <button
               type="button"
               onClick={toggleMute}
@@ -2217,6 +2279,7 @@ export default function App() {
   return (
     <GameErrorBoundary>
       <AdvokatEngineApp />
+      <OfflineIndicator />
     </GameErrorBoundary>
   );
 }
