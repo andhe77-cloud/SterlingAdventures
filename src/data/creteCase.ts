@@ -97,7 +97,7 @@ export const CRETE_ACT23_INTRO_LINES: DialogLine[] = [
     backgroundOverrideUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
     unlocksEvidence: 'andrews_verlorener_schal',
     unlocksThought: 'thought_c2_a3_schal_zwilling',
-    text: '(Andrews verlorener Schal notiert… Wenn er Recht hat und sein identisches Stück gestern Abend verschwunden ist, dann erklärt das schlagartig dieses feine blaue „Seidentuch“ oben am Gitter von Zelle 08!)',
+    text: '(Andrews verlorener Schal notiert… Wenn er Recht hat und sein identisches Stück gestern Abend verschwunden ist, dann erklärt das schlagartig dieses feine blaue „Seidentuch“, an dem Arthur Morgan in Zelle 08 aufgefunden wurde!)',
   },
   {
     speakerId: 'eleonore',
@@ -109,19 +109,19 @@ export const CRETE_ACT23_INTRO_LINES: DialogLine[] = [
     speakerId: 'nate',
     emotion: 'sweating',
     backgroundOverrideUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
-    text: 'Nun… unter uns gesagt, Mrs. Higginson: Heute Morgen hing genau so ein blaues Seidentuch an den Stäben in Arthur Morgans Arrestzelle – ich hielt es zuerst einfach für eines seiner typischen Erste-Klasse-Kellnertücher.',
+    text: 'Nun… unter uns gesagt, Mrs. Higginson: Heute Morgen fanden wir Arthur Morgan in seiner Arrestzelle erhängt an genau so einem blauen Seidentuch statt an einem groben Seil – ich hielt es zuerst einfach für eines seiner typischen Erste-Klasse-Kellnertücher.',
   },
   {
     speakerId: 'eleonore',
     emotion: 'shocked',
     backgroundOverrideUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
-    text: 'WAS?! In der Zelle von diesem toten Kellner?!',
+    text: 'WAS?! Mein blauer Kreta-Schal… als Schlinge bei diesem toten Kellner?!',
   },
   {
     speakerId: 'nate',
     emotion: 'thinking',
     backgroundOverrideUrl: '/src/assets/images/crete_beach_day_1795257795327.jpg',
-    text: 'Wenn das aber gar nicht Arthurs Tuch war, sondern Andrews verschwundener Schal, dann bekomme ich ein riesiges Problem mit diesem offiziellen „Selbstmord“! Nur… erklären kann ich es mir trotzdem nicht: Die elektronische Zellentür wurde die ganze Nacht nicht geöffnet, und von außen gibt es keinerlei Gewaltspuren.',
+    text: 'Wenn das tatsächlich nicht Arthurs Tuch war, sondern Andrews verschwundener Schal, dann bekomme ich ein riesiges Problem mit diesem offiziellen „Selbstmord“! Nur… erklären kann ich es mir trotzdem nicht: Die elektronische Zellentür wurde die ganze Nacht nicht geöffnet, und von außen gibt es keinerlei Gewaltspuren.',
   },
   {
     speakerId: 'eleonore',
@@ -181,7 +181,7 @@ export const CRETE_ACT23_INTRO_LINES: DialogLine[] = [
   {
     speakerId: 'nate',
     emotion: 'thinking',
-    text: 'Mir geht es genauso, Maya. Eigentlich ist die Akte offiziell geschlossen und Kommissar Dimitri kümmert sich längst um die Hafen-Formalitäten – aber solange dieser blaue Schal in Zelle 08 hängt, stimmt irgendetwas gewaltig nicht.',
+    text: 'Mir geht es genauso, Maya. Eigentlich ist die Akte offiziell geschlossen und Kommissar Dimitri kümmert sich längst um die Hafen-Formalitäten – aber solange ausgerechnet Andrews blauer Schal als angebliches „Seil“ in Zelle 08 diente, stimmt irgendetwas gewaltig nicht.',
   },
   {
     speakerId: 'maya',
@@ -1650,7 +1650,7 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'maya',
               emotion: 'thinking',
-              text: 'Und als wir heute früh in Zelle 08 standen, hielten wir das blaue Seidentuch oben an der Stange für irgendein Kellner-Halstuch von Arthur! Wenn das aber Andrews Schal war, wie kam er dann bitte in eine abgeschlossene Zelle ohne Tür-Eintrag?!',
+              text: 'Und als wir heute früh in Zelle 08 standen, hielten wir das blaue Seidentuch, mit dem Arthur Morgan oben an der Stange erhängt aufgefunden wurde, für irgendein Kellner-Halstuch! Wenn das aber Andrews Schal war, wie kam er dann bitte in eine abgeschlossene Zelle ohne Tür-Eintrag?!',
             },
             {
               speakerId: 'nate',
@@ -2428,7 +2428,7 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Aber Officer Brandt, wir haben einen neuen Hinweis aus den Passagier-Aussagen! Es geht um ein entscheidendes Detail am elektronischen Türschloss und um dieses blaue Tuch dort oben – lassen Sie uns bitte nur fünf Minuten hinein!',
+              text: 'Aber Officer Brandt, wir haben einen neuen Hinweis aus den Passagier-Aussagen! Es geht um ein entscheidendes Detail am elektronischen Türschloss und um dieses blaue Seidentuch, mit dem der Gefangene oben an der Gitterstange hing – lassen Sie uns bitte nur fünf Minuten hinein!',
             },
             {
               speakerId: 'brandt',
@@ -2476,7 +2476,7 @@ export const CRETE_CASE: GameCase = {
         },
         {
           id: 'c2_a3_schal_stange',
-          label: 'Blauer Kreta-Schal am Gitter',
+          label: 'Blauer Kreta-Schal (Tat-„Seil“ am Gitter)',
           x: 42,
           y: 10,
           width: 10,
@@ -2486,12 +2486,12 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Jetzt, wo ich Eleonores Exemplar draußen am Strand vor Augen hatte, bleibt wirklich nicht der Hauch eines Zweifels: Diese goldene Borte, dieses tiefe Blau – das hier oben ist Andrews angeblich gestohlener Kreta-Seidenschal.',
+              text: 'Jetzt, wo ich Eleonores Exemplar draußen am Strand vor Augen hatte, bleibt wirklich nicht der Hauch eines Zweifels: Diese goldene Borte, dieses tiefe Blau – das Seidentuch, mit dem Arthur Morgan hier oben an der Stange erhängt wurde, ist Andrews angeblich gestohlener Kreta-Schal.',
             },
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Aber wie kommt ein Seidenschal vom Promenadendeck in eine Zelle, deren Tür sich die ganze Nacht über laut Protokoll kein einziges Mal geöffnet hat?',
+              text: 'Aber wie kommt ausgerechnet sein Seidenschal als vermeintliches „Seil“ in eine Zelle, deren Tür sich die ganze Nacht über laut Protokoll kein einziges Mal geöffnet hat?',
             },
           ],
         },
@@ -4247,12 +4247,12 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'andrew',
               emotion: 'grumpy',
-              text: 'Super. Dann tappen wir also schon wieder im Dunkeln, wer da um zwei Uhr durchs Schiff geschlichen ist – und vor allem, wie Arthur Morgan überhaupt wehrlos gemacht wurde!',
+              text: 'Super. Dann tappen wir also schon wieder völlig im Dunkeln, wer da um zwei Uhr morgens durchs Schiff geschlichen ist und das Schloss geknackt hat!',
             },
             {
               speakerId: 'nate',
               emotion: 'thinking',
-              text: 'Moment… denken wir doch einmal logisch nach! Wenn Herr Kowalski hinten bei den Generatoren war: Wer hat denn um zwei Uhr nachts überhaupt regulär Dienst an Bord, sodass man ihn noch fragen könnte, ob er jemanden gesehen hat?',
+              text: 'Moment… denken wir doch einmal logisch nach! Wenn Herr Kowalski hinten bei den Generatoren war: Wer hat denn um zwei Uhr nachts überhaupt regulär Dienst an Bord, sodass man ihn noch fragen könnte, ob er jemanden auf den Gängen gesehen hat?',
               choices: [
                 {
                   label: '„Vielleicht die Boutique, der Speisesaal oder das Wellness-Deck?“',
@@ -4275,7 +4275,7 @@ export const CRETE_CASE: GameCase = {
                     {
                       speakerId: 'andrew',
                       emotion: 'neutral',
-                      text: 'Die Brücke hockt ganz oben, und bei der Security steht Officer Brandt selbst schon bis zum Hals in Widersprüchen… Wer hat nachts noch durchgehend geöffnet?',
+                      text: 'Die Brücke hockt ganz oben, und bei der Security steht Officer Brandt selbst schon bis zum Hals in Widersprüchen… Wer hat im Gästebereich nachts noch durchgehend geöffnet?',
                     },
                   ],
                 },
@@ -4295,12 +4295,12 @@ export const CRETE_CASE: GameCase = {
               speakerId: 'electrician',
               emotion: 'neutral',
               setsFlag: 'flag_c2_a3_kowalski_hinweis',
-              text: 'Wenn auf Deck irgendjemand mitten in der Nacht Schritte auf den Gängen mitbekommen hat – oder wenn es wirklich um ein fehlendes Betäubungsmittel für Ihren Mordfall geht –, dann ist die Krankenstation eigentlich Ihre einzige Anlaufstelle zu so später Stunde. Dr. Vance müsste jede Nachtbereitschaft gehabt haben.',
+              text: 'Wenn oben in den Gängen überhaupt jemand mitten in der Nacht Schritte oder verdächtige Personen mitbekommen hat, dann ist die Krankenstation Ihre einzige Anlaufstelle zu so später Stunde. Dr. Vance müsste heute Nacht Bereitschaft gehabt haben.',
             },
             {
               speakerId: 'nate',
               emotion: 'confident',
-              text: 'Natürlich!! Die Krankenstation hat rund um die Uhr Dienst – nicht nur als möglicher Zeuge für die Zeit um zwei Uhr, sondern auch wegen der Medizin-Schränke und dem ausstehenden Blut-Bericht!',
+              text: 'Natürlich!! Die Krankenstation hat rund um die Uhr Dienst – wenn irgendjemand zwischen 01:50 Uhr und 02:20 Uhr auf den Korridoren etwas beobachtet hat, dann Dr. Vance! Kommen Sie, fragen wir gleich noch oben nach!',
             },
           ],
         },
@@ -4419,7 +4419,7 @@ export const CRETE_CASE: GameCase = {
       statements: [
         {
           id: 'c2_a3_v1',
-          text: 'Bei meiner Untersuchung von Arthur Morgan fanden sich weder Stichwunden noch Blutergüsse oder Zeichen eines Handgemenges.',
+          text: 'Bei meiner Erstuntersuchung von Arthur Morgan fanden sich weder Stichwunden noch Blutergüsse oder sonstige äußere Zeichen eines Handgemenges.',
           pressLines: [
             {
               speakerId: 'nate',
@@ -4436,18 +4436,35 @@ export const CRETE_CASE: GameCase = {
         },
         {
           id: 'c2_a3_v2',
-          text: 'Auch das feine blaue Seidentuch oben am Zellengitter ändert daran nichts: Als geschniegelter Erste-Klasse-Oberkellner trug Arthur Morgan schließlich ständig solche Halstücher – es war also sein eigenes!',
+          text: 'Die elektronische Tür von Arrestzelle 08 war ohne Schlüsselkarten-Scan und ohne jede Beschädigung verriegelt – es konnte also niemand von außen eingedrungen sein.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              shout: 'MOMENT MAL!',
+              text: 'Sind Sie denn selbst Technikerin, Dr. Vance? Haben Sie je geprüft, ob man das MS-400-Schloss auch ohne Keycard überlisten kann?',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'Natürlich nicht, ich bin Ärztin! Mir hat die Schiffsführung lediglich versichert, im Türspeicher stehe kein einziger nächtlicher Eintrag.',
+            },
+          ],
+        },
+        {
+          id: 'c2_a3_v3',
+          text: 'Auch das feine blaue Seidentuch oben am Zellengitter, an dem Morgan erhängt aufgefunden wurde, ändert daran nichts: Als geschniegelter Erste-Klasse-Oberkellner trug Arthur Morgan ständig solche Halstücher – es war also sein eigenes!',
           pressLines: [
             {
               speakerId: 'nate',
               emotion: 'confident',
               shout: 'MOMENT MAL!',
-              text: 'Sind Sie da ganz sicher, Dr. Vance?! Haben Sie jemals bei der Wäscherei oder den Passagieren nachgefragt, wem dieses auffällige blaue Kreta-Muster wirklich gehört?!',
+              text: 'Sind Sie da ganz sicher, Dr. Vance?! Haben Sie jemals bei der Wäscherei oder den Passagieren nachgefragt, wem dieses auffällige blaue Kreta-Tuch, mit dem Morgan erhängt wurde, wirklich gehört?!',
             },
             {
               speakerId: 'falk',
               emotion: 'smug',
-              text: 'Wenn das kein Kellnertuch gewesen sein soll, Sterling – wem soll dieser blaue Schal denn bitte sonst gehören?! Zeigen Sie dem Gericht Ihren angeblichen Beweis!',
+              text: 'Wenn das kein Kellnertuch gewesen sein soll, Sterling – wem soll dieser blaue Schal aus Zelle 08 denn bitte sonst gehören?! Zeigen Sie dem Gericht Ihren angeblichen Beweis!',
             },
           ],
           contradiction: {
@@ -4464,7 +4481,7 @@ export const CRETE_CASE: GameCase = {
               {
                 speakerId: 'nate',
                 emotion: 'confident',
-                text: 'Und genau das identische Zwillingsstück ihres Ehemannes Andrew Higginson verschwand gestern Abend spurlos an Bord! Das Tuch am Tatort von Zelle 08 gehört also nicht Arthur Morgan – es stammt von einem völlig anderen Passagier!',
+                text: 'Und genau das identische Zwillingsstück ihres Ehemannes Andrew Higginson verschwand gestern Abend spurlos an Bord! Das blaue Tuch, an dem Arthur Morgan in Zelle 08 erhängt wurde, gehört also nicht ihm – es stammt von einem völlig anderen Passagier!',
               },
               {
                 speakerId: 'eleonore',
@@ -4480,11 +4497,28 @@ export const CRETE_CASE: GameCase = {
                 speakerId: 'falk',
                 emotion: 'thinking',
                 sfx: 'thought_pop',
-                text: 'So so… ein gestohlener oder verlorener blauer Kreta-Seidenschal der Familie Higginson… Interessante Randnotiz, Sterling. Aber selbst ein fremder Schal beweist noch lange keinen Mord!',
+                text: 'So so… ein gestohlener oder verlorener blauer Kreta-Seidenschal der Familie Higginson als angebliches Tat-„Seil“… Interessante Randnotiz, Sterling. Aber selbst ein fremder Schal beweist noch lange keinen Mord!',
                 startsTestimonyId: 'testimony_c2_a3_vance_mord',
               },
             ],
           },
+        },
+        {
+          id: 'c2_a3_v4',
+          text: 'Nach Abschluss aller Hafen-Formalitäten gibt es keinen Grund mehr, den Fall weiter offenzuhalten – für die Schiffsführung bleibt es bei Selbstmord.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              shout: 'MOMENT MAL!',
+              text: 'Warum hat es die Schiffsführung bloß plötzlich wieder so eilig, den Deckel zuzumachen, kaum dass wir am Nachmittag weitergegraben haben?',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'Jede Stunde Hafen-Verzögerung kostet die Reederei ein Vermögen, Mr. Sterling! Und Staatsanwalt von Falk versicherte mir, nach dieser Show-Verhandlung sei endlich Ruhe!',
+            },
+          ],
         },
       ],
       wrongObjectionLines: [
@@ -4494,7 +4528,7 @@ export const CRETE_CASE: GameCase = {
           animation: 'facepalm',
           sfx: 'facepalm',
           shake: true,
-          text: 'Das widerlegt weder die fehlenden Kampfspuren noch die Herkunft des blauen Tuches, Sterling!',
+          text: 'Das widerlegt weder die fehlenden Kampfspuren noch die Herkunft des blauen Schals an der Zellenstange, Sterling!',
         },
       ],
     },
@@ -4506,13 +4540,47 @@ export const CRETE_CASE: GameCase = {
         {
           speakerId: 'vance',
           emotion: 'neutral',
-          text: 'Gut, über das Seidentuch habe ich schlicht eine Vermutung geäußert – aber am medizinischen Kern ändert das nichts.',
+          text: 'Gut, über die Herkunft des blauen Seidenschals habe ich schlicht eine Vermutung geäußert – aber am medizinischen Kern ändert das nichts.',
         },
       ],
       statements: [
         {
-          id: 'c2_a3_v3',
-          text: 'Selbst wenn dieses blaue Tuch jemand anderem gehörte – ein kräftiger Mann wie Morgan hätte sich gegen jeden Angreifer gewehrt! Ohne Kampfspuren und bei geschlossener Tür bleibt nur Selbstmord!',
+          id: 'c2_a3_vm1',
+          text: 'Selbst wenn dieser blaue Schal am Gitter jemand anderem gehörte – ein fremdes Tuch als Schlinge beweist noch lange kein Fremdverschulden.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              shout: 'MOMENT MAL!',
+              text: 'Wie bitteschön soll Arthur Morgan in einer verschlossenen Zelle denn zufällig an den gestohlenen Schal eines Kreuzfahrtgastes geraten sein, um sich damit zu erhängen?!',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'neutral',
+              text: 'Als Oberkellner kam er schließlich im ganzen VIP-Bereich und an Deck herum – er hätte einen verlorenen Schal schon gestern Abend einstecken können!',
+            },
+          ],
+        },
+        {
+          id: 'c2_a3_vm2',
+          text: 'Ich selbst hatte während der fraglichen Nacht durchgehend Bereitschaft auf der Krankenstation – bis auf einen kurzen Notruf wegen Seekrankheit gegen 01:48 Uhr.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              text: 'Und wie lange genau stand Ihre Krankenstation inklusive der Arznei-Schränke während dieses Notrufs völlig unbewacht offen, Frau Doktor?',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'Knapp zwanzig Minuten… bis etwa 02:10 Uhr. Aber was soll das schon bedeuten? In den Zellen unten gab es doch überhaupt keinen Kampf!',
+            },
+          ],
+        },
+        {
+          id: 'c2_a3_vm3',
+          text: 'Entscheidend bleibt ohnehin etwas anderes: Ein kräftiger Mann wie Morgan hätte sich gegen jeden Angreifer gewehrt! Ohne Kampfspuren und bei geschlossener Tür bleibt nur Selbstmord!',
           pressLines: [
             {
               speakerId: 'nate',
@@ -4551,69 +4619,333 @@ export const CRETE_CASE: GameCase = {
                 emotion: 'shocked',
                 shake: true,
                 text: 'Tch… WAS?! Betäubt?! Und wenn schon – das erklärt immer noch nicht diesen verschlossenen Raum!! Wie um alles in der Welt soll überhaupt ein Mörder ungesehen in Zelle 08 hinein- und wieder herausgekommen sein, ohne dass das elektronische Schloss irgendetwas aufzeichnet?!',
+              },
+              {
+                speakerId: 'nate',
+                emotion: 'confident',
+                text: 'Ganz einfach, Euer Ehren!! Ich erkläre diesem Gericht jetzt persönlich im Detail, wie leicht man dieses… äh… elektronische Zellenschloss überlistet!',
+              },
+              {
+                speakerId: 'nate',
+                emotion: 'sweating',
+                choicePool: true,
+                text: '(Verdammt… wie hatte Andrew diesen ganzen Kabel- und Schaltkram vorhin genau genannt?! Ähm… mal sehen, wie ich das dem Richter erkläre…)',
+                choices: [
+                  {
+                    label: '„Äh… das AS-400-Dingsbums-Relais macht um 02:04 Uhr Bumm!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Also, Euer Ehren! Man nimmt diesen… äh… AS-400-Dingsbums-Stecker am Türrahmen, lässt den kurz auf der Leitung Bumm machen, und zack – dann schnappt der Magnet vor Schreck einfach von selber auf!!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'facepalm',
+                        animation: 'facepalm',
+                        sfx: 'facepalm',
+                        text: 'Ein „AS-400-Dingsbums-Stecker“, der „Bumm“ macht, weil sich der Magnet „erschreckt“?! Haben Sie heute Nachmittag am Sonnenstich gelitten, Sterling?!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Man zapft den AS-24-Volt-Dingsda-Saft-Bus mit der Zange an!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Nein, warten Sie! Es liegt an diesem… äh… AS-24-Volt-Dingsda-Saft-Bus! Wenn man da den Überlauf-Nupsi umlegt, kriegt der Bordcomputer fünfzehn Minuten lang keine Luft und vergisst einfach, auf die Uhr zu gucken!!',
+                      },
+                      {
+                        speakerId: 'pendelton',
+                        emotion: 'headshake',
+                        animation: 'headshake',
+                        text: 'Mr. Sterling… selbst meine Kaffeemaschine hat eine präzisere Fehlerbeschreibung als Ihr „Saft-Bus-Nupsi“. Sortieren Sie bitte Ihre Gedanken!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Auf dem AS-08/15-Platinen-Dingens schläft der kleine Watch-Hund!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Jetzt fällt’s mir ein!! Auf der Platine von diesem AS-08/15-Dingens wohnt nämlich ein elektronischer… äh… Watch-Hund! Und wenn man den sieben Sekunden lang überfüttert, schläft der ein und lässt jeden rein!!',
+                      },
+                      {
+                        speakerId: 'maya',
+                        emotion: 'sweating',
+                        text: '(Nate… es hieß Watchdog-Reset, nicht Watch-Hund überfüttern!! Hör auf, bevor dich der ganze Ballsaal auslacht!!)',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Ein AS-Protokoll-Wackelkontakt im grünen Blink-Dings!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Es ist ein klassischer… äh… AS-Protokoll-Wackelkontakt direkt hinter diesem kleinen grünen Blink-Dings! Dadurch denkt das Schloss: „Nanu, hier ist ja Sonntag!“ und öffnet lautlos die Tür!!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Aha, ein Türschloss mit Kalenderfunktion, das sonntags aus Kulanz entriegelt… Brillant, Sterling, wirklich brillant!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Man knipst die AS-Phase-Zwo-Strippe an den Brücken-Nupsi!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Passen Sie auf, man geht runter zum… äh… Dings-Schrank, nimmt die rote AS-Phase-Zwo-Strippe und dreht diesen Brücken-Nupsi nach links, damit oben kein rotes Lämpchen meckert!!',
+                      },
+                      {
+                        speakerId: 'andrew',
+                        emotion: 'grumpy',
+                        text: '(Oh Gott im Himmel… gleich fallen mir beide Ohren ab. Was erzählt der Mann da für einen elektrischen Unfug?!)',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Der AS-Kippschalter meldet ‚404 Tür nicht gefunden‘!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Also eigentlich… äh… drückt man am AS-Kippschalter auf „Pause“, dann kriegt der Chip einen Schluckauf und zeigt im Logbuch einfach „Error 404 Tür nicht gefunden“ an!!',
+                      },
+                      {
+                        speakerId: 'pendelton',
+                        emotion: 'neutral',
+                        text: 'Eine Zellentür aus massivem Stahl zeigt also „Error 404“ an… Mr. Sterling, verschwenden Sie nicht die Zeit meines Gerichts mit Computer-Märchen!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Die AS-Schleife-B-Dingens löscht den Kassenbon-Speicher!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Äh… Sie verstehen das falsch! Bei der AS-Schleife-B-Dingens im… Schaltkasten stürzt die ganze Festplatte in den Kassenbon-Modus ab und schreibt Null Komma Null Quittungen ins Tür-Heft!!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'facepalm',
+                        animation: 'facepalm',
+                        sfx: 'facepalm',
+                        text: 'Einen Kassenbon im Tür-Heft… Ich beantrage gleich ein ärztliches Gutachten für den Verteidiger statt für das Opfer!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Das MS-AS-Turbo-Magnet-Dingsbums verliert die Bodenhaftung!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Das Prinzip ist doch ganz simpel: Sobald dieses MS-AS-Turbo-Magnet-Dingsbums kurz… äh… entmagnetisiert wird, schwebt der Bolzen nach links und vergisst sein Passwort!!',
+                      },
+                      {
+                        speakerId: 'eleonore',
+                        emotion: 'sweating',
+                        text: 'Du meine Güte, Andrew… ich glaube, so langsam bräuchte Mr. Sterling wirklich deine persönliche Nachhilfe…',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Ein gezielter AS-Bypass-Dings am… Strom-Dingsda-Verteiler!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Moment… oder legt man diesen… äh… AS-Bypass-Dingsda rechts neben das Strom-Dingsbums und wartet bis… äh… bis genau 02:19 Uhr irgendwas piepst?! Ach verflixt, welches Kabel war denn nochmal die Masse?!',
+                      },
+                      {
+                        speakerId: 'maya',
+                        emotion: 'sweating',
+                        text: 'Nate… der halbe Ballsaal hält sich schon die Hand vor den Mund…',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Äh… die AS-Strom-Schleife… Dings… Sie wissen schon, was ich meine!“',
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Na eben diese… diese AS-Strom-Dingsbums-Sache, die bei Überlast… äh… einfach fünfzehn Minuten… Dings macht!! So ungefähr wie wenn man den Stecker vom Föhn zieht, nur rückwärts!!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Wie ein Föhn, nur rückwärts… Mein Gott, Sterling, selbst als Gerichts-Comedian würden Sie heute Abend durchfallen!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Ich gebe auf – ich kriege das Technik-Zeug einfach nicht erklärt!“',
+                    exitsChoicePool: true,
+                    nextLines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Uff… wissen Sie was, Euer Ehren?! Ich gebe auf!! Ich bin Strafverteidiger und kein Schiffs-Elektriker – wenn ich noch einmal „Dingsbums“ oder „AS-irgendwas“ sage, falle ich selbst vor Scham unter das Verteidigerpult!',
+                      },
+                      {
+                        speakerId: 'pendelton',
+                        emotion: 'headshake',
+                        animation: 'headshake',
+                        sfx: 'gavel_double',
+                        text: 'Das wäre für das gesamte Tribunal zweifellos eine Erlösung, Mr. Sterling! Dennoch steht die Frage im Raum – kann uns bitte EINMAL jemand im Saal vernünftig und technisch sauber erklären, wie dieses Zellenschloss geöffnet worden sein soll?!',
+                      },
+                      {
+                        speakerId: 'nate',
+                        emotion: 'confident',
+                        text: 'Jawohl, Euer Ehren!! Mr. Andrew Higginson war mit mir unten in Zelle 08 und in der Schaltzentrale – rufen Sie ihn bitte kurz in den Zeugenstand, er kann es diesem Gericht haargenau erklären!!',
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'grumpy',
+                text: 'W-was?! Ich soll jetzt vor den ganzen Zuschauern hier nach vorn?! Hören Sie mal, Euer Ehren – nur weil ich in der IT arbeite, heißt das nicht, dass ich der Schiffsschlosser bin!! Eigentlich kenne ich mich mit so etwas gar nicht aus!',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'smug',
+                text: 'Ach so? Dann war dieser angebliche 15-Minuten-Absturz also vielleicht doch nur ein billiges Gerücht eines Amateurs, der genau wie Mr. Sterling gar nicht versteht, wie so ein System funktioniert?',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'grumpy',
+                shake: true,
+                text: 'EIN AMATEUR?! Jetzt hören Sie mir mal gut zu, Herr Staatsanwalt!! Wenn Sie meinen, dieses zweitklassige MS-400-Relais sei irgendwie schwer zu überlisten, dann passen Sie jetzt mal genau auf!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'confident',
+                text: 'Das Ding hängt an einem trivialen 24-Volt-Bus ohne sauberes Fehler-Logging vor dem Watchdog-Reset! Wenn man auf Schleife B genau sieben Sekunden lang eine gezielte Überlastung erzwingt und die Brücken-Warnung im Neben-Schrank umlegt, stürzt der Speicher-Controller einfach komplett ab!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'confident',
+                text: 'In den nächsten geschlagenen 15 Minuten fällt der Magnetbolzen lautlos ab, jeder Trottel kann durch die Tür spazieren – und wenn sich das System um 02:19 Uhr selbst neu bootet, schreibt es exakt NULL Komma NULL Einträge ins Protokoll!! So primitiv ist diese Kiste programmiert!!',
+              },
+              {
+                speakerId: 'eleonore',
+                emotion: 'confident',
+                text: 'WHOOO!! DAS IST MEIN MANN!! HÖREN SIE DIESE FACHKOMPETENZ?!',
+              },
+              {
+                speakerId: 'pendelton',
+                emotion: 'thinking',
+                animation: 'headshake',
+                sfx: 'gavel',
+                text: 'Moment, Mr. Higginson… das klingt ja in der Theorie höchst abenteuerlich mit Ihrer Sieben-Sekunden-Überlastung! Aber solange wir keinen handfesten Beleg haben, dass in jener Nacht unten bei Zelle 08 tatsächlich der Strom ausgefallen ist, bezweifle ich stark, dass das Schloss wirklich manipuliert wurde! Mr. Sterling, können Sie diesen nächtlichen Stromausfall irgendwie beweisen?!',
                 requiresFinalEvidencePrompt: {
                   question:
-                    'Beweise dem Tribunal, wie das Magnetschloss von Zelle 08 lautlos geöffnet wurde, ohne einen Eintrag im Tür-Logbuch zu hinterlassen!',
-                  correctEvidenceId: 'magnet_crash_protokoll',
-                  alternativeEvidenceIds: ['spannungseinbruch_log'],
+                    'Beweise Judge Pendelton, dass die Stromversorgung von Zelle 08 heute Nacht tatsächlich um 02:04 bis 02:19 Uhr ausgefallen ist!',
+                  correctEvidenceId: 'spannungseinbruch_log',
                   successLines: [
                     {
                       speakerId: 'nate',
                       emotion: 'confident',
-                      shout: 'VOLLTREFFER!',
+                      shout: 'EINSPRUCH!',
+                      sfx: 'objection',
                       shake: true,
-                      text: 'SO KAM DER MÖRDER HINEIN, Euer Ehren!! Ein gezielter Absturz des MS-400-Controllers legt das Magnetschloss für volle 15 Minuten spurlos frei – und das Spannungsprotokoll aus der Schaltzentrale beweist genau diesen Einbruch von 02:04 bis 02:19 Uhr, ohne ein einziges Bit im Tür-Log!!',
-                    },
-                    {
-                      speakerId: 'pendelton',
-                      emotion: 'shocked',
-                      animation: 'slam',
-                      sfx: 'gavel_double',
-                      text: 'EIN UNBEMERKTES 15-MINUTEN-FENSTER UND EIN BETÄUBTES OPFER?! Kann man ein elektronisches Schiffsschloss denn wirklich so einfach überlisten? Das soll uns dieser technische Zeuge gleich selbst erläutern – rufen Sie Mr. Andrew Higginson kurz in den Zeugenstand!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'grumpy',
-                      text: 'W-was?! Ich soll jetzt vor den ganzen Zuschauern hier nach vorn?! Hören Sie mal, Euer Ehren – nur weil ich in der IT arbeite, heißt das nicht, dass ich der Schiffsschlosser bin!! Eigentlich kenne ich mich mit so etwas gar nicht aus!',
+                      text: 'Und ob ich das beweisen kann, Euer Ehren!! Hier ist das offizielle Spannungsprotokoll aus der Schaltzentrale – direkt von Chef-Elektriker Kowalski! Um exakt 02:04 Uhr stürzt Schleife B für genau 15 Minuten ab und bootet um 02:19 Uhr neu, während die Brücken-Warnung manuell stummgeschaltet war!!',
                     },
                     {
                       speakerId: 'falk',
-                      emotion: 'smug',
-                      text: 'Ach so? Dann war dieser angebliche 15-Minuten-Absturz also vielleicht doch nur ein billiges Gerücht eines Amateurs, der gar nicht versteht, wie so ein System funktioniert?',
+                      emotion: 'sweating',
+                      text: 'N-na und?! Vielleicht hat um 02:04 Uhr bloß ein Bord-Kühlschrank in der Kombüse kurz geflackert oder eine Sicherung ist von selbst gesprungen!',
                     },
                     {
                       speakerId: 'andrew',
-                      emotion: 'grumpy',
+                      emotion: 'confident',
+                      shout: 'MOMENT MAL!',
+                      sfx: 'objection',
                       shake: true,
-                      text: 'EIN AMATEUR?! Jetzt hören Sie mir mal gut zu, Herr Staatsanwalt!! Wenn Sie meinen, dieses zweitklassige MS-400-Relais sei irgendwie schwer zu überlisten, dann passen Sie jetzt mal genau auf!',
+                      text: 'Das glaubst du doch selbst nicht, Herr Staatsanwalt!! Schauen Sie auf die Kurve: Eine exakte Sieben-Sekunden-Lastspitze direkt vor einem kompletten Watchdog-Absturz auf Schleife B bis Punkt 02:19 Uhr! Das macht kein Kühlschrank der Welt – das ist exakt der MS-400-Überbrückungstrick!!',
+                    },
+                    {
+                      speakerId: 'eleonore',
+                      emotion: 'shocked',
+                      shake: true,
+                      text: 'A-ANDREW?! Hast du da vorne am Pult gerade allen Ernstes „MOMENT MAL!“ geschrien und mit dem Zeigefinger gedroht wie… wie Phoenix Wright?! Du schimpfst doch sonst immer über meine ganzen Anwalts-Spiele auf der Konsole!!',
                     },
                     {
                       speakerId: 'andrew',
                       emotion: 'confident',
-                      text: 'Das Ding hängt an einem trivialen 24-Volt-Bus ohne sauberes Fehler-Logging vor dem Watchdog-Reset! Wenn man auf Schleife B genau sieben Sekunden lang eine gezielte Überlastung erzwingt und die Brücken-Warnung im Neben-Schrank umlegt, stürzt der Speicher-Controller einfach komplett ab!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'confident',
-                      text: 'In den nächsten geschlagenen 15 Minuten fällt der Magnetbolzen lautlos ab, jeder Trottel kann durch die Tür spazieren – und wenn sich das System um 02:19 Uhr selbst neu bootet, schreibt es exakt NULL Komma NULL Einträge ins Protokoll!! So primitiv ist diese Kiste programmiert!!',
+                      text: 'Ach Schatz… wer sagt denn, dass ich dir abends auf dem Sofa nicht doch heimlich zuschaue, wenn die Jungs endlich schlafen? Natürlich weiß ich, was meine Frau liebt.',
                     },
                     {
                       speakerId: 'eleonore',
                       emotion: 'confident',
-                      text: 'WHOOO!! DAS IST MEIN MANN!! HÖREN SIE DIESE FACHKOMPETENZ?!',
+                      text: 'Oh, Andrew!! Wenn das hier vorbei ist, reden wir in der Kabine nochmal darüber, wie sehr du angeblich „keine Ahnung“ von meinen Spielen hast!',
+                    },
+                    {
+                      speakerId: 'maya',
+                      emotion: 'thinking',
+                      text: 'Ähm… Nate? Wer ist eigentlich dieser „Phönix Wright“, von dem die beiden so begeistert schwärmen? Irgendein berühmter TV-Anwalt aus Amerika?',
+                    },
+                    {
+                      speakerId: 'nate',
+                      emotion: 'sweating',
+                      text: 'Keine Ahnung, Maya… Klingt nach einem ziemlich exzentrischen Typen. Wahrscheinlich läuft der mit extrem gegelten Stachelhaaren und einem knallblauen Anzug herum und brüllt wegen jeder Kleinigkeit „Einspruch!“ durch den Saal.',
+                    },
+                    {
+                      speakerId: 'maya',
+                      emotion: 'smug',
+                      text: 'Hm… hochstehende Stachelhaare, knallblauer Anzug und ein sehr lautes „Einspruch!“… stimmt, völlig absurd! So würde sich ein seriöser Strafverteidiger im echten Leben natürlich niemals kleiden, richtig, Nate?',
+                    },
+                    {
+                      speakerId: 'nate',
+                      emotion: 'confident',
+                      text: 'Haha, selbstverständlich nicht, Maya. Wir bleiben hier schließlich absolut bodenständig!',
                     },
                     {
                       speakerId: 'pendelton',
                       emotion: 'confident',
                       animation: 'slam',
                       sfx: 'gavel_double',
-                      text: 'Ich danke Ihnen für diese überaus… plastische technische Vorführung, Mr. Higginson! Damit gibt es für dieses Tribunal keinen Zweifel mehr!',
+                      text: 'Ruhe im Saal!! Das Spannungsprotokoll aus der Schaltzentrale bestätigt Mr. Higginsons Schilderung bis auf die Sekunde! Damit gibt es für dieses Tribunal keinerlei Zweifel mehr: Der Tod von Arthur Morgan war KEIN Selbstmord – ES WAR MORD!!',
                     },
                     {
                       speakerId: 'pendelton',
                       emotion: 'confident',
                       sfx: 'gavel',
-                      text: 'Der Tod von Arthur Morgan war KEIN Selbstmord – ES WAR MORD! Ich übergebe die weiteren offiziellen Mordermittlungen hiermit förmlich in die Hände von Kommissar Dimitri und der Hafenpolizei Heraklion! Die Sitzung ist geschlossen!!',
+                      text: 'Da wir ohnehin erfahrene Strafverfolger direkt an Bord haben, übergebe ich die weiteren offiziellen Mordermittlungen und die Vorbereitung der Anklage hiermit förmlich in die Hände von Detective Marston und Staatsanwalt von Falk!!',
+                    },
+                    {
+                      speakerId: 'marston',
+                      emotion: 'shocked',
+                      shake: true,
+                      text: 'W-WAS?! Moment mal, Euer Ehren!! Ich habe hier auf der MS Aurora offiziell URLAUB!! Ich bin zahlender Gast mit Liegestuhl-Reservierung – mein offizieller Dienst endete gestern Abend mit Fall 1!!',
+                    },
+                    {
+                      speakerId: 'falk',
+                      emotion: 'shocked',
+                      shake: true,
+                      text: 'Da muss ich dem Detective ausnahmsweise völlig recht geben, Euer Ehren!! Auch ich bin eigentlich als privater Urlaubsgast an Bord dieser Kreuzfahrt! Ich habe mein Ticket selbst bezahlt und wollte in diesem Urlaub bestimmt keinen zweiten Mordfall am Hals haben!',
+                    },
+                    {
+                      speakerId: 'pendelton',
+                      emotion: 'headshake',
+                      animation: 'headshake',
+                      sfx: 'gavel',
+                      text: 'Na, meine Herren, überanstrengen werden Sie sich schon nicht! So gemütlich, wie Sie beide sich während der heutigen Ermittlung ausgeruht haben, während Mr. Sterling allein über sämtliche Decks gehetzt ist, dürften Sie doch bestens erholt für den Fall sein!!',
+                    },
+                    {
+                      speakerId: 'marston',
+                      emotion: 'grumpy',
+                      text: 'Grummel… ja danke auch, Euer Ehren… mein schöner Nachmittagscocktail am Pooldeck kann sich wohl endgültig abschminken…',
                     },
                     {
                       speakerId: 'cruisemanager',
@@ -4629,7 +4961,7 @@ export const CRETE_CASE: GameCase = {
                     {
                       speakerId: 'maya',
                       emotion: 'confident',
-                      text: 'Und wie, Nate!! Das ganze Publikum steht Kopf! Morgen früh geht es endlich entspannt an den Strand von Kreta – kein Gerichtssaal mehr, nur noch Sonne und Eis!',
+                      text: 'Und wie, Nate!! Morgen haben wir endlich keinen Landgang und keinen Gerichtssaal mehr – sondern einen herrlich entspannten Seetag mit Meeresbrise, Liegestuhl und ganz viel Eis!!',
                     },
                     {
                       speakerId: 'andrew',
@@ -4641,370 +4973,379 @@ export const CRETE_CASE: GameCase = {
                       emotion: 'neutral',
                       text: 'Einen winzigen Moment noch, Euer Ehren! Bevor Sie endgültig den Hammer weglegen und hier alle mit Sekt anstoßen: Ich beantrage eine kurze fünfminütige Unterbrechung.',
                     },
-                    {
-                      speakerId: 'pendelton',
-                      emotion: 'thinking',
-                      text: 'Eine Pause, Mr. von Falk? Nach dem Schlusswort? Nun gut – fünf Minuten gewährt, aber fassen Sie sich kurz.',
-                    },
-                    {
-                      speakerId: 'nate',
-                      emotion: 'sweating',
-                      hideCharacters: true,
-                      sfx: 'page_turn',
-                      text: '(Fünf Minuten später… Während die Zuschauer schon ihre Mäntel zusammenpacken, stürmt Staatsanwalt von Falk mit einer frischen Mappe aus dem Sicherheitsbüro zurück in den Ballsaal!)',
-                    },
-                    {
-                      speakerId: 'falk',
-                      emotion: 'confident',
-                      shout: 'MOMENT MAL!',
-                      shake: true,
-                      text: 'HALTEN SIE ALLE DEN ATEM AN!! Hier geht heute Abend niemand nach Hause! Rufen Sie diesen Familienvater gefälligst noch EINMAL in den Zeugenstand – ich muss da noch etwas ganz Grundlegendes klären!!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      shake: true,
-                      text: 'W-was?! Ich dachte, wir wären längst fertig?! Wieso starren Sie mich denn plötzlich so an, Herr Staatsanwalt?!',
-                    },
-                    {
-                      speakerId: 'falk',
-                      emotion: 'smug',
-                      sfx: 'tension',
-                      text: 'Weil sich die Anklage nicht einfach mit einem anonymen „Es war Mord!“ zufrieden gibt, Sterling! Schauen Sie sich Ihre eigenen Beweise von heute Abend einmal in einem einzigen Paket an – dann sehen Sie den Mörder genau hier vor uns stehen: ANDREW HIGGINSON!!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      shake: true,
-                      text: 'M-MÖRDER?! ICH?! Haben Sie völlig den Verstand verloren?! Ich bin ein ganz normaler Tourist im Familienurlaub!!',
-                    },
-                    {
-                      speakerId: 'nate',
-                      emotion: 'shocked',
-                      text: 'Staatsanwalt von Falk, das kann doch nicht Ihr Ernst sein!! Sie werfen einem unbescholtenen Passagier aus heiterem Himmel Mord vor?!',
-                    },
-                    buildMultiTryDefense(
+              {
+                speakerId: 'pendelton',
+                emotion: 'thinking',
+                text: 'Eine Pause, Mr. von Falk? Nach dem Schlusswort? Nun gut – fünf Minuten gewährt, aber fassen Sie sich kurz.',
+              },
+              {
+                speakerId: 'nate',
+                emotion: 'sweating',
+                hideCharacters: true,
+                sfx: 'page_turn',
+                text: '(Fünf Minuten später… Während die Zuschauer schon ihre Mäntel zusammenpacken, stürmt Staatsanwalt von Falk mit einer frischen Mappe aus dem Sicherheitsbüro zurück in den Ballsaal!)',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'confident',
+                shout: 'MOMENT MAL!',
+                shake: true,
+                text: 'HALTEN SIE ALLE DEN ATEM AN!! Hier geht heute Abend niemand nach Hause! Rufen Sie diesen Familienvater gefälligst noch EINMAL in den Zeugenstand – ich muss da noch etwas ganz Grundlegendes klären!!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                shake: true,
+                text: 'W-was?! Ich dachte, wir wären längst fertig?! Wieso starren Sie mich denn plötzlich so an, Herr Staatsanwalt?!',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'smug',
+                sfx: 'tension',
+                text: 'Weil sich die Anklage nicht einfach mit einem anonymen „Es war Mord!“ zufrieden gibt, Sterling! Schauen Sie sich Ihre eigenen Beweise von heute Abend einmal in einem einzigen Paket an – dann sehen Sie den Mörder genau hier vor uns stehen: ANDREW HIGGINSON!!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                shake: true,
+                text: 'M-MÖRDER?! ICH?! Haben Sie völlig den Verstand verloren?! Ich bin ein ganz normaler Tourist im Familienurlaub!!',
+              },
+              {
+                speakerId: 'nate',
+                emotion: 'shocked',
+                text: 'Staatsanwalt von Falk, das kann doch nicht Ihr Ernst sein!! Sie werfen einem unbescholtenen Passagier aus heiterem Himmel Mord vor?!',
+              },
+              buildMultiTryDefense(
+                {
+                  speakerId: 'falk',
+                  emotion: 'confident',
+                  text: 'Aus heiterem Himmel?! Gehen wir meine VIER Fakten doch Schritt für Schritt durch!! ERSTENS: TÄTERWISSEN!! Weder der Chef-Elektriker noch Security-Chef Brandt hatten eine Ahnung, wie man das MS-400-Schloss geräuschlos für 15 Minuten abstürzen lässt – bis ausgerechnet „IT-Mann“ Higginson vor fünf Minuten stolz wie ein Pfau jeden Handgriff erklärt hat!!',
+                },
+                [
+                  {
+                    label: '„Er ist Datenbank-Manager, kein Schiffs-Elektriker!“',
+                    lines: [
                       {
-                        speakerId: 'falk',
+                        speakerId: 'nate',
                         emotion: 'confident',
-                        text: 'Aus heiterem Himmel?! Gehen wir meine VIER Fakten doch Schritt für Schritt durch!! ERSTENS: TÄTERWISSEN!! Weder der Chef-Elektriker noch Security-Chef Brandt hatten eine Ahnung, wie man das MS-400-Schloss geräuschlos für 15 Minuten abstürzen lässt – bis ausgerechnet „IT-Mann“ Higginson vor fünf Minuten stolz wie ein Pfau jeden Handgriff erklärt hat!!',
+                        text: 'Moment! Andrew hat den ganzen Tag lang beteuert, dass er beruflich nur Datenbanken plant und von Schiffs-Hardware eigentlich gar nichts versteht!',
                       },
-                      [
-                        {
-                          label: '„Er ist Datenbank-Manager, kein Schiffs-Elektriker!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'confident',
-                              text: 'Moment! Andrew hat den ganzen Tag lang beteuert, dass er beruflich nur Datenbanken plant und von Schiffs-Hardware eigentlich gar nichts versteht!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Ach ja?! Und vor zweihundert Zeugen hat er eben im Zeugenstand aus dem Stegreif das Bus-Relais, den Sieben-Sekunden-Überlasttrick und den Brücken-Schalter heruntergerattert! Eine hübsche Tarnung, solange niemand hinschaut!',
-                            },
-                            {
-                              speakerId: 'andrew',
-                              emotion: 'shocked',
-                              text: 'Aber ich hab das doch erst unten vor der Tür gesehen!! Ich wollte vor den Leuten nur nicht wie ein Vollidiot dastehen!!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Jeder Techniker hätte diesen Bug finden können!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'thinking',
-                              text: 'Das MS-400 ist ein Standardsystem! Jeder Bord-Elektriker hätte denselben Fehler am Bus finden können.',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'confident',
-                              text: 'Hätte, könnte, müsste – nur hat es KEIN Elektriker bemerkt! Erst als Mr. Higginson persönlich zur Zelle spazierte, wusste plötzlich jemand nach genau zwei Minuten, welches Kabel gezogen werden muss!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Nate war die ganze Zeit mit ihm in der Zelle!“',
-                          lines: [
-                            {
-                              speakerId: 'maya',
-                              emotion: 'sweating',
-                              text: 'Moment mal – Nate stand beim Schloss-Test direkt neben ihm! Andrew konnte das ja wohl kaum allein heimlich ausprobieren!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Natürlich brauchte Sterling einen Fachmann an der Hand – nur dass genau dieser „Fachmann“ den Trick verdächtig flüssig beherrschte!',
-                            },
-                          ],
-                        },
-                      ]
-                    ),
-                    buildMultiTryDefense(
-                      {
-                        speakerId: 'falk',
-                        emotion: 'confident',
-                        text: 'ZWEITENS: DER BLAUE KRETA-SCHAL!! Wie Sie vorhin selbst triumphierend vor Gericht bewiesen haben, hing in Zelle 08 kein Kellnertuch – sondern exakt Andrew Higginsons eigener Kreta-Seidenschal!! Und welch praktischer Zufall: Ausgerechnet gestern Abend soll er ihm angeblich „gestohlen“ worden sein!!',
-                      },
-                      [
-                        {
-                          label: '„Eleonore sagte selbst, Andrew lässt alles liegen!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'thinking',
-                              text: 'Seine eigene Frau hat bestätigt, dass Andrew seine Sachen ständig irgendwo im Salon oder an Deck liegen lässt! Jeder Passagier hätte den Schal einfach mitnehmen können!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Noch bequemer!! Dann hätte er nicht einmal eine Ausrede erfinden müssen, falls seine Frau zu Hause fragt, wo das Geschenk geblieben ist – perfekt, wenn man ein Tuch als Tatwerkzeug zurücklässt!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Andrew schwört, er wurde ihm aus der Jacke geklaut!“',
-                          lines: [
-                            {
-                              speakerId: 'andrew',
-                              emotion: 'shocked',
-                              shake: true,
-                              text: 'Aber das STIMMT DOCH AUCH!! Er war sauber zusammengefaltet in meiner Jackentasche!!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'confident',
-                              text: 'Natürlich, Mr. Higginson! Jedes Schulkind würde bei einer Tatwaffe wohl zuerst behaupten, sie sei gestern Abend leider gestohlen worden!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Der wahre Mörder hat den Schal als falsche Fährte gelegt!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'confident',
-                              text: 'Genau deshalb wäre das doch eine viel zu offensichtliche Spur! Der echte Täter schnappt sich einen fremden Schal, um den Verdacht von sich wegzulenken!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Ach wirklich?! Unter zwölfhundert Gästen klaut ein Mörder also rein zufällig genau den Schal des EINEN Mannes, der am nächsten Tag wie durch Zauberhand weiß, wie man das MS-400 lautlos knackt?! Glauben Sie Ihren eigenen Märchen eigentlich noch, Sterling?!',
-                            },
-                          ],
-                        },
-                      ]
-                    ),
-                    {
-                      speakerId: 'falk',
-                      emotion: 'confident',
-                      text: 'DRITTENS: IHR ALIBI!! Sagen Sie diesem Gericht jetzt frei heraus, Mr. Higginson – wo genau waren Sie heute Nacht zwischen 02:00 Uhr und 02:20 Uhr, als Arthur Morgan in Zelle 08 starb?!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      text: 'Äh… in unserer Familienkabine natürlich!! Ich habe tief und fest im Bett geschlafen!! Fragen Sie doch Eleonore!!',
-                    },
-                    {
-                      speakerId: 'eleonore',
-                      emotion: 'sweating',
-                      text: 'Ich… ich hatte wegen meiner Erkältung doch Ohropax in den Ohren und hab die ganze Nacht wie ein Stein durchgeschlafen…',
-                    },
-                    {
-                      speakerId: 'falk',
-                      emotion: 'smug',
-                      sfx: 'evidence_chime',
-                      shake: true,
-                      text: 'SO?! SIE HABEN ALSO TIEF UND FEST GESCHLAFEN?! Dann erklären Sie doch bitte einmal diesen Standbildern hier aus den ÜBERWACHUNGSKAMERAS vom Kabinenkorridor, warum ein gewisser Andrew Higginson um 01:58 Uhr allein in den Flur zum Treppenhaus schleicht – und erst um 02:23 Uhr wieder zurückkehrt!!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      shake: true,
-                      text: 'D-DAS… DAS SIND KAMERA-AUFNAHMEN?! Oh Gott… N-nein, hören Sie mir zu!! Ich hab es verschwiegen, ja – aber ich war NICHT bei irgendeiner Zelle!!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      text: 'Ich hatte gestern Abend vergessen, unsere Kabinentür richtig abzuschließen! Als ich um kurz vor zwei wach wurde, waren die Betten der Jungs leer!! Ich bin heimlich über die Gänge geschlichen, um meine Kinder zu suchen – weil ich Angst hatte, dass Eleonore mir sonst die ganze restliche Kreuzfahrt lang die Hölle heißmacht, wenn sie merkt, dass ich die Tür vergessen habe!!',
-                    },
-                    {
-                      speakerId: 'eleonore',
-                      emotion: 'shocked',
-                      text: 'ANDREW!! Du hast die Kabinentür nicht abgeschlossen?!',
-                    },
-                    buildMultiTryDefense(
                       {
                         speakerId: 'falk',
                         emotion: 'smug',
-                        text: 'Welch rührende Familien-Geschichte über vergessene Türschlösser! Nur leider passt diese verdächtige Abwesenheit von 01:58 bis 02:23 Uhr auf die Minute genau zu unserem 15-Minuten-Mordfenster um 02:04 bis 02:19 Uhr!!',
+                        text: 'Ach ja?! Und vor zweihundert Zeugen hat er eben im Zeugenstand aus dem Stegreif das Bus-Relais, den Sieben-Sekunden-Überlasttrick und den Brücken-Schalter heruntergerattert! Eine hübsche Tarnung, solange niemand hinschaut!',
                       },
-                      [
-                        {
-                          label: '„Seine Angst vor Eleonore erklärt das Verheimlichen total!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'sweating',
-                              text: 'Wer Andrew heute erlebt hat, weiß sofort, dass er sich wirklich mehr vor Eleonores Standpauke gefürchtet hat als vor dem Staatsanwalt!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Oder es ist exakt die panische Notlüge eines Mannes, der gerade nicht wusste, dass wir die Überwachungskamera noch vor der Pause ausgelesen haben!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Die Kamera zeigt ihn nur oben im Flur, nie im Zellentrakt!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'confident',
-                              text: 'Auf diesem Foto verlässt er lediglich den Kabinengang auf Deck 5! Das beweist nicht im Geringsten, dass er jemals unten bei Zelle 08 oder in der Krankenstation war!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'confident',
-                              text: 'Und genau vor der Treppe Achtern enden die Passagierkameras – ab dort führen nur die Personal-Stufen hinab zur Krankenstation und zum Zellentrakt! Und von seinen drei Söhnen ist auf dem Video übrigens weit und breit keiner zu sehen!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Ein besorgter Vater sucht nachts eben seine Kinder!“',
-                          lines: [
-                            {
-                              speakerId: 'maya',
-                              emotion: 'confident',
-                              text: 'Leo, Rick und Conrad waren ja um 02:10 Uhr wirklich wach auf dem Rettungsboot-Deck! Das beweist doch, dass seine Geschichte stimmt!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Oder er wusste, dass seine Kinder ohnehin herumstreunen, und nutzt genau das jetzt nachträglich als bequeme Ausrede für seinen eigenen nächtlichen Ausflug!',
-                            },
-                          ],
-                        },
-                      ]
-                    ),
-                    {
-                      speakerId: 'falk',
-                      emotion: 'confident',
-                      sfx: 'tension',
-                      shake: true,
-                      text: 'UND VIERTENS – DAS FINANZIELLE MOTIV AUS FALL 1!! Erinnern Sie sich noch an den weingetränkten Droh- und Zahlungsbrief über 45.000 Euro bis zur Ankunft auf Kreta, den wir gestern im VIP-Salon sicherstellten?!',
-                    },
-                    {
-                      speakerId: 'falk',
-                      emotion: 'confident',
-                      text: 'Unter dem verschmierten Rotweinfleck las gestern Abend jeder hastig „A. M.“! Doch unsere Spurensicherung hat das Blatt gestern Nacht noch einmal unter Schräglicht gescannt: Der verschmierte letzte Buchstabe ist kein M… DA STEHT „A. H.“ – ANDREW HIGGINSON!!',
-                    },
-                    {
-                      speakerId: 'falk',
-                      emotion: 'smug',
-                      text: 'Darum frage ich Sie direkt vor diesem gesamten Schiff, Mr. Higginson: Haben Sie zurzeit hohe Schulden oder ernste finanzielle Probleme?!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      shake: true,
-                      text: 'Äh… i-ich… nun ja… w-wir haben drei wachsende Kinder, ein großes Haus abzubezahlen, und dann diese teure Mittelmeer-Kreuzfahrt hier oben drauf… w-wer hat denn bei den Preisen heutzutage bitteschön KEINE Schulden?!',
-                    },
-                    {
-                      speakerId: 'andrew',
-                      emotion: 'shocked',
-                      text: 'Ja, das Konto ist manchmal knapp – aber das beweist doch noch lange nicht, dass ich irgendjemanden umgebracht habe oder diesen „A. H.“-Brief überhaupt kenne!!',
-                    },
-                    buildMultiTryDefense(
+                      {
+                        speakerId: 'andrew',
+                        emotion: 'shocked',
+                        text: 'Aber ich hab das doch erst unten vor der Tür gesehen!! Ich wollte vor den Leuten nur nicht wie ein Vollidiot dastehen!!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Jeder Techniker hätte diesen Bug finden können!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'thinking',
+                        text: 'Das MS-400 ist ein Standardsystem! Jeder Bord-Elektriker hätte denselben Fehler am Bus finden können.',
+                      },
                       {
                         speakerId: 'falk',
                         emotion: 'confident',
-                        text: 'Hohe Schulden eingeräumt, eine Zahlungsfrist über 45.000 Euro auf die Initialen „A. H.“ direkt vor Kreta, spezielles Täterwissen am Zellenschloss, der eigene Schal am Tatort und ein durch die Überwachungskamera widerlegtes Alibi!! Für eine sofortige Festnahme reicht diese Indizienkette zehnmal!!',
+                        text: 'Hätte, könnte, müsste – nur hat es KEIN Elektriker bemerkt! Erst als Mr. Higginson persönlich zur Zelle spazierte, wusste plötzlich jemand nach genau zwei Minuten, welches Kabel gezogen werden muss!',
                       },
-                      [
-                        {
-                          label: '„Die Initialen ‚A. H.‘ könnten zu dutzenden Gästen passen!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'confident',
-                              text: 'An Bord befinden sich über tausend Menschen! Auf wie viele Passagiere oder Crew-Mitglieder mögen wohl die bloßen Anfangsbuchstaben „A. H.“ zutreffen?!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Wie viele davon hatten gestandene Geldnöte, verlieren exakt zur selben Zeit ihren blauen Seidenschal in Zelle 08, erklären stolz das MS-400-Schloss und schleichen um 02:10 Uhr durch die Gänge, Sterling?!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Normale Familienschulden sind kein Mordmotiv!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'thinking',
-                              text: 'Ein Hauskredit und drei Kinder machen noch keinen Mörder! Sie haben keinerlei direkten Beweis, dass zwischen Andrew und Arthur Morgan jemals Geld geflossen ist!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'confident',
-                              text: 'Was genau hinter diesem 45.000-Euro-Schreiben steckt, wird die genaue Untersuchung in Haft schon zutage fördern! Die Indizienlage genügt vollkommen!',
-                            },
-                          ],
-                        },
-                        {
-                          label: '„Ohne direkten Beweis vom Tatort dürfen Sie ihn nicht verurteilen!“',
-                          lines: [
-                            {
-                              speakerId: 'nate',
-                              emotion: 'confident',
-                              text: 'Sie haben weder Fingerabdrücke an der Arznei-Flasche noch Zeugen unten im Zellentrakt! Das reicht im Leben nicht für ein Urteil!',
-                            },
-                            {
-                              speakerId: 'falk',
-                              emotion: 'smug',
-                              text: 'Ich verlange heute Abend auch kein Endurteil, Herr Kollege – ich beantrage wegen dringenden Tatverdachts sofortige Untersuchungshaft!!',
-                            },
-                          ],
-                        },
-                      ]
-                    ),
-                    {
-                      speakerId: 'pendelton',
-                      emotion: 'neutral',
-                      animation: 'slam',
-                      sfx: 'gavel_double',
-                      text: 'Ordnung im Saal!! Die Indizienkette der Staatsanwaltschaft – technisches Sonderwissen, persönliches Tatmittel, kamera-belegte Abwesenheit während der Tatzeit sowie ein bestätigtes finanzielles Motiv rund um „A. H.“ – begründet zweifellos einen dringenden Tatverdacht! Sicherheitsleute: Nehmen Sie Mr. Andrew Higginson bis zur Hauptverhandlung in Untersuchungshaft!',
-                    },
-                    {
-                      speakerId: 'eleonore',
-                      emotion: 'shocked',
-                      shake: true,
-                      text: 'ANDREW!! NEIN!! MR. STERLING, BITTE HELFEN SIE IHM – ER WAR ES NICHT!!',
-                    },
-                    {
-                      speakerId: 'cruisemanager',
-                      emotion: 'confident',
-                      sfx: 'foghorn',
-                      triggersOutro: true,
-                      text: 'UND WAS FÜR EIN FINALE, MEINE DAMEN UND HERREN!! Die Hafenbehörde hat bestätigt, dass wir unsere Ermittlungen an Bord fortführen – also LEINEN LOS!! Die MS Aurora legt noch heute Nacht von Kreta ab, und unser großes Gerichts-LARP geht auf hoher See in die nächste Runde!!',
-                    },
-                  ],
-                  wrongLines: [
-                    {
-                      speakerId: 'falk',
-                      emotion: 'facepalm',
-                      animation: 'facepalm',
-                      sfx: 'facepalm',
-                      text: 'Was soll das beweisen?! Zeigen Sie uns den technischen Befund zum Magnetschloss oder den 15-Minuten-Spannungseinbruch, Sterling!',
-                    },
-                  ],
+                    ],
+                  },
+                  {
+                    label: '„Nate war die ganze Zeit mit ihm in der Zelle!“',
+                    lines: [
+                      {
+                        speakerId: 'maya',
+                        emotion: 'sweating',
+                        text: 'Moment mal – Nate stand beim Schloss-Test direkt neben ihm! Andrew konnte das ja wohl kaum allein heimlich ausprobieren!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Natürlich brauchte Sterling einen Fachmann an der Hand – nur dass genau dieser „Fachmann“ den Trick verdächtig flüssig beherrschte!',
+                      },
+                    ],
+                  },
+                ]
+              ),
+              buildMultiTryDefense(
+                {
+                  speakerId: 'falk',
+                  emotion: 'confident',
+                  text: 'ZWEITENS: DER BLAUE KRETA-SCHAL!! Wie Sie vorhin selbst triumphierend vor Gericht bewiesen haben, diente in Zelle 08 kein Kellnertuch als Schlinge – sondern exakt Andrew Higginsons eigener Kreta-Seidenschal, mit dem Arthur Morgan erhängt wurde!! Und welch praktischer Zufall: Ausgerechnet gestern Abend soll er ihm angeblich „gestohlen“ worden sein!!',
                 },
+                [
+                  {
+                    label: '„Eleonore sagte selbst, Andrew lässt alles liegen!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'thinking',
+                        text: 'Seine eigene Frau hat bestätigt, dass Andrew seine Sachen ständig irgendwo im Salon oder an Deck liegen lässt! Jeder Passagier hätte den Schal einfach mitnehmen können!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Noch bequemer!! Dann hätte er nicht einmal eine Ausrede erfinden müssen, falls seine Frau zu Hause fragt, wo das Geschenk geblieben ist – perfekt, wenn man sein eigenes Tuch als Tatwerkzeug an der Zellenstange zurücklässt!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Andrew schwört, er wurde ihm aus der Jacke geklaut!“',
+                    lines: [
+                      {
+                        speakerId: 'andrew',
+                        emotion: 'shocked',
+                        shake: true,
+                        text: 'Aber das STIMMT DOCH AUCH!! Er war sauber zusammengefaltet in meiner Jackentasche!!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'confident',
+                        text: 'Natürlich, Mr. Higginson! Jedes Schulkind würde bei einer Tatwaffe wohl zuerst behaupten, sie sei gestern Abend leider gestohlen worden!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Der wahre Mörder hat den Schal als falsche Fährte genutzt!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'confident',
+                        text: 'Genau deshalb wäre das doch eine viel zu offensichtliche Spur! Der echte Täter schnappt sich einen fremden Schal, um den Verdacht von sich wegzulenken!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Ach wirklich?! Unter zwölfhundert Gästen klaut ein Mörder also rein zufällig genau den Schal des EINEN Mannes, der am nächsten Tag wie durch Zauberhand weiß, wie man das MS-400 lautlos knackt?! Glauben Sie Ihren eigenen Märchen eigentlich noch, Sterling?!',
+                      },
+                    ],
+                  },
+                ]
+              ),
+              {
+                speakerId: 'falk',
+                emotion: 'confident',
+                text: 'DRITTENS: IHR ALIBI!! Sagen Sie diesem Gericht jetzt frei heraus, Mr. Higginson – wo genau waren Sie heute Nacht zwischen 02:00 Uhr und 02:20 Uhr, als Arthur Morgan in Zelle 08 starb?!',
               },
-            ],
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                text: 'Äh… in unserer Familienkabine natürlich!! Ich habe tief und fest im Bett geschlafen!! Fragen Sie doch Eleonore!!',
+              },
+              {
+                speakerId: 'eleonore',
+                emotion: 'sweating',
+                text: 'Ich… ich hatte wegen meiner Erkältung doch Ohropax in den Ohren und hab die ganze Nacht wie ein Stein durchgeschlafen…',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'smug',
+                sfx: 'evidence_chime',
+                shake: true,
+                text: 'SO?! SIE HABEN ALSO TIEF UND FEST GESCHLAFEN?! Dann erklären Sie doch bitte einmal diesen Standbildern hier aus den ÜBERWACHUNGSKAMERAS vom Kabinenkorridor, warum ein gewisser Andrew Higginson um 01:58 Uhr allein in den Flur zum Treppenhaus schleicht – und erst um 02:23 Uhr wieder zurückkehrt!!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                shake: true,
+                text: 'D-DAS… DAS SIND KAMERA-AUFNAHMEN?! Oh Gott… N-nein, hören Sie mir zu!! Ich hab es verschwiegen, ja – aber ich war NICHT bei irgendeiner Zelle!!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                text: 'Ich hatte gestern Abend vergessen, unsere Kabinentür richtig abzuschließen! Als ich um kurz vor zwei wach wurde, waren die Betten von Leo und Rick leer!! Ich bin heimlich über die Gänge geschlichen, um die beiden Großen zu suchen – weil ich Angst hatte, dass Eleonore mir sonst die ganze restliche Kreuzfahrt lang die Hölle heißmacht, wenn sie merkt, dass ich die Tür vergessen habe!!',
+              },
+              {
+                speakerId: 'eleonore',
+                emotion: 'shocked',
+                text: 'ANDREW!! Du hast die Kabinentür nicht abgeschlossen?!',
+              },
+              buildMultiTryDefense(
+                {
+                  speakerId: 'falk',
+                  emotion: 'smug',
+                  text: 'Welch rührende Familien-Geschichte über vergessene Türschlösser! Nur leider passt diese verdächtige Abwesenheit von 01:58 bis 02:23 Uhr auf die Minute genau zu unserem 15-Minuten-Mordfenster um 02:04 bis 02:19 Uhr!!',
+                },
+                [
+                  {
+                    label: '„Seine Angst vor Eleonore erklärt das Verheimlichen total!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'sweating',
+                        text: 'Wer Andrew heute erlebt hat, weiß sofort, dass er sich wirklich mehr vor Eleonores Standpauke gefürchtet hat als vor dem Staatsanwalt!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Oder es ist exakt die panische Notlüge eines Mannes, der gerade nicht wusste, dass wir die Überwachungskamera noch vor der Pause ausgelesen haben!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Die Kamera zeigt ihn nur oben im Flur, nie im Zellentrakt!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'confident',
+                        text: 'Auf diesem Foto verlässt er lediglich den Kabinengang auf Deck 5! Das beweist nicht im Geringsten, dass er jemals unten bei Zelle 08 oder in der Krankenstation war!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'confident',
+                        text: 'Und genau vor der Treppe Achtern enden die Passagierkameras – ab dort führen nur die Personal-Stufen hinab zur Krankenstation und zum Zellentrakt! Und von Leo und Rick ist auf dem Video übrigens weit und breit keiner zu sehen!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Ein besorgter Vater sucht nachts eben seine Kinder!“',
+                    lines: [
+                      {
+                        speakerId: 'maya',
+                        emotion: 'confident',
+                        text: 'Leo und Rick waren ja um 02:10 Uhr wirklich wach auf dem Rettungsboot-Deck – Conrad lag im Bett, aber die zwei Älteren sind herumgeschlichen! Das beweist doch, dass Andrews Geschichte stimmt!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Oder er wusste, dass Leo und Rick ohnehin gern nachts ausbüxen, und nutzt genau das jetzt nachträglich als bequeme Ausrede für seinen eigenen nächtlichen Ausflug!',
+                      },
+                    ],
+                  },
+                ]
+              ),
+              {
+                speakerId: 'falk',
+                emotion: 'confident',
+                sfx: 'tension',
+                shake: true,
+                text: 'UND VIERTENS – DAS FINANZIELLE MOTIV AUS FALL 1!! Erinnern Sie sich noch an den weingetränkten Droh- und Zahlungsbrief über 45.000 Euro bis zur Ankunft auf Kreta, den wir gestern im VIP-Salon sicherstellten?!',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'confident',
+                text: 'Unter dem verschmierten Rotweinfleck las gestern Abend jeder hastig „A. M.“! Doch unsere Spurensicherung hat das Blatt gestern Nacht noch einmal unter Schräglicht gescannt: Der verschmierte letzte Buchstabe ist kein M… DA STEHT „A. H.“ – ANDREW HIGGINSON!!',
+              },
+              {
+                speakerId: 'falk',
+                emotion: 'smug',
+                text: 'Darum frage ich Sie direkt vor diesem gesamten Schiff, Mr. Higginson: Haben Sie zurzeit hohe Schulden oder ernste finanzielle Probleme?!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                shake: true,
+                text: 'Äh… i-ich… nun ja… w-wir haben drei wachsende Kinder, ein großes Haus abzubezahlen, und dann diese teure Mittelmeer-Kreuzfahrt hier oben drauf… w-wer hat denn bei den Preisen heutzutage bitteschön KEINE Schulden?!',
+              },
+              {
+                speakerId: 'andrew',
+                emotion: 'shocked',
+                text: 'Ja, das Konto ist manchmal knapp – aber das beweist doch noch lange nicht, dass ich irgendjemanden umgebracht habe oder diesen „A. H.“-Brief überhaupt kenne!!',
+              },
+              buildMultiTryDefense(
+                {
+                  speakerId: 'falk',
+                  emotion: 'confident',
+                  text: 'Hohe Schulden eingeräumt, eine Zahlungsfrist über 45.000 Euro auf die Initialen „A. H.“ direkt vor Kreta, spezielles Täterwissen am Zellenschloss, der eigene Schal als Tat-Seil und ein durch die Überwachungskamera widerlegtes Alibi!! Für eine sofortige Festnahme reicht diese Indizienkette zehnmal!!',
+                },
+                [
+                  {
+                    label: '„Die Initialen ‚A. H.‘ könnten zu dutzenden Gästen passen!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'confident',
+                        text: 'An Bord befinden sich über tausend Menschen! Auf wie viele Passagiere oder Crew-Mitglieder mögen wohl die bloßen Anfangsbuchstaben „A. H.“ zutreffen?!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Wie viele davon hatten gestandene Geldnöte, verlieren exakt zur selben Zeit ihren blauen Seidenschal als Tat-Seil in Zelle 08, erklären stolz das MS-400-Schloss und schleichen um 02:10 Uhr durch die Gänge, Sterling?!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Normale Familienschulden sind kein Mordmotiv!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'thinking',
+                        text: 'Ein Hauskredit und drei Kinder machen noch keinen Mörder! Sie haben keinerlei direkten Beweis, dass zwischen Andrew und Arthur Morgan jemals Geld geflossen ist!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'confident',
+                        text: 'Was genau hinter diesem 45.000-Euro-Schreiben steckt, wird die genaue Untersuchung in Haft schon zutage fördern! Die Indizienlage genügt vollkommen!',
+                      },
+                    ],
+                  },
+                  {
+                    label: '„Ohne direkten Beweis vom Tatort dürfen Sie ihn nicht verurteilen!“',
+                    lines: [
+                      {
+                        speakerId: 'nate',
+                        emotion: 'confident',
+                        text: 'Sie haben weder Fingerabdrücke an der Arznei-Flasche noch Zeugen unten im Zellentrakt! Das reicht im Leben nicht für ein Urteil!',
+                      },
+                      {
+                        speakerId: 'falk',
+                        emotion: 'smug',
+                        text: 'Ich verlange heute Abend auch kein Endurteil, Herr Kollege – ich beantrage wegen dringenden Tatverdachts sofortige Untersuchungshaft!!',
+                      },
+                    ],
+                  },
+                ]
+              ),
+              {
+                speakerId: 'pendelton',
+                emotion: 'neutral',
+                animation: 'slam',
+                sfx: 'gavel_double',
+                text: 'Ordnung im Saal!! Die Indizienkette der Staatsanwaltschaft – technisches Sonderwissen, persönliches Tatmittel, kamera-belegte Abwesenheit während der Tatzeit sowie ein bestätigtes finanzielles Motiv rund um „A. H.“ – begründet zweifellos einen dringenden Tatverdacht! Sicherheitsleute: Nehmen Sie Mr. Andrew Higginson bis zur Hauptverhandlung in Untersuchungshaft!',
+              },
+              {
+                speakerId: 'eleonore',
+                emotion: 'shocked',
+                shake: true,
+                text: 'ANDREW!! NEIN!! MR. STERLING, BITTE HELFEN SIE IHM – ER WAR ES NICHT!!',
+              },
+                      {
+                        speakerId: 'cruisemanager',
+                        emotion: 'confident',
+                        sfx: 'foghorn',
+                        triggersOutro: true,
+                        text: 'UND WAS FÜR EIN FINALE, MEINE DAMEN UND HERREN!! Die Hafenbehörde hat bestätigt, dass wir unsere Ermittlungen an Bord fortführen – also LEINEN LOS!! Die MS Aurora legt noch heute Nacht von Kreta ab, und unser großes Gerichts-LARP geht auf hoher See in die nächste Runde!!',
+                      },
+                    ],
+                    wrongLines: [],
+                  },
+                },
+              ],
+            },
           },
+        {
+          id: 'c2_a3_vm4',
+          text: 'Solange kein neuer Laborbericht das Gegenteil belegt, bleibt mein vorläufiges Gutachten zum Selbstmord unumstößlich bestehen.',
+          pressLines: [
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              shout: 'MOMENT MAL!',
+              text: '„Solange kein neuer Laborbericht das Gegenteil belegt“ – interessante Formulierung, Dr. Vance! Ist Ihr großes Blut-Analysegerät oben heute Nachmittag nicht längst fertig durchgelaufen?!',
+            },
+            {
+              speakerId: 'vance',
+              emotion: 'sweating',
+              text: 'I-ich… wenn die Verteidigung behauptet, ein solcher Bericht existiere, dann soll sie ihn dem Gericht doch bitte vorlegen!',
+            },
+          ],
         },
       ],
       wrongObjectionLines: [

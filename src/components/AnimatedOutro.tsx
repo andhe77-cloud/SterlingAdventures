@@ -22,6 +22,8 @@ export interface OutroSlide {
   fadeOutEvening?: boolean;
   playsGreekMusic?: boolean;
   fadeOutGreekMusic?: boolean;
+  playsDramaticMusic?: boolean;
+  fadeOutDramaticMusic?: boolean;
   shoutBanner?: 'MOMENT MAL!';
   sfx?: 'foghorn' | 'alarm' | 'tension' | 'page_turn';
   durationMs: number;
@@ -110,27 +112,41 @@ export const CRETE_ACT22_OUTRO_SLIDES: OutroSlide[] = [
 export const CRETE_ACT23_OUTRO_SLIDES: OutroSlide[] = [
   {
     id: 'c2_a3_outro_arrest',
-    imageUrl: '/src/assets/images/outro_andrew_arrest_1795276704503.jpg',
-    kicker: 'Tag 4 · Später Abend · Großer Ballsaal',
+    imageUrl: '/src/assets/images/outro_andrew_arrest_fixed_1795337972595.jpg',
+    kicker: 'Tag 4 · Später Abend · Ausgang des Ballsaals',
     speaker: 'Eleonore Higginson',
     caption:
-      'Handschellen klicken um Andrew Higginsons Handgelenke. Unter Tränen klammert sich Eleonore an Nates Ärmel: „Mr. Sterling, bitte!! Andrew würde niemals jemanden umbringen – Sie müssen ihm helfen!!“',
+      'Kaltes Metall klickt um Andrew Higginsons Handgelenke. Fassungslos klammert sich Eleonore unter Tränen an Nates Ärmel: „Mr. Sterling, bitte!! Sie kennen doch meinen Mann – Andrew würde niemals jemanden töten!“',
+    playsDramaticMusic: true,
     sfx: 'tension',
-    durationMs: 7400,
-    panFrom: { scale: 1.0, x: -10, y: 0 },
-    panTo: { scale: 1.08, x: 10, y: -4 },
+    durationMs: 9200,
+    panFrom: { scale: 1.0, x: -12, y: 0 },
+    panTo: { scale: 1.08, x: 8, y: -3 },
+  },
+  {
+    id: 'c2_a3_outro_andrew_look',
+    imageUrl: '/src/assets/images/outro_andrew_arrest_fixed_1795337972595.jpg',
+    kicker: 'Eskortiert von der Schiffs-Sicherheit',
+    speaker: 'Andrew Higginson',
+    caption:
+      'Auf dem langen Korridor wirft Andrew einen verzweifelten letzten Blick über die Schulter zurück: „Nate… ich schwöre es Ihnen, ich war nicht bei dieser Zelle! Passen Sie auf Eleonore und die Jungs auf!!“',
+    playsDramaticMusic: true,
+    durationMs: 9000,
+    panFrom: { scale: 1.08, x: 8, y: -3 },
+    panTo: { scale: 1.15, x: -12, y: -4 },
   },
   {
     id: 'c2_a3_outro_maya_pledge',
-    imageUrl: '/src/assets/images/outro_andrew_arrest_1795276704503.jpg',
-    kicker: 'Vor den Augen der Familie Higginson',
+    imageUrl: '/src/assets/images/outro_andrew_arrest_fixed_1795337972595.jpg',
+    kicker: 'Ein dunkler Schatten über dem Urlaub',
     speaker: 'Maya & Nate',
     caption:
-      'Maya blickt fassungslos auf den abgeführten Familienvater und flüstert bedrückt: „Nate… wir haben diese Abend-Show erst eingefordert. Jetzt ist es doch wieder unser Fall – denn irgendwie wäre es auch unsere Schuld!“',
+      'Schweigend blickt Maya den Polizisten hinterher und ballt entschlossen die Hände: „Nate… wir haben diese Abend-Show erst versprochen und ihn aufs Pult geholt. Irgendwie tragen wir Mitschuld – wir dürfen Andrew jetzt nicht allein lassen!“',
+    playsDramaticMusic: true,
     sfx: 'page_turn',
-    durationMs: 7200,
-    panFrom: { scale: 1.08, x: 10, y: -3 },
-    panTo: { scale: 1.02, x: -6, y: 0 },
+    durationMs: 9400,
+    panFrom: { scale: 1.12, x: -6, y: -2 },
+    panTo: { scale: 1.02, x: 6, y: 0 },
   },
   {
     id: 'c2_a3_outro_manager_joy',
@@ -138,19 +154,34 @@ export const CRETE_ACT23_OUTRO_SLIDES: OutroSlide[] = [
     kicker: 'Bühnenrampe · MS Aurora',
     speaker: 'Sabine Lindemann (Kreuzfahrtmanagerin)',
     caption:
-      'Während die Menge noch fassungslos tuschelt, strahlt Kreuzfahrtmanagerin Sabine Lindemann selig ins Mikrofon: „Leinen los!! Wir legen sofort von Kreta ab – und auf hoher See geht unser großes Kreuzfahrt-Gerichts-LARP mit dem Prozess gegen Andrew weiter!!“',
+      'Nur wenige Schritte entfernt tritt Sabine Lindemann unter tosendem Scheinwerferlicht erneut ans Mikrofon: „Leinen los, meine Damen und Herren!! Die MS Aurora verlässt Kreta noch in dieser Stunde – und auf hoher See erwartet Sie der größte Schauprozess des Jahres!“',
+    playsDramaticMusic: true,
     sfx: 'alarm',
-    durationMs: 6800,
+    durationMs: 9200,
     panFrom: { scale: 1.0, x: 0, y: 2 },
-    panTo: { scale: 1.09, x: -8, y: -4 },
+    panTo: { scale: 1.09, x: -10, y: -4 },
+  },
+  {
+    id: 'c2_a3_outro_departure_night',
+    imageUrl: '/src/assets/images/outro_crete_harbor_1795089043540.jpg',
+    kicker: 'Tag 4 · Mitternacht · Kurs aufs offene Mittelmeer',
+    speaker: 'Nate Sterling (Gedanke)',
+    caption:
+      'Schwere Maschinen dröhnen tief im Rumpf, als die Küste von Kreta langsam in der Dunkelheit versinkt. Ein bezahltes Urlaubsticket für Marston und Falk, eine verschwiegene 15-Minuten-Stromlücke und der weingetränkte Brief an „A. H.“ – die wahre Jagd hat gerade erst begonnen…',
+    playsDramaticMusic: true,
+    fadeOutDramaticMusic: true,
+    sfx: 'foghorn',
+    durationMs: 8800,
+    panFrom: { scale: 1.0, x: 8, y: 0 },
+    panTo: { scale: 1.1, x: -12, y: -4 },
   },
   {
     id: 'c2_a3_outro_preview',
     kicker: 'Ende von Fall 2 · Aufbruch zu Fall 3',
     caption:
-      'Die MS Aurora verlässt den Hafen von Kreta, während Andrew Higginson in Haft sitzt – doch hinter dem „A. H.“-Brief und der 15-Minuten-Stromlücke wartet das wahre Geheimnis in Fall 3!',
+      'Die MS Aurora fährt hinaus auf hohe See, während Andrew Higginson unschuldig hinter Gittern sitzt – die Verteidigung gegen Staatsanwalt von Falks perfektes Indiziennetz geht in Fall 3 weiter!',
     sfx: 'tension',
-    durationMs: 5600,
+    durationMs: 6500,
     panFrom: { scale: 0.96, x: 0, y: 0 },
     panTo: { scale: 1.02, x: 0, y: 0 },
     isCliffhangerCard: true,
@@ -266,6 +297,14 @@ export function AnimatedOutro({
       soundFx.stopGreekBouzouki();
     }
 
+    if (current.fadeOutDramaticMusic) {
+      soundFx.fadeOutDramaticTheme(Math.max(1600, current.durationMs - 700));
+    } else if (current.playsDramaticMusic && !muted) {
+      soundFx.startDramaticTheme();
+    } else {
+      soundFx.stopDramaticTheme();
+    }
+
     if (current.shoutBanner && !muted) {
       soundFx.playShout(current.shoutBanner);
     }
@@ -280,6 +319,7 @@ export function AnimatedOutro({
       } else {
         soundFx.stopPianoBallad();
         soundFx.stopGreekBouzouki();
+        soundFx.stopDramaticTheme();
         onComplete();
       }
     }, current.durationMs);
@@ -293,6 +333,7 @@ export function AnimatedOutro({
     return () => {
       soundFx.stopPianoBallad();
       soundFx.stopGreekBouzouki();
+      soundFx.stopDramaticTheme();
     };
   }, []);
 
@@ -302,6 +343,7 @@ export function AnimatedOutro({
     } else {
       soundFx.stopPianoBallad();
       soundFx.stopGreekBouzouki();
+      soundFx.stopDramaticTheme();
       onComplete();
     }
   };
@@ -309,6 +351,7 @@ export function AnimatedOutro({
   const handleSkip = () => {
     soundFx.stopPianoBallad();
     soundFx.stopGreekBouzouki();
+    soundFx.stopDramaticTheme();
     onComplete();
   };
 
@@ -471,7 +514,7 @@ export function AnimatedOutro({
                     className="absolute inset-x-0 bottom-0 p-5 sm:p-8 space-y-1.5"
                   >
                     <div className="flex items-center gap-2 text-xs font-semibold text-amber-400">
-                      {(current.playsPiano || current.playsGreekMusic) && (
+                      {(current.playsPiano || current.playsGreekMusic || current.playsDramaticMusic) && (
                         <Music className="w-3.5 h-3.5 shrink-0" />
                       )}
                       <span>{current.kicker}</span>

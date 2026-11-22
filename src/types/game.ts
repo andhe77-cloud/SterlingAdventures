@@ -113,6 +113,7 @@ export interface LogicCombination {
 export interface DialogChoice {
   label: string;
   nextLines: DialogLine[];
+  exitsChoicePool?: boolean;
 }
 
 export interface ChapterInfo {
@@ -169,6 +170,7 @@ export interface DialogLine {
     wrongLines: DialogLine[];
   };
   choices?: DialogChoice[];
+  choicePool?: boolean;
   startsMiniGameId?: MiniGameId;
   backgroundOverrideUrl?: string;
   hideCharacters?: boolean;

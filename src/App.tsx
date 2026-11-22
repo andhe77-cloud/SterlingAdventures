@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Component, type ErrorInfo, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BookOpen,
   Brain,
@@ -20,6 +20,13 @@ import { CaseBinder, type BinderTab } from './components/CaseBinder';
 import { GameStage, type InvestigationMenu } from './components/GameStage';
 import { CRUISE_CASE } from './data/cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './data/creteCase';
+import {
+  KAP4_MORGEN_INTRO_LINES,
+  createCreteAct22Checkpoint,
+  createCreteAct23Checkpoint,
+  createCreteAct24Checkpoint,
+  getChapterJumpOptions,
+} from './data/chapterCheckpoints';
 import type {
   Character,
   CheckpointEntry,
@@ -31,6 +38,49 @@ import type {
   ShoutType,
 } from './types/game';
 import { soundFx } from './utils/soundFx';
+
+class GameErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): { hasError: boolean } {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Advokat-Engine Fehler abgefangen:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-xl p-6 text-center space-y-4">
+            <h2 className="font-display text-xl font-bold text-amber-400">
+              Kleiner technischer Aussetzer
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Dein Spielfortschritt ist sicher im Browser gespeichert. Du kannst jetzt problemlos fortfahren.
+            </p>
+            <button
+              type="button"
+              onClick={() => this.setState({ hasError: false })}
+              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg cursor-pointer"
+            >
+              Szene wiederherstellen
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE];
 const CASE_MAP: Record<string, GameCase> = {
@@ -79,300 +129,6 @@ function createInitialState(caseDef: GameCase = CRUISE_CASE): GameSaveState {
     statementIndex: 0,
     trialCheckpoint: null,
     chapterCheckpoint: null,
-  };
-}
-
-const KAP4_MORGEN_INTRO_LINES: DialogLine[] = [
-  {
-    speakerId: 'maya',
-    emotion: 'confident',
-    text: 'Tag 3, Morgen! Draußen am Horizont tauchen bereits die Umrisse von Kreta auf – und drinnen im Großen Ballsaal beginnt gleich das endgültige Hauptverfahren!',
-  },
-  {
-    speakerId: 'pendelton',
-    emotion: 'neutral',
-    animation: 'slam',
-    sfx: 'gavel_double',
-    text: 'Ruhe im Ballsaal! Das endgültige Hauptverfahren um den gestohlenen Goldenen Chronometer und den Fund in Kabine 312 ist hiermit eröffnet!',
-  },
-  {
-    speakerId: 'falk',
-    emotion: 'smug',
-    text: 'Heute gibt es keine Ausreden mehr, Sterling! Die Beute lag direkt unter dem Bett Ihrer Mandantin! Detective Marston, erklären Sie dem Gericht endlich, warum Sie Miss Brooks erneut verhaften mussten!',
-    startsTestimonyId: 'testimony_kap4_marston',
-  },
-];
-
-function createFinalTrialCheckpoint(): CheckpointEntry {
-  const snapshot: GameCheckpointSnapshot = {
-    caseId: CRUISE_CASE.id,
-    screen: 'PLAYING',
-    phase: 'court',
-    currentChapterId: 'kap4_tag3_morgen',
-    pendingChapterTransition: null,
-    credibility: 5,
-    maxCredibility: 5,
-    currentLocationId: 'courtroom',
-    unlockedLocations: ['suite', 'brig', 'deck', 'cabin_312', 'courtroom'],
-    collectedEvidence: [
-      'ausweis_nate',
-      'tatort_bericht',
-      'vitrine_glocke',
-      'weinglas_spur',
-      'musik_alibi',
-      'balkon_fluchtweg',
-      'keycard_log',
-      'chronometer_kabine_fund',
-      'kabinen_tuch',
-      'kabine_312_log',
-      'schuldschein_brief',
-    ],
-    unlockedThoughts: Object.keys(CRUISE_CASE.thoughts),
-    solvedDeductions: CRUISE_CASE.logicCombinations.map((c) => c.id),
-    flags: {
-      flag_glocke_gefunden: true,
-      flag_wein_gefunden: true,
-      flag_weinglas_lupe_noetig: true,
-      flag_lupe_erhalten: true,
-      flag_weinglas_untersucht: true,
-      flag_arthur_abgewehrt: true,
-      flag_balkon_spur_aktiv: true,
-      flag_balkon_untersucht: true,
-      flag_marston_ueberzeugt: true,
-      flag_zeit_geloest: true,
-      flag_flucht_geloest: true,
-      flag_kap2_freispruch: true,
-      flag_kabinen_twist: true,
-      flag_kap3_tuch_gefunden: true,
-      flag_kap3_log_erhalten: true,
-      flag_kap3_brief_gefunden: true,
-      flag_kap3_arthur_log_gezeigt: true,
-      flag_kap3_arthur_gestand: true,
-      flag_kap3_arthur_abgetreten: true,
-      flag_kap3_trick_geloest: true,
-      flag_kap3_motiv_geloest: true,
-    },
-    visitedTopics: [],
-    inspectedHotspots: [],
-    activeTestimonyId: null,
-    statementIndex: 0,
-  };
-  return {
-    label: CRUISE_CASE.chapters?.kap4_tag3_morgen?.dayLabel ?? 'Tag 3 · Morgen',
-    introLines: [...KAP4_MORGEN_INTRO_LINES],
-    snapshot,
-  };
-}
-
-function createCreteAct22Checkpoint(): CheckpointEntry {
-  const introLines: DialogLine[] = [
-    {
-      speakerId: 'maya',
-      emotion: 'thinking',
-      text: 'Tag 4, Mittag! Kommissar Dimitri hat vorhin oben beim Kapitän tatsächlich ordentlich Druck gemacht.',
-    },
-    {
-      speakerId: 'nate',
-      emotion: 'thinking',
-      text: 'Immerhin dürfen wir uns jetzt endlich offiziell umschauen, statt direkt von Falk vor die Tür gesetzt zu werden.',
-    },
-    {
-      speakerId: 'maya',
-      emotion: 'thinking',
-      text: 'Genau! Neben dem Gang vor Arrestzelle 08 steht uns ab sofort auch die Krankenstation offen – und bis zur Mittagsanhörung bleibt nicht mehr allzu viel Zeit.',
-    },
-    {
-      speakerId: 'nate',
-      emotion: 'thinking',
-      text: 'Gehen wir strukturiert vor: Schauen wir zuerst bei Dr. Vance in der Krankenstation vorbei und hören uns unvoreingenommen an, was die medizinischen Unterlagen zur Nacht sagen.',
-    },
-  ];
-  const snapshot: GameCheckpointSnapshot = {
-    caseId: CRETE_CASE.id,
-    screen: 'PLAYING',
-    phase: 'investigation',
-    currentChapterId: 'c2_akt2_mittag',
-    pendingChapterTransition: null,
-    credibility: 5,
-    maxCredibility: 5,
-    currentLocationId: 'infirmary',
-    unlockedLocations: [
-      'promenade',
-      'music_salon',
-      'vip_salon',
-      'brig_cell',
-      'infirmary',
-    ],
-    collectedEvidence: ['ausweis_nate', 'higginson_notiz'],
-    unlockedThoughts: ['thought_c2_blockade'],
-    solvedDeductions: [],
-    flags: {
-      flag_c2_a1_promenade: true,
-      flag_c2_a1_music: true,
-      flag_c2_a1_vip: true,
-      flag_c2_brig_freigeschaltet: true,
-      flag_c2_a1_rauswurf: true,
-      flag_c2_a1_angenommen: true,
-    },
-    visitedTopics: [],
-    inspectedHotspots: [],
-    activeTestimonyId: null,
-    statementIndex: 0,
-  };
-  return {
-    label: CRETE_CASE.chapters?.c2_akt2_mittag?.dayLabel ?? 'Tag 4 · Mittag (Akt 2.2)',
-    introLines,
-    snapshot,
-  };
-}
-
-function createCreteAct23Checkpoint(): CheckpointEntry {
-  const snapshot: GameCheckpointSnapshot = {
-    caseId: CRETE_CASE.id,
-    screen: 'PLAYING',
-    phase: 'investigation',
-    currentChapterId: 'c2_akt3_nachmittag',
-    pendingChapterTransition: null,
-    credibility: 5,
-    maxCredibility: 5,
-    currentLocationId: 'promenade',
-    unlockedLocations: ['promenade', 'brig_cell'],
-    collectedEvidence: ['ausweis_nate', 'zellen_klima_protokoll'],
-    unlockedThoughts: ['thought_c2_kuehlung_9grad'],
-    solvedDeductions: [],
-    flags: {
-      flag_c2_a1_promenade: true,
-      flag_c2_a1_music: true,
-      flag_c2_a1_vip: true,
-      flag_c2_brig_freigeschaltet: true,
-      flag_c2_a1_rauswurf: true,
-      flag_c2_a1_angenommen: true,
-      flag_c2_a2_rettungsdeck_offen: true,
-      flag_c2_a2_vance_befragt: true,
-      flag_c2_a2_21grad_notiz: true,
-      flag_c2_a2_brandt_protokoll: true,
-      flag_c2_a2_walkie_indiz: true,
-      flag_c2_a2_brandt_widerspruch_geloest: true,
-      flag_c2_a2_zelle_offen: true,
-      flag_c2_a2_seil_gesehen: true,
-      flag_c2_a2_schloss_gesehen: true,
-      flag_c2_a2_klima_geloest: true,
-      flag_c2_a2_vance_temp_gefragt: true,
-      flag_c2_a2_bruecke_freigeschaltet: true,
-      flag_c2_a2_brandt_deck_done: true,
-      flag_c2_a2_bruecke_geloest: true,
-      flag_c2_tatzeit_geloest: true,
-      flag_c2_dimitri_weg: true,
-    },
-    visitedTopics: [],
-    inspectedHotspots: [],
-    activeTestimonyId: null,
-    statementIndex: 0,
-  };
-  return {
-    label: CRETE_CASE.chapters?.c2_akt3_nachmittag?.dayLabel ?? 'Tag 4 · Nachmittag (Akt 2.3)',
-    introLines: [...CRETE_ACT23_INTRO_LINES],
-    snapshot,
-  };
-}
-
-function createCreteAct24Checkpoint(): CheckpointEntry {
-  const introLines: DialogLine[] = [
-    {
-      speakerId: 'pendelton',
-      emotion: 'neutral',
-      animation: 'slam',
-      sfx: 'gavel_double',
-      text: 'Ruhe im Ballsaal! Die Abendsitzung des Not-Tribunals wird eröffnet. Staatsanwalt von Falk – wen rufen Sie zu dem gefundenen Seidenschal in den Zeugenstand?',
-    },
-    {
-      speakerId: 'falk',
-      emotion: 'smug',
-      text: 'Mit zweifelhaftem Vergnügen rufe ich die Eigentümerin des Tat-Hilfsmittels: Mrs. Eleonore Higginson!',
-    },
-    {
-      speakerId: 'eleonore',
-      emotion: 'shocked',
-      animation: 'shock',
-      sfx: 'evidence_chime',
-      text: 'OH MEIN GOTT!! EIN ECHTER GERICHTSSAAL!! Andrew, mach schnell ein Foto – ich stehe genau an DEM Zeugenpult!! Hallo, Euer Ehren! Hallo, Herr Verteidiger!!',
-      startsTestimonyId: 'testimony_c2_eleonore',
-    },
-  ];
-  const snapshot: GameCheckpointSnapshot = {
-    caseId: CRETE_CASE.id,
-    screen: 'PLAYING',
-    phase: 'court',
-    currentChapterId: 'c2_akt4_abend',
-    pendingChapterTransition: null,
-    credibility: 5,
-    maxCredibility: 5,
-    currentLocationId: 'courtroom',
-    unlockedLocations: [
-      'promenade',
-      'music_salon',
-      'vip_salon',
-      'brig_cell',
-      'infirmary',
-      'lifeboat_deck',
-      'courtroom',
-    ],
-    collectedEvidence: [
-      'ausweis_nate',
-      'higginson_notiz',
-      'obduktion_vorlaeufig',
-      'brandt_wachbuch',
-      'zellen_klima_protokoll',
-      'lueftung_streich',
-      'bruecken_log',
-      'seidenschal_spur',
-      'keycard_fragment',
-      'beweis_brandt_luegt',
-      'notiz_todeszeit_0210',
-    ],
-    unlockedThoughts: Object.keys(CRETE_CASE.thoughts).filter(
-      (id) => id !== 'thought_c2_flashback_schacht'
-    ),
-    solvedDeductions: CRETE_CASE.logicCombinations.map((c) => c.id),
-    flags: {
-      flag_c2_a1_promenade: true,
-      flag_c2_a1_music: true,
-      flag_c2_a1_vip: true,
-      flag_c2_brig_freigeschaltet: true,
-      flag_c2_a1_rauswurf: true,
-      flag_c2_a1_angenommen: true,
-      flag_c2_a2_rettungsdeck_offen: true,
-      flag_c2_a2_vance_befragt: true,
-      flag_c2_a2_21grad_notiz: true,
-      flag_c2_a2_brandt_protokoll: true,
-      flag_c2_a2_walkie_indiz: true,
-      flag_c2_a2_brandt_widerspruch_geloest: true,
-      flag_c2_a2_zelle_offen: true,
-      flag_c2_a2_seil_gesehen: true,
-      flag_c2_a2_schloss_gesehen: true,
-      flag_c2_a2_klima_geloest: true,
-      flag_c2_a2_vance_temp_gefragt: true,
-      flag_c2_a2_bruecke_freigeschaltet: true,
-      flag_c2_a2_brandt_deck_done: true,
-      flag_c2_a2_bruecke_geloest: true,
-      flag_c2_tatzeit_geloest: true,
-      flag_c2_dimitri_weg: true,
-      flag_c2_a3_start: true,
-      flag_c2_a3_rucksack_gesichtet: true,
-      flag_c2_rucksack_gefunden: true,
-      flag_c2_conrad_flucht: true,
-      flag_c2_conrad_geloest: true,
-      flag_c2_a3_bereit: true,
-    },
-    visitedTopics: [],
-    inspectedHotspots: [],
-    activeTestimonyId: null,
-    statementIndex: 0,
-  };
-  return {
-    label: CRETE_CASE.chapters?.c2_akt4_abend?.dayLabel ?? 'Tag 4 · Abend (Akt 2.4)',
-    introLines,
-    snapshot,
   };
 }
 
@@ -449,7 +205,7 @@ function buildRepeatInspectLine(label: string, repeatCount: number): DialogLine[
   ];
 }
 
-export default function App() {
+function AdvokatEngineApp() {
   const [state, setState] = useState<GameSaveState>(() => createInitialState(CRUISE_CASE));
   const [savedCaseIds, setSavedCaseIds] = useState<Record<string, boolean>>(() => ({
     [CRUISE_CASE.id]: Boolean(loadSavedState(CRUISE_CASE.id)),
@@ -713,22 +469,22 @@ export default function App() {
       {
         speakerId: 'nate',
         emotion: 'confident',
-        text: 'Schön, dass du wieder an Bord meines Teams bist, Maya! Hör zu: Andrew und ich haben in der Schaltzentrale exakt zwischen 02:04 Uhr und 02:19 Uhr den heimlichen Strom-Absturz des Zellenschlosses gefunden – und eine noch wichtigere Überlegung gemacht.',
+        text: 'Schön, dass du wieder an Bord meines Teams bist, Maya! Hör zu: Andrew und ich haben in der Schaltzentrale exakt zwischen 02:04 Uhr und 02:19 Uhr den heimlichen Strom-Absturz des Zellenschlosses gefunden – genau das Zeitfenster, in dem der Hocker umfiel.',
       },
       {
         speakerId: 'maya',
         emotion: 'thinking',
-        text: 'Oh?! Was denn für eine Überlegung? Hat der Elektriker etwa jemanden im Flur gesehen?',
+        text: 'Oh?! Und hat der Elektriker um zwei Uhr nachts vielleicht jemanden durch die Gänge schleichen sehen?',
       },
       {
         speakerId: 'nate',
         emotion: 'thinking',
-        text: 'Nein, der war hinten bei den Hauptgeneratoren. Aber wir haben überlegt, wer um zwei Uhr nachts überhaupt regulär Dienst hat und etwas bemerkt haben könnte – eigentlich bleibt da außer der Brücke nur die Krankenstation oben! Und wir müssen Dr. Vance ohnehin nach der ausstehenden Toxikologie fragen.',
+        text: 'Nein, der stand hinten bei den lauten Hauptgeneratoren. Aber wir haben überlegt, wer um zwei Uhr morgens im Passagierbereich überhaupt regulär Dienst hat und etwas bemerkt haben könnte: Eigentlich bleibt da außer der Brücke nur noch die Krankenstation!',
       },
       {
         speakerId: 'maya',
         emotion: 'confident',
-        text: 'Stimmt!! Die Krankenstation hat rund um die Uhr Bereitschaft! Gehen wir sofort hoch zu Dr. Vance!',
+        text: 'Stimmt!! Die Krankenstation hat ja rund um die Uhr Bereitschaft! Gehen wir sofort hoch zu Dr. Vance und fragen sie, ob ihr heute Nacht gegen zwei Uhr etwas aufgefallen ist!',
       },
     ]);
   }, [
@@ -817,12 +573,23 @@ export default function App() {
   ) => {
     const restoredSnapshot: GameCheckpointSnapshot = {
       ...checkpoint.snapshot,
+      flags: { ...checkpoint.snapshot.flags },
+      unlockedLocations: [...checkpoint.snapshot.unlockedLocations],
+      collectedEvidence: [...checkpoint.snapshot.collectedEvidence],
+      unlockedThoughts: [...checkpoint.snapshot.unlockedThoughts],
+      solvedDeductions: [...checkpoint.snapshot.solvedDeductions],
+      visitedTopics: [...checkpoint.snapshot.visitedTopics],
+      inspectedHotspots: [...checkpoint.snapshot.inspectedHotspots],
       screen: 'PLAYING',
       credibility: checkpoint.snapshot.maxCredibility,
     };
     setState((prev) => ({
       ...restoredSnapshot,
-      trialCheckpoint: setAsChapterCheckpoint ? null : (prev.trialCheckpoint ?? null),
+      trialCheckpoint: setAsChapterCheckpoint
+        ? restoredSnapshot.phase === 'court'
+          ? checkpoint
+          : null
+        : (prev.trialCheckpoint ?? null),
       chapterCheckpoint: setAsChapterCheckpoint
         ? checkpoint
         : (prev.chapterCheckpoint ?? null),
@@ -1028,10 +795,23 @@ export default function App() {
   };
 
   const handleSelectChoice = (choiceIndex: number) => {
-    const current = dialogQueue[0];
-    const choice = current?.choices?.[choiceIndex];
-    if (!choice) return;
-    setDialogQueue([...choice.nextLines, ...dialogQueue.slice(1)]);
+    setDialogQueue((prevQueue) => {
+      const current = prevQueue[0];
+      const choice = current?.choices?.[choiceIndex];
+      if (!choice) return prevQueue;
+      const rest = prevQueue.slice(1);
+      if (current.choicePool && !choice.exitsChoicePool && current.choices) {
+        const remainingChoices = current.choices.filter((_, idx) => idx !== choiceIndex);
+        if (remainingChoices.length > 0) {
+          const repeatNode: DialogLine = {
+            ...current,
+            choices: remainingChoices,
+          };
+          return [...choice.nextLines, repeatNode, ...rest];
+        }
+      }
+      return [...choice.nextLines, ...rest];
+    });
   };
 
   const handleCompleteMiniGame = (miniGameId: MiniGameId) => {
@@ -1709,6 +1489,8 @@ export default function App() {
     soundFx.muted = next;
     if (next) {
       soundFx.stopPianoBallad();
+      soundFx.stopGreekBouzouki();
+      soundFx.stopDramaticTheme();
     }
     setMuted(next);
   };
@@ -2219,29 +2001,29 @@ export default function App() {
         />
       )}
 
-      {/* Restart Options Modal */}
+      {/* Restart Options & Chapter Selection Modal */}
       {showRestartModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-xs p-4"
           role="dialog"
           aria-modal="true"
-          aria-label="Neustart wählen"
+          aria-label="Neustart und Kapitelauswahl"
           onClick={() => setShowRestartModal(false)}
         >
           <div
-            className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-xl p-6 shadow-2xl space-y-5"
+            className="w-full max-w-lg max-h-[90vh] flex flex-col bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-slate-800 shrink-0">
               <div>
                 <h3
                   onClick={handleSecretDevTap}
                   className="font-display text-lg font-bold text-slate-100 select-none"
                 >
-                  Neustart wählen
+                  Neustart & Kapitelauswahl
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Starte ab dem aktuellen Kapitelanfang, dem letzten Verhör oder kehre zur Fallauswahl zurück.
+                  Starte ab dem aktuellen Stand oder springe direkt an den Anfang einer Ermittlung bzw. Verhandlung.
                 </p>
               </div>
               <button
@@ -2254,122 +2036,168 @@ export default function App() {
               </button>
             </div>
 
-            <div className="flex flex-col gap-2.5">
-              {state.chapterCheckpoint && (
-                <button
-                  type="button"
-                  onClick={() => restoreCheckpoint(state.chapterCheckpoint!)}
-                  className="w-full text-left px-4 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg transition-colors cursor-pointer"
-                >
-                  <div className="text-xs font-bold">
-                    Kapitelanfang neu starten
-                  </div>
-                  <div className="text-[11px] font-medium text-slate-900/80 mt-0.5">
-                    {state.chapterCheckpoint.label} · mit voller Glaubwürdigkeit
-                  </div>
-                </button>
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+              {(state.chapterCheckpoint || state.trialCheckpoint) && (
+                <div className="flex flex-col gap-2">
+                  {state.chapterCheckpoint && (
+                    <button
+                      type="button"
+                      onClick={() => restoreCheckpoint(state.chapterCheckpoint!)}
+                      className="w-full text-left px-4 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <div className="text-xs font-bold">
+                        Aktuellen Abschnitt neu starten
+                      </div>
+                      <div className="text-[11px] font-medium text-slate-900/80 mt-0.5">
+                        {state.chapterCheckpoint.label} · mit voller Glaubwürdigkeit
+                      </div>
+                    </button>
+                  )}
+
+                  {state.trialCheckpoint && (
+                    <button
+                      type="button"
+                      onClick={() => restoreCheckpoint(state.trialCheckpoint!)}
+                      className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <div className="text-xs font-semibold">
+                        Letztes Verhör wiederholen
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-0.5 truncate">
+                        {state.trialCheckpoint.label}
+                      </div>
+                    </button>
+                  )}
+                </div>
               )}
 
-              {state.trialCheckpoint && (
-                <button
-                  type="button"
-                  onClick={() => restoreCheckpoint(state.trialCheckpoint!)}
-                  className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
-                >
-                  <div className="text-xs font-semibold">
-                    Prozess-Checkpoint laden
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5 truncate">
-                    {state.trialCheckpoint.label}
-                  </div>
-                </button>
-              )}
+              <div className="space-y-2.5">
+                <div className="text-[11px] font-semibold tracking-wide text-slate-400">
+                  Kapitelauswahl ({activeCase.badgeLabel ?? activeCase.title})
+                </div>
 
-              {activeCase.id === CRUISE_CASE.id ? (
+                <div className="space-y-2">
+                  {getChapterJumpOptions(activeCase.id).map((chapter) => {
+                    const isCurrent = state.currentChapterId === chapter.id;
+                    return (
+                      <div
+                        key={chapter.id}
+                        className={`rounded-lg border p-3 space-y-2 ${
+                          isCurrent
+                            ? 'bg-slate-800/80 border-amber-500/40'
+                            : 'bg-slate-950/60 border-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div>
+                            <div className="text-xs font-bold text-slate-100">
+                              {chapter.chapterLabel}
+                            </div>
+                            <div className="text-[11px] text-slate-400">
+                              {chapter.chapterTitle}
+                            </div>
+                          </div>
+                          {isCurrent && (
+                            <span className="text-[10px] font-semibold text-amber-400 shrink-0">
+                              Aktuell
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {chapter.investigation && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                restoreCheckpoint(
+                                  chapter.investigation!.createCheckpoint(),
+                                  true
+                                )
+                              }
+                              className="text-left px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-md transition-colors cursor-pointer"
+                            >
+                              <div className="text-xs font-semibold text-amber-300">
+                                {chapter.investigation.label}
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                                {chapter.investigation.subtitle}
+                              </div>
+                            </button>
+                          )}
+                          {chapter.trial && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                restoreCheckpoint(
+                                  chapter.trial!.createCheckpoint(),
+                                  true
+                                )
+                              }
+                              className="text-left px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-md transition-colors cursor-pointer"
+                            >
+                              <div className="text-xs font-semibold text-sky-300">
+                                {chapter.trial.label}
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                                {chapter.trial.subtitle}
+                              </div>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {activeCase.id === CRETE_CASE.id && devShortcutsUnlocked && (
+                    <button
+                      type="button"
+                      onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
+                      className="w-full text-left px-3.5 py-2.5 bg-amber-950/40 hover:bg-amber-900/40 border border-amber-500/30 text-amber-200 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <div className="text-xs font-semibold">
+                        Zu Akt 2.4 springen (Eleonore im Zeugenstand)
+                      </div>
+                      <div className="text-[10px] text-amber-300/75 mt-0.5">
+                        Zusatz-Szene · ab Tag 4 Abend
+                      </div>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="pt-1 flex flex-col gap-2">
                 <button
                   type="button"
-                  onClick={() => restoreCheckpoint(createFinalTrialCheckpoint(), true)}
-                  className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
+                  onClick={() => startNewGame(activeCase.id)}
+                  className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors cursor-pointer"
                 >
                   <div className="text-xs font-semibold">
-                    Zur letzten Verhandlung springen (Tag 3 · Morgen)
+                    Aktuellen Fall komplett neu starten
                   </div>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    Direkt zum Hauptverfahren · ab Kommissar Marston
+                    Zurück zum Intro von {activeCase.title}
                   </div>
                 </button>
-              ) : devShortcutsUnlocked ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => restoreCheckpoint(createCreteAct22Checkpoint(), true)}
-                    className="w-full text-left px-4 py-2.5 bg-amber-950/50 hover:bg-amber-900/50 border border-amber-500/40 text-amber-200 rounded-lg transition-colors cursor-pointer"
-                  >
-                    <div className="text-xs font-semibold">
-                      Zu Akt 2.2 springen (Tag 4 · Mittag)
-                    </div>
-                    <div className="text-[11px] text-amber-300/75 mt-0.5">
-                      Entwickler-Shortcut · ab Krankenstation / Tatzeit-Ermittlung
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => restoreCheckpoint(createCreteAct23Checkpoint(), true)}
-                    className="w-full text-left px-4 py-2.5 bg-amber-950/50 hover:bg-amber-900/50 border border-amber-500/40 text-amber-200 rounded-lg transition-colors cursor-pointer"
-                  >
-                    <div className="text-xs font-semibold">
-                      Zu Akt 2.3 springen (Tag 4 · Nachmittag)
-                    </div>
-                    <div className="text-[11px] text-amber-300/75 mt-0.5">
-                      Entwickler-Shortcut · blauer Schal, Kreuzfahrtmanagerin & Magnetschloss
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => restoreCheckpoint(createCreteAct24Checkpoint(), true)}
-                    className="w-full text-left px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 rounded-lg transition-colors cursor-pointer"
-                  >
-                    <div className="text-xs font-semibold">
-                      Zu Akt 2.4 springen (Eleonore im Zeugenstand)
-                    </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">
-                      Direkt ab Tag 4 · Abend & danach Akt 2.5
-                    </div>
-                  </button>
-                </>
-              ) : null}
 
-              <button
-                type="button"
-                onClick={() => startNewGame(activeCase.id)}
-                className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="text-xs font-semibold">
-                  Aktuellen Fall komplett neu starten
-                </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  Zurück zum Intro von {activeCase.title}
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setShowRestartModal(false);
-                  setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }));
-                }}
-                className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="text-xs font-semibold">
-                  Zurück zur Fallauswahl
-                </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  Zwischen Fall 1 und Fall 2 wechseln
-                </div>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowRestartModal(false);
+                    setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }));
+                  }}
+                  className="w-full text-left px-4 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div className="text-xs font-semibold">
+                    Zurück zur Fallauswahl
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">
+                    Zwischen Fall 1 und Fall 2 wechseln
+                  </div>
+                </button>
+              </div>
             </div>
 
-            <div className="flex justify-end pt-1">
+            <div className="flex justify-end px-6 py-3 border-t border-slate-800 bg-slate-900 shrink-0">
               <button
                 type="button"
                 onClick={() => setShowRestartModal(false)}
@@ -2382,5 +2210,13 @@ export default function App() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <GameErrorBoundary>
+      <AdvokatEngineApp />
+    </GameErrorBoundary>
   );
 }

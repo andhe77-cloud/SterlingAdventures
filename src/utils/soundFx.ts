@@ -28,6 +28,10 @@ class SoundEngine {
   private greekFadeTimer: number | null = null;
   private greekMasterGain: GainNode | null = null;
   private greekStep = 0;
+  private dramaticTimer: number | null = null;
+  private dramaticFadeTimer: number | null = null;
+  private dramaticMasterGain: GainNode | null = null;
+  private dramaticStep = 0;
   private rawShoutBytes = new Map<ShoutType, ArrayBuffer>();
   private decodedShouts = new Map<ShoutType, AudioBuffer>();
   private shoutPreloadStarted = false;
@@ -744,6 +748,138 @@ class SoundEngine {
 
     oscA.start(startTime);
     oscA.stop(startTime + duration + 0.03);
+  }
+
+  public startDramaticTheme(): void {
+    if (this.muted || typeof window === 'undefined') return;
+    if (this.dramaticFadeTimer !== null) {
+      window.clearTimeout(this.dramaticFadeTimer);
+      this.dramaticFadeTimer = null;
+    }
+
+    const ctx = this.getContext();
+    if (ctx) {
+      if (!this.dramaticMasterGain) {
+        this.dramaticMasterGain = ctx.createGain();
+        this.dramaticMasterGain.connect(ctx.destination);
+      }
+      this.dramaticMasterGain.gain.cancelScheduledValues(ctx.currentTime);
+      this.dramaticMasterGain.gain.setValueAtTime(1.0, ctx.currentTime);
+    }
+
+    if (this.dramaticTimer !== null) return;
+
+    // Tense C-minor / G7 courtroom suspense ostinato ([bassHz, leadHz])
+    const sequence: Array<[number | null, number | null]> = [
+      [130.81, 392.0], // C3 + G4
+      [130.81, null],
+      [155.56, 311.13], // Eb3 + Eb4
+      [130.81, 349.23], // C3 + F4
+      [130.81, 392.0], // C3 + G4
+      [130.81, null],
+      [146.83, 466.16], // D3 + Bb4
+      [130.81, 392.0], // C3 + G4
+      [103.83, 311.13], // Ab2 + Eb4
+      [103.83, null],
+      [130.81, 392.0], // C3 + G4
+      [103.83, 349.23], // Ab2 + F4
+      [98.0, 293.66], // G2 + D4
+      [98.0, 311.13], // G2 + Eb4
+      [123.47, 293.66], // B2 + D4
+      [98.0, 246.94], // G2 + B3
+      [116.54, 349.23], // Bb2 + F4
+      [116.54, null],
+      [146.83, 392.0], // D3 + G4
+      [116.54, 349.23], // Bb2 + F4
+      [103.83, 311.13], // Ab2 + Eb4
+      [103.83, 293.66], // Ab2 + D4
+      [98.0, 261.63], // G2 + C4
+      [98.0, 246.94], // G2 + B3
+    ];
+
+    this.dramaticStep = 0;
+
+    const triggerStep = () => {
+      const activeCtx = this.getContext();
+      if (!activeCtx) return;
+      const [bassFreq, leadFreq] = sequence[this.dramaticStep % sequence.length];
+      this.dramaticStep += 1;
+      const now = activeCtx.currentTime;
+
+      if (bassFreq) {
+        this.dramaticVoice(activeCtx, bassFreq, 0.28, 0.075, now, true);
+      }
+      if (leadFreq) {
+        this.dramaticVoice(activeCtx, leadFreq, 0.44, 0.052, now, false);
+      }
+    };
+
+    triggerStep();
+    this.dramaticTimer = window.setInterval(triggerStep, 235);
+  }
+
+  public fadeOutDramaticTheme(durationMs = 2200): void {
+    if (this.dramaticFadeTimer !== null) {
+      window.clearTimeout(this.dramaticFadeTimer);
+      this.dramaticFadeTimer = null;
+    }
+    const ctx = this.ctx;
+    if (ctx && this.dramaticMasterGain && !this.muted) {
+      const now = ctx.currentTime;
+      const currentVal = Math.max(0.001, this.dramaticMasterGain.gain.value);
+      this.dramaticMasterGain.gain.cancelScheduledValues(now);
+      this.dramaticMasterGain.gain.setValueAtTime(currentVal, now);
+      this.dramaticMasterGain.gain.exponentialRampToValueAtTime(
+        0.0005,
+        now + durationMs / 1000
+      );
+    }
+    this.dramaticFadeTimer = window.setTimeout(() => {
+      this.dramaticFadeTimer = null;
+      this.stopDramaticTheme();
+    }, durationMs);
+  }
+
+  public stopDramaticTheme(): void {
+    if (this.dramaticFadeTimer !== null) {
+      window.clearTimeout(this.dramaticFadeTimer);
+      this.dramaticFadeTimer = null;
+    }
+    if (this.dramaticTimer !== null) {
+      window.clearInterval(this.dramaticTimer);
+      this.dramaticTimer = null;
+    }
+  }
+
+  private dramaticVoice(
+    ctx: AudioContext,
+    freq: number,
+    duration: number,
+    volume: number,
+    startTime: number,
+    isBass: boolean
+  ): void {
+    const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+
+    osc.type = isBass ? 'sawtooth' : 'triangle';
+    osc.frequency.setValueAtTime(freq, startTime);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(isBass ? 420 : 1450, startTime);
+    filter.frequency.exponentialRampToValueAtTime(isBass ? 190 : 720, startTime + duration);
+
+    gain.gain.setValueAtTime(0.001, startTime);
+    gain.gain.linearRampToValueAtTime(volume, startTime + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0007, startTime + duration);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.dramaticMasterGain ?? ctx.destination);
+
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.03);
   }
 
   private tone(

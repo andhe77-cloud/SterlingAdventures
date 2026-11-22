@@ -488,12 +488,19 @@ export function GameStage({
 
           {/* Branching Choices */}
           {!isTyping && currentLine.choices && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <div
+              className={`grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 ${
+                currentLine.choices.length > 6 ? 'max-h-64 overflow-y-auto pr-1' : ''
+              }`}
+            >
               {currentLine.choices.map((choice, idx) => (
                 <button
-                  key={choice.label}
+                  key={`${idx}-${choice.label}`}
                   type="button"
-                  onClick={() => onSelectChoice(idx)}
+                  onClick={(e) => {
+                    e.currentTarget.blur();
+                    onSelectChoice(idx);
+                  }}
                   className="text-left px-4 py-2.5 bg-slate-800 hover:bg-blue-700 border border-slate-700 hover:border-blue-400 text-slate-100 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   {choice.label}
