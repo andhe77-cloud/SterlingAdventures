@@ -197,9 +197,9 @@ export const CRETE_CASE: GameCase = {
   badgeLabel: 'Fall 2 · Schatten über Kreta',
   description:
     'Endlich kommt die sonnige Küste von Kreta in Sicht – doch noch bevor die Passagiere an Land dürfen, schrillen über die MS Aurora erneut die Alarmpfeifen. Ein rätselhafter Vorfall tief unter Deck zwingt Nate und Maya abermals ans Werk, während der ersehnte Urlaub immer weiter in die Ferne rückt.',
-  victoryTitle: 'AKT 2.5 ABGESCHLOSSEN!',
+  victoryTitle: 'FALL 2 ABGESCHLOSSEN!',
   victorySummary:
-    'Du hast die wahre Tatzeit in internationalen Gewässern bewiesen, Eleonore vor dem Tribunal entlastet und Sicherheitsoffizier Lukas Brandt im Verhör überführt – doch der wahre Drahtzieher an Bord schlägt noch vor der Hafenöffnung zurück. (Fortsetzung folgt ab Akt 2.6!)',
+    'Du hast bewiesen, dass Arthur Morgan in Zelle 08 betäubt und das MS-400-Schloss gezielt manipuliert wurde. Doch Staatsanwalt von Falk nutzte Andrews technisches Wissen eiskalt für eine überraschende Wende — mit schwerwiegenden Folgen bei der Abfahrt von Kreta.',
   supportsOutro: false,
   initialChapterId: 'c2_akt1_morgen',
   chapters: {
@@ -437,7 +437,7 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'eleonore',
               emotion: 'confident',
-              text: 'Hihi, genau so reden bescheidene Hauptcharaktere immer kurz vor dem nächsten Kapitel!',
+              text: 'Hihi, genau so reden die ruhigen Helden in unseren Sonntagabend-Krimis auch immer, kurz bevor es richtig losgeht!',
             },
           ],
         },
@@ -452,7 +452,7 @@ export const CRETE_CASE: GameCase = {
             {
               speakerId: 'eleonore',
               emotion: 'shocked',
-              text: 'Oh!! Andrew, hast du diese Entschlossenheit gehört?! Wie in Teil 1!!',
+              text: 'Oh!! Andrew, hast du diese Entschlossenheit gehört?! Genau wie gestern Abend im Ballsaal!!',
             },
           ],
         },
@@ -636,6 +636,11 @@ export const CRETE_CASE: GameCase = {
       bio: 'Steht völlig unter Schock, nachdem Arthur Morgan über Nacht in seiner eigenen Arrestzelle gestorben ist.',
       accentColor: '#64748b',
       portraitUrl: '/src/assets/images/sprite_marston_detective_1795080940855.jpg',
+      portraits: {
+        grumpy: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+        headshake: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+        sweating: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+      },
       side: 'right',
     },
     falk: {
@@ -4803,19 +4808,19 @@ export const CRETE_CASE: GameCase = {
                 text: '(Verdammt… wie hatte Andrew diesen ganzen Kabel- und Schaltkram vorhin genau genannt?! Ähm… mal sehen, wie ich das dem Richter erkläre…)',
                 choices: [
                   {
-                    label: '„Äh… das AS-400-Dingsbums-Relais macht um 02:04 Uhr Bumm!“',
+                    label: '„Äh… das MS-400-Dingsbums-Relais macht um 02:04 Uhr Bumm!“',
                     nextLines: [
                       {
                         speakerId: 'nate',
                         emotion: 'sweating',
-                        text: 'Also, Euer Ehren! Man nimmt diesen… äh… AS-400-Dingsbums-Stecker am Türrahmen, lässt den kurz auf der Leitung Bumm machen, und zack – dann schnappt der Magnet vor Schreck einfach von selber auf!!',
+                        text: 'Also, Euer Ehren! Man nimmt diesen… äh… MS-400-Dingsbums-Stecker am Türrahmen, lässt den kurz auf der Leitung Bumm machen, und zack – dann schnappt der Magnet vor Schreck einfach von selber auf!!',
                       },
                       {
                         speakerId: 'falk',
                         emotion: 'facepalm',
                         animation: 'facepalm',
                         sfx: 'facepalm',
-                        text: 'Ein „AS-400-Dingsbums-Stecker“, der „Bumm“ macht, weil sich der Magnet „erschreckt“?! Haben Sie heute Nachmittag am Sonnenstich gelitten, Sterling?!',
+                        text: 'Ein „MS-400-Dingsbums-Stecker“, der „Bumm“ macht, weil sich der Magnet „erschreckt“?! Haben Sie heute Nachmittag am Sonnenstich gelitten, Sterling?!',
                       },
                     ],
                   },
@@ -6062,7 +6067,7 @@ export const CRETE_CASE: GameCase = {
                 emotion: 'confident',
                 shout: 'EINSPRUCH!',
                 shake: true,
-                text: 'HIER IST DIE WAHRHEIT, Euer Ehren! Um exakt 03:00 Uhr wurde die Temperatur in Zelle 08 massiv auf eisige 9 °C heruntergedreht – und um 02:10 Uhr hörten zwei Zeugen durch den Lüftungsschacht den Metallhocker krachen! Arthur starb schon um 02:15 Uhr, NICHT um 07:30 Uhr!',
+                text: 'HIER IST DIE WAHRHEIT, Euer Ehren! Um exakt 03:00 Uhr wurde die Temperatur in Zelle 08 massiv nach unten geregelt – und um 02:10 Uhr hörten zwei Zeugen durch den Lüftungsschacht den Metallhocker krachen! Arthur starb schon gegen 02:10 Uhr, NICHT um 07:30 Uhr!',
               },
               {
                 speakerId: 'dimitri',
@@ -6087,10 +6092,10 @@ export const CRETE_CASE: GameCase = {
                 emotion: 'facepalm',
                 animation: 'facepalm',
                 sfx: 'facepalm',
-                text: 'Gah!! Was soll dieser Irrsinn, Käpt’n?! Und selbst wenn Sie um 02:15 Uhr herum herumgetrickst haben – zeigen Sie dem Tribunal endlich den konkreten Beweis, Sterling, WO das Schiff um 02:15 Uhr war und warum Brammer überhaupt diese Stunden verschleppen wollte!!',
+                text: 'Gah!! Was soll dieser Irrsinn, Käpt’n?! Und selbst wenn Sie um 02:10 Uhr herumgetrickst haben – zeigen Sie dem Tribunal endlich den konkreten Beweis, Sterling, WO das Schiff um 02:10 Uhr war und warum Brammer überhaupt diese Stunden verschleppen wollte!!',
                 requiresFinalEvidencePrompt: {
                   question:
-                    'Zeige Staatsanwalt von Falk, Judge Pendelton und Kommissar Dimitri den Beweis für die Position um 02:15 Uhr und Kapitän Brammers Motiv!',
+                    'Zeige Staatsanwalt von Falk, Judge Pendelton und Kommissar Dimitri den Beweis für die Position um 02:10 Uhr und Kapitän Brammers Motiv!',
                   correctEvidenceId: 'bruecken_log',
                   successLines: [
                     {
@@ -6098,7 +6103,7 @@ export const CRETE_CASE: GameCase = {
                       emotion: 'confident',
                       shout: 'VOLLTREFFER!',
                       shake: true,
-                      text: 'Hier ist Ihr Beweis, Staatsanwalt von Falk! Laut Kapitän Brammers Brücken-Log passierte die MS Aurora die griechische 12-Meilen-Grenze erst um 05:45 Uhr! Um 02:15 Uhr trieben wir noch 42 Seemeilen vor Kreta – mitten in INTERNATIONALEN GEWÄSSERN!',
+                      text: 'Hier ist Ihr Beweis, Staatsanwalt von Falk! Laut Kapitän Brammers Brücken-Log passierte die MS Aurora die griechische 12-Meilen-Grenze erst um 05:45 Uhr! Um 02:10 Uhr trieben wir noch 42 Seemeilen vor Kreta – mitten in INTERNATIONALEN GEWÄSSERN!',
                     },
                     {
                       speakerId: 'captain',
@@ -6116,7 +6121,7 @@ export const CRETE_CASE: GameCase = {
                       speakerId: 'dimitri',
                       emotion: 'confident',
                       sfx: 'gavel_double',
-                      text: 'Απίστευτο!! Στις 02:15 στα 42 ναυτικά μίλια – καθαρά διεθνή ύδατα!! Κύριε Στέρλινγκ, είστε ιδιοφυΐα! Αυτό σημαίνει ότι η Ελληνική Ακτοφυλακή δεν έχει καμία απολύτως αρμοδιότητα! Εγώ φεύγω για έναν καλό φρέντο εσπρέσο στο λιμάνι – γεια σας!!',
+                      text: 'Απίστευτο!! Στις 02:10 στα 42 ναυτικά μίλια – καθαρά διεθνή ύδατα!! Κύριε Στέρλινγκ, είστε ιδιοφυΐα! Αυτό σημαίνει ότι η Ελληνική Ακτοφυλακή δεν έχει καμία απολύτως αρμοδιότητα! Εγώ φεύγω για έναν καλό φρέντο εσπρέσο στο λιμάνι – γεια σας!!',
                     },
                     {
                       speakerId: 'maya',
@@ -6149,12 +6154,12 @@ export const CRETE_CASE: GameCase = {
                       speakerId: 'nate',
                       emotion: 'thinking',
                       sfx: 'tension',
-                      text: 'Stimmt – wir wissen jetzt, warum Kapitän Brammer und Dr. Vance die Uhrzeit verschleppt haben. Aber eines ist immer noch völlig offen: War Arthurs Tod um 02:15 Uhr nun tatsächlich ein Selbstmord… oder hat jemand in Zelle 08 nachgeholfen? Genau das müssen wir als Nächstes herausfinden!',
+                      text: 'Stimmt – wir wissen jetzt, warum Kapitän Brammer und Dr. Vance die Uhrzeit verschleppt haben. Aber eines ist immer noch völlig offen: War Arthurs Tod um 02:10 Uhr nun tatsächlich ein Selbstmord… oder hat jemand in Zelle 08 nachgeholfen? Genau das müssen wir als Nächstes herausfinden!',
                       completesChapter: {
                         completedChapterTitle: 'Akt 2.2 abgeschlossen',
                         completedTimeLabel: 'Tag 4 · Mittag beendet',
                         summary:
-                          'Du hast aufgedeckt, dass Kapitän Brammer Dr. Vance befahl, die Todeszeit auf 07:30 Uhr zu verschieben, damit das Schiff in den Hafen einlaufen durfte. In Wahrheit starb Arthur um 02:15 Uhr in internationalen Gewässern – Dimitri geht entspannt von Bord, alle Passagiere sind außer sich vor Wut über die gesperrte Gangway, und ob es Suizid war oder nicht, bleibt völlig offen!',
+                          'Du hast aufgedeckt, dass Kapitän Brammer Dr. Vance befahl, die Todeszeit auf 07:30 Uhr zu verschieben, damit das Schiff in den Hafen einlaufen durfte. In Wahrheit starb Arthur um 02:10 Uhr in internationalen Gewässern – Dimitri geht entspannt von Bord, alle Passagiere sind außer sich vor Wut über die gesperrte Gangway, und ob es Suizid war oder nicht, bleibt völlig offen!',
                         nextChapterId: 'c2_akt3_nachmittag',
                         nextLocationId: 'promenade',
                         nextPhase: 'investigation',
@@ -6178,7 +6183,7 @@ export const CRETE_CASE: GameCase = {
                       emotion: 'facepalm',
                       animation: 'facepalm',
                       sfx: 'facepalm',
-                      text: 'Was soll das über unsere Position um 02:15 Uhr beweisen?! Schauen Sie auf die Schiffsroute des Kapitäns, Sterling!',
+                      text: 'Was soll das über unsere Position um 02:10 Uhr beweisen?! Schauen Sie auf die Schiffsroute des Kapitäns, Sterling!',
                     },
                   ],
                 },
@@ -6333,7 +6338,7 @@ export const CRETE_CASE: GameCase = {
               {
                 speakerId: 'eleonore',
                 emotion: 'shocked',
-                text: 'Immerhin ein echter Rauswurf wie in Teil 3!! Viel Erfolg, Mr. Sterling!!',
+                text: 'Immerhin ein echter Rauswurf wie im Fernsehkrimi!! Viel Erfolg, Mr. Sterling!!',
                 completesChapter: {
                   completedChapterTitle: 'Akt 2.4 abgeschlossen',
                   completedTimeLabel: 'Tag 4 · Abend beendet',
@@ -6469,7 +6474,7 @@ export const CRETE_CASE: GameCase = {
                       speakerId: 'maya',
                       emotion: 'thinking',
                       winGame: true,
-                      text: 'Akt 2.5 ist gelöst, Nate – Brandt wird abgeführt! Aber wer ist der große Unbekannte auf der VIP-Liste? Das finden wir in Akt 2.6 heraus!',
+                      text: 'Brandt wird abgeführt, Nate! Aber wer steckt wirklich hinter dem Befehl ganz oben auf der VIP-Liste? Das lassen wir nicht auf sich beruhen!',
                     },
                   ],
                   wrongLines: [

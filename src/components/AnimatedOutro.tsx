@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { AlertTriangle, ChevronRight, Music, SkipForward } from 'lucide-react';
+import { AlertTriangle, Anchor, ChevronRight, Music, SkipForward } from 'lucide-react';
 import { soundFx } from '../utils/soundFx';
 import { resolveAssetPath } from '../utils/assetPath';
 
@@ -9,6 +9,7 @@ interface AnimatedOutroProps {
   slides?: OutroSlide[];
   cliffhangerTitle?: string;
   finishButtonLabel?: string;
+  accentVariant?: 'alert' | 'ending';
   onComplete: () => void;
 }
 
@@ -24,6 +25,8 @@ export interface OutroSlide {
   fadeOutGreekMusic?: boolean;
   playsDramaticMusic?: boolean;
   fadeOutDramaticMusic?: boolean;
+  playsMaltaMusic?: boolean;
+  fadeOutMaltaMusic?: boolean;
   shoutBanner?: 'MOMENT MAL!';
   sfx?: 'foghorn' | 'alarm' | 'tension' | 'page_turn';
   durationMs: number;
@@ -188,6 +191,232 @@ export const CRETE_ACT23_OUTRO_SLIDES: OutroSlide[] = [
   },
 ];
 
+export const CASE3_ST2_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'f3_st2_outro_vertagt',
+    imageUrl: '/src/assets/images/cruise_court_ballroom_1795039845955.jpg',
+    kicker: 'Tag 5 · Später Abend · Großer Ballsaal',
+    speaker: 'Judge Pendelton & Detective Marston',
+    caption:
+      'Mit drei krachenden Einsprüchen hat Nate das Täterwissen, die Schal-Lüge und Falks Nacht-Theorie in Stücke gerissen! Wegen des ungeklärten 45.000-€-Briefes vertagt Judge Pendelton den Prozess auf morgen – und Detective Marston verbürgt sich persönlich mit seinem Wort für Andrews Erscheinen, sodass Andrew sofort freikommt!',
+    playsPiano: true,
+    sfx: 'page_turn',
+    durationMs: 10200,
+    panFrom: { scale: 1.0, x: -8, y: 0 },
+    panTo: { scale: 1.08, x: 10, y: -3 },
+  },
+  {
+    id: 'f3_st2_outro_reunion_1',
+    imageUrl: '/src/assets/images/outro_f3_higginson_reunited_matched_1795445475684.jpg',
+    kicker: 'Abenddämmerung · Promenadendeck',
+    speaker: 'Familie Higginson',
+    caption:
+      'Kaum öffnen sich die schweren Saaltüren ins sanfte Abendlicht der Laternen, stürzen Eleonore, Leo, Rick und der kleine Conrad jubelnd auf Andrew zu. Nach einer schier endlosen Nacht voll Angst und Zellen-Trennung hält die ganze Familie Higginson einander endlich wieder fest im Arm!',
+    playsPiano: true,
+    durationMs: 9600,
+    panFrom: { scale: 1.0, x: 0, y: 2 },
+    panTo: { scale: 1.09, x: -10, y: -4 },
+  },
+  {
+    id: 'f3_st2_outro_reunion_2',
+    imageUrl: '/src/assets/images/outro_f3_higginson_reunited_matched_1795445475684.jpg',
+    kicker: 'Wieder vereint auf hoher See',
+    speaker: 'Andrew, Eleonore & Maya',
+    caption:
+      'Während Conrad begeistert von seinem Piraten-Abenteuer plappert und Andrew lächelnd über die Brille wischt, grinst Maya neben Nate tapfer durch ihre Augenringe: „Okay… vielleicht war dieser zehnstündige Kinderdienst am Ende doch jeden Trubel wert!“',
+    playsPiano: true,
+    fadeOutEvening: true,
+    durationMs: 8800,
+    panFrom: { scale: 1.09, x: -10, y: -4 },
+    panTo: { scale: 1.02, x: 6, y: 0 },
+  },
+  {
+    id: 'f3_st2_outro_sabine_show',
+    imageUrl: '/src/assets/images/outro_f3_sabine_malta_1795422337962.jpg',
+    kicker: 'Showbühne · MS Aurora Abendprogramm',
+    speaker: 'Sabine Lindemann (Kreuzfahrtmanagerin)',
+    caption:
+      'Drinnen flammen plötzlich noch einmal alle goldenen Scheinwerfer auf! Mit funkelndem Mikrofon wirbelt Sabine Lindemann zurück ins Rampenlicht: „WELCH EIN DRAMATISCHER SEETAG, MEINE DAMEN UND HERREN!! Drei Anklagepunkte pulverisiert – doch das letzte große Geheimnis bleibt noch offen!!“',
+    playsMaltaMusic: true,
+    sfx: 'alarm',
+    durationMs: 9600,
+    panFrom: { scale: 1.0, x: 8, y: 0 },
+    panTo: { scale: 1.08, x: -10, y: -4 },
+  },
+  {
+    id: 'f3_st2_outro_malta',
+    imageUrl: '/src/assets/images/outro_f3_sabine_malta_1795422337962.jpg',
+    kicker: 'Kurs auf den nächsten Hafen · Malta',
+    speaker: 'Sabine Lindemann',
+    caption:
+      '„SCHALTEN SIE AUCH MORGEN WIEDER EIN!! Wenn sich früh am Morgen die Hafeneinfahrt öffnet, legen wir in MALTA an – und genau dort wartet der endgültige Showdown um den geheimnisvollen „A. H.“-Brief und die Beweise aus Fall 1 auf Sie!!“',
+    playsMaltaMusic: true,
+    sfx: 'foghorn',
+    durationMs: 10200,
+    panFrom: { scale: 1.08, x: -10, y: -4 },
+    panTo: { scale: 1.01, x: 4, y: 2 },
+  },
+  {
+    id: 'f3_st2_outro_horizon',
+    imageUrl: '/src/assets/images/intro_ship_sunset_1795043375929.jpg',
+    kicker: 'Nacht auf dem Mittelmeer · Zielhafen Valletta, Malta',
+    speaker: 'Nate Sterling (Gedanke)',
+    caption:
+      '(Andrew ist vorerst frei, aber irgendjemand aus der Crew hat das MS-400-Handbuch zerrissen, den blauen Schal aus dem Fundbüro geholt und uns diesen 45.000-€-Brief untergeschoben… Morgen vor Malta nehmen wir uns jede einzelne Akte aus Fall 1 noch einmal gnadenlos vor!)',
+    playsMaltaMusic: true,
+    fadeOutMaltaMusic: true,
+    durationMs: 9200,
+    panFrom: { scale: 1.0, x: -8, y: 0 },
+    panTo: { scale: 1.1, x: 10, y: -4 },
+  },
+  {
+    id: 'f3_st2_outro_cliffhanger',
+    kicker: 'Ende von Fall 3 · Fortsetzung in Fall 4',
+    caption:
+      'Die Verhandlung ist vertagt und Familie Higginson vereint. Morgen läuft die MS Aurora in Malta ein – mit der Neuaufrollung von Aufgabe 4 und den Original-Beweisen aus Fall 1!',
+    sfx: 'tension',
+    durationMs: 6500,
+    panFrom: { scale: 0.96, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
+
+export const CASE4_PART1_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'f4_p1_outro_fake',
+    imageUrl: '/src/assets/images/minigame_f4_fake_chronometer_1795445497378.jpg',
+    kicker: 'Tag 6 · Nachmittag · Asservatenkammer MS Aurora',
+    speaker: 'Nate Sterling & Detective Marston',
+    caption:
+      'Aufgemaltes Gold statt 18-Karat, keine kardanische Aufhängung und die Gravur „REPLIKA · VALLETTA M-09“! Der angeblich unbezahlbare Chronometer aus Fall 1 war die ganze Zeit eine billige Nachbildung aus Malta!',
+    playsDramaticMusic: true,
+    sfx: 'tension',
+    durationMs: 8200,
+    panFrom: { scale: 1.0, x: -8, y: 2 },
+    panTo: { scale: 1.08, x: 8, y: -3 },
+  },
+  {
+    id: 'f4_p1_outro_ballroom',
+    imageUrl: '/src/assets/images/cruise_court_ballroom_1795039845955.jpg',
+    kicker: 'Abend · Großer Ballsaal · Letzte Verhandlung',
+    speaker: 'Sabine Lindemann & Judge Pendelton',
+    caption:
+      'Im Großen Ballsaal schlägt die Schiffsglocke zur letzten großen Verhandlung! Mit dem gefälschten 45.000-€-Brief und der Chronometer-Fälschung hält Nate Sterling plötzlich den Schlüssel zur gesamten Verschwörung in den Händen…',
+    playsDramaticMusic: true,
+    fadeOutDramaticMusic: true,
+    sfx: 'foghorn',
+    durationMs: 8200,
+    panFrom: { scale: 1.0, x: 6, y: 0 },
+    panTo: { scale: 1.09, x: -10, y: -4 },
+  },
+  {
+    id: 'f4_p1_outro_cliffhanger',
+    kicker: 'Ende Teil 1 · Übergang in die letzte Verhandlung',
+    caption:
+      'Wer gab die Fälschung in Malta in Auftrag — und wer ermordete Arthur Morgan? Das große Finale beginnt jetzt im Großen Ballsaal!',
+    sfx: 'alarm',
+    durationMs: 5600,
+    panFrom: { scale: 0.96, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
+
+export const CASE4_FINALE_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'f4_fin_outro_bridge',
+    imageUrl: '/src/assets/images/bridge_deck_1795257794601.jpg',
+    kicker: 'Letzter Morgen an Bord · Brücke der MS Aurora',
+    speaker: 'Kapitän Albert Werner Brammer',
+    caption:
+      'Stille liegt über der Kommandobrücke im ersten Licht des Morgens. Ein letztes Mal steht Kapitän Brammer nach vierzig Jahren Dienstzeit am Steuerrad – fest entschlossen, seine Mannschaft, die Passagiere und das echte Erbstück seines Großvaters sicher nach Hause zu bringen.',
+    playsPiano: true,
+    sfx: 'foghorn',
+    durationMs: 9200,
+    panFrom: { scale: 1.0, x: -8, y: 0 },
+    panTo: { scale: 1.08, x: 10, y: -4 },
+  },
+  {
+    id: 'f4_fin_outro_family',
+    imageUrl: '/src/assets/images/outro_f3_higginson_reunited_matched_1795445475684.jpg',
+    kicker: 'Sonnendeck · Familie Higginson völlig rehabilitiert',
+    speaker: 'Andrew, Eleonore & die Jungs',
+    caption:
+      'Jeder einzelne Verdacht ist restlos ausgeräumt, der gefälschte Brief an „A. H.“ enttarnt und der wahre Chronometer zurückgekehrt. Unter der warmen Ägäis-Sonne atmen Andrew und Eleonore endlich ohne jeden Schatten auf ihrem Namen auf!',
+    playsPiano: true,
+    durationMs: 8800,
+    panFrom: { scale: 1.0, x: 4, y: 2 },
+    panTo: { scale: 1.08, x: -8, y: -3 },
+  },
+  {
+    id: 'f4_fin_outro_athens',
+    imageUrl: '/src/assets/images/intro_ship_sunset_1795043375929.jpg',
+    kicker: 'Kurs auf den Heimathafen · Küste vor Athen',
+    speaker: 'Nate, Maya & Detective Marston',
+    caption:
+      'Am Horizont zeichnen sich bereits die weißen Lichter und alten Hügel von Athen ab. Detective Marston steckt das fertige Protokoll ein, während Nate und Maya schweigend aufs Wasser blicken — eine letzte Einfahrt bleibt noch bis zum großen Abschied.',
+    playsPiano: true,
+    fadeOutEvening: true,
+    sfx: 'page_turn',
+    durationMs: 8600,
+    panFrom: { scale: 1.02, x: -8, y: 0 },
+    panTo: { scale: 1.1, x: 8, y: -4 },
+  },
+  {
+    id: 'f4_fin_outro_epilog_card',
+    kicker: 'Ende von Fall 4 · Übergang zum Epilog',
+    caption:
+      'Das Rätsel um den Goldenen Chronometer, den 45.000-€-Brief und den Tod in Zelle 08 ist vollständig gelöst. Morgen läuft die MS Aurora in den Heimathafen Athen ein!',
+    sfx: 'tension',
+    durationMs: 5600,
+    panFrom: { scale: 0.96, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
+
+export const CASE4_EPILOG_OUTRO_SLIDES: OutroSlide[] = [
+  {
+    id: 'f4_epilog_outro_sabine_higginson',
+    imageUrl: '/src/assets/images/outro_f4_sabine_higginsons_1795455836169.jpg',
+    kicker: 'Hafenpier Athen · Ein ganz neues Show-Casting',
+    speaker: 'Sabine Lindemann, Eleonore & Andrew',
+    caption:
+      'Kaum sind Nate und Maya abgebogen, hat Sabine Lindemann auch schon ihr neues Wunsch-Ensemble erspäht! Während Eleonore mit funkelnden Augen sofort von ihrer eigenen großen Live-Gerichtsshow schwärmt, rutscht Andrew neben den eisessenden Jungs vor Schreck fast der Boden unter den Schuhen weg…',
+    playsMaltaMusic: true,
+    sfx: 'page_turn',
+    durationMs: 10200,
+    panFrom: { scale: 1.0, x: -8, y: 0 },
+    panTo: { scale: 1.08, x: 8, y: -3 },
+  },
+  {
+    id: 'f4_epilog_outro_captain_farewell',
+    imageUrl: '/src/assets/images/outro_f4_captain_farewell_1795455836590.jpg',
+    kicker: 'Kommandobrücke der MS Aurora · Letzter Abschied',
+    speaker: 'Kapitän Albert Werner Brammer',
+    caption:
+      'Hoch über dem warmen Abendhimmel von Athen steht ein tief bewegter alter Seebär ein letztes Mal am Steuerrad seiner Brücke. Seine Offiziere salutieren stumm zum Abschied, während Kapitän Brammer seine Mütze an die Brust drückt und sich nach vierzig Jahren von seiner Crew und dem Meer verabschiedet.',
+    playsPiano: true,
+    sfx: 'foghorn',
+    durationMs: 10200,
+    panFrom: { scale: 1.02, x: 6, y: 0 },
+    panTo: { scale: 1.1, x: -8, y: -4 },
+  },
+  {
+    id: 'f4_epilog_outro_ende',
+    kicker: 'Akte MS Aurora · Fall 1 bis 4',
+    caption:
+      'Alle Geheimnisse gelöst. Die Familie Higginson ist frei — und für Nate & Maya beginnt nun endlich der wohlverdiente Urlaub.',
+    playsPiano: true,
+    fadeOutEvening: true,
+    durationMs: 5600,
+    panFrom: { scale: 0.96, x: 0, y: 0 },
+    panTo: { scale: 1.02, x: 0, y: 0 },
+    isCliffhangerCard: true,
+  },
+];
+
 const OUTRO_SLIDES: OutroSlide[] = [
   {
     id: 'outro_piano_1',
@@ -273,6 +502,7 @@ export function AnimatedOutro({
   slides = OUTRO_SLIDES,
   cliffhangerTitle = 'Was ist unter Deck geschehen?',
   finishButtonLabel = 'Fall 1 abschließen',
+  accentVariant = 'alert',
   onComplete,
 }: AnimatedOutroProps) {
   const [index, setIndex] = useState(0);
@@ -305,6 +535,14 @@ export function AnimatedOutro({
       soundFx.stopDramaticTheme();
     }
 
+    if (current.fadeOutMaltaMusic) {
+      soundFx.fadeOutMaltaShowTheme(Math.max(1600, current.durationMs - 700));
+    } else if (current.playsMaltaMusic && !muted) {
+      soundFx.startMaltaShowTheme();
+    } else {
+      soundFx.stopMaltaShowTheme();
+    }
+
     if (current.shoutBanner && !muted) {
       soundFx.playShout(current.shoutBanner);
     }
@@ -320,6 +558,7 @@ export function AnimatedOutro({
         soundFx.stopPianoBallad();
         soundFx.stopGreekBouzouki();
         soundFx.stopDramaticTheme();
+        soundFx.stopMaltaShowTheme();
         onComplete();
       }
     }, current.durationMs);
@@ -334,6 +573,7 @@ export function AnimatedOutro({
       soundFx.stopPianoBallad();
       soundFx.stopGreekBouzouki();
       soundFx.stopDramaticTheme();
+      soundFx.stopMaltaShowTheme();
     };
   }, []);
 
@@ -344,6 +584,7 @@ export function AnimatedOutro({
       soundFx.stopPianoBallad();
       soundFx.stopGreekBouzouki();
       soundFx.stopDramaticTheme();
+      soundFx.stopMaltaShowTheme();
       onComplete();
     }
   };
@@ -352,6 +593,7 @@ export function AnimatedOutro({
     soundFx.stopPianoBallad();
     soundFx.stopGreekBouzouki();
     soundFx.stopDramaticTheme();
+    soundFx.stopMaltaShowTheme();
     onComplete();
   };
 
@@ -397,17 +639,37 @@ export function AnimatedOutro({
               className="absolute inset-0"
             >
               {current.isCliffhangerCard ? (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-red-950/35 via-slate-950 to-slate-950 p-8 text-center">
+                <div
+                  className={`w-full h-full flex flex-col items-center justify-center p-8 text-center ${
+                    accentVariant === 'ending'
+                      ? 'bg-gradient-to-b from-amber-950/35 via-slate-950 to-slate-950'
+                      : 'bg-gradient-to-b from-red-950/35 via-slate-950 to-slate-950'
+                  }`}
+                >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="space-y-4 max-w-2xl"
                   >
-                    <div className="mx-auto w-14 h-14 rounded-full bg-red-500/15 border border-red-500/50 flex items-center justify-center">
-                      <AlertTriangle className="w-7 h-7 text-red-400" />
+                    <div
+                      className={`mx-auto w-14 h-14 rounded-full flex items-center justify-center ${
+                        accentVariant === 'ending'
+                          ? 'bg-amber-500/15 border border-amber-400/50'
+                          : 'bg-red-500/15 border border-red-500/50'
+                      }`}
+                    >
+                      {accentVariant === 'ending' ? (
+                        <Anchor className="w-7 h-7 text-amber-300" />
+                      ) : (
+                        <AlertTriangle className="w-7 h-7 text-red-400" />
+                      )}
                     </div>
-                    <div className="text-xs font-semibold tracking-wider text-red-400 uppercase">
+                    <div
+                      className={`text-xs font-semibold tracking-wider uppercase ${
+                        accentVariant === 'ending' ? 'text-amber-400' : 'text-red-400'
+                      }`}
+                    >
                       {current.kicker}
                     </div>
                     <h1 className="font-display text-3xl sm:text-5xl font-bold text-slate-50 leading-tight text-balance">
@@ -514,7 +776,10 @@ export function AnimatedOutro({
                     className="absolute inset-x-0 bottom-0 p-5 sm:p-8 space-y-1.5"
                   >
                     <div className="flex items-center gap-2 text-xs font-semibold text-amber-400">
-                      {(current.playsPiano || current.playsGreekMusic || current.playsDramaticMusic) && (
+                      {(current.playsPiano ||
+                        current.playsGreekMusic ||
+                        current.playsDramaticMusic ||
+                        current.playsMaltaMusic) && (
                         <Music className="w-3.5 h-3.5 shrink-0" />
                       )}
                       <span>{current.kicker}</span>

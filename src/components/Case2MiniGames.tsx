@@ -21,7 +21,21 @@ import {
 } from 'lucide-react';
 import type { MiniGameId } from '../types/game';
 import { soundFx } from '../utils/soundFx';
-import { KidsDressupMiniGame, ShipPlanMiniGame } from './Case3MiniGames';
+import {
+  AlibiRouteMapMiniGame,
+  DutyRosterPuzzleMiniGame,
+  FundbueroLogMiniGame,
+  KidsDressupMiniGame,
+  KowalskiBooksHiddenMiniGame,
+  ShipPlanMiniGame,
+  VipPhotoSearchMiniGame,
+  VipSokobanMiniGame,
+} from './Case3MiniGames';
+import {
+  ChronometerCompareMiniGame,
+  LetterForensicsMiniGame,
+  LibraryBooksHiddenMiniGame,
+} from './Case4MiniGames';
 
 interface Case2MiniGameProps {
   miniGameId: MiniGameId;
@@ -1851,6 +1865,78 @@ export function Case2MiniGame({
       <ShipPlanMiniGame
         flags={flags}
         onComplete={() => onComplete('ship_plan')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'vip_sokoban') {
+    return (
+      <VipSokobanMiniGame
+        onComplete={() => onComplete('vip_sokoban')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'vip_photo_search') {
+    return (
+      <VipPhotoSearchMiniGame
+        onComplete={() => onComplete('vip_photo_search')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'fundbuero_log') {
+    return (
+      <FundbueroLogMiniGame
+        onComplete={() => onComplete('fundbuero_log')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'duty_roster_puzzle') {
+    return (
+      <DutyRosterPuzzleMiniGame
+        onComplete={() => onComplete('duty_roster_puzzle')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'alibi_route_map') {
+    return (
+      <AlibiRouteMapMiniGame
+        onComplete={() => onComplete('alibi_route_map')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'kowalski_books_hidden') {
+    return (
+      <KowalskiBooksHiddenMiniGame
+        onComplete={() => onComplete('kowalski_books_hidden')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'letter_forensics') {
+    return (
+      <LetterForensicsMiniGame
+        onComplete={() => onComplete('letter_forensics')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'library_books_hidden') {
+    return (
+      <LibraryBooksHiddenMiniGame
+        onComplete={() => onComplete('library_books_hidden')}
+        onCancel={onCancel}
+      />
+    );
+  }
+  if (miniGameId === 'chronometer_compare') {
+    return (
+      <ChronometerCompareMiniGame
+        onComplete={() => onComplete('chronometer_compare')}
         onCancel={onCancel}
       />
     );

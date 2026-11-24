@@ -32,6 +32,10 @@ class SoundEngine {
   private dramaticFadeTimer: number | null = null;
   private dramaticMasterGain: GainNode | null = null;
   private dramaticStep = 0;
+  private maltaTimer: number | null = null;
+  private maltaFadeTimer: number | null = null;
+  private maltaMasterGain: GainNode | null = null;
+  private maltaStep = 0;
   private rawShoutBytes = new Map<ShoutType, ArrayBuffer>();
   private decodedShouts = new Map<ShoutType, AudioBuffer>();
   private shoutPreloadStarted = false;
@@ -257,6 +261,7 @@ class SoundEngine {
       case 'anya':
         return 520;
       case 'maya':
+      case 'maya_chaos':
         return 585;
       default:
         return 460;
@@ -276,7 +281,10 @@ class SoundEngine {
     const filter = ctx.createBiquadFilter();
     const gain = ctx.createGain();
 
-    osc.type = isInnerThought || speakerId === 'maya' || speakerId === 'anya' ? 'sine' : 'triangle';
+    osc.type =
+      isInnerThought || speakerId === 'maya' || speakerId === 'maya_chaos' || speakerId === 'anya'
+        ? 'sine'
+        : 'triangle';
     osc.frequency.setValueAtTime(freq, now);
     osc.frequency.exponentialRampToValueAtTime(freq * 0.92, now + 0.028);
 
@@ -880,6 +888,149 @@ class SoundEngine {
 
     osc.start(startTime);
     osc.stop(startTime + duration + 0.03);
+  }
+
+  public startMaltaShowTheme(): void {
+    if (this.muted || typeof window === 'undefined') return;
+    if (this.maltaFadeTimer !== null) {
+      window.clearTimeout(this.maltaFadeTimer);
+      this.maltaFadeTimer = null;
+    }
+
+    const ctx = this.getContext();
+    if (ctx) {
+      if (!this.maltaMasterGain) {
+        this.maltaMasterGain = ctx.createGain();
+        this.maltaMasterGain.connect(ctx.destination);
+      }
+      this.maltaMasterGain.gain.cancelScheduledValues(ctx.currentTime);
+      this.maltaMasterGain.gain.setValueAtTime(1.0, ctx.currentTime);
+    }
+
+    if (this.maltaTimer !== null) return;
+
+    // Uplifting F-major / C-major Mediterranean voyage show finale ([bassHz, leadHz])
+    const sequence: Array<[number | null, number | null]> = [
+      [174.61, 523.25], // F3 + C5
+      [null, 587.33],   // D5
+      [261.63, 659.25], // C4 + E5
+      [null, 698.46],   // F5
+      [174.61, 880.0],  // F3 + A5
+      [null, 698.46],   // F5
+      [220.0, 659.25],  // A3 + E5
+      [null, 587.33],   // D5
+      [196.0, 587.33],  // G3 + D5
+      [null, 659.25],   // E5
+      [261.63, 783.99], // C4 + G5
+      [null, 659.25],   // E5
+      [174.61, 587.33], // F3 + D5
+      [null, 523.25],   // C5
+      [220.0, 440.0],   // A3 + A4
+      [null, 523.25],   // C5
+      [146.83, 587.33], // D3 + D5
+      [null, 698.46],   // F5
+      [233.08, 783.99], // Bb3 + G5
+      [null, 880.0],    // A5
+      [196.0, 783.99],  // G3 + G5
+      [null, 698.46],   // F5
+      [261.63, 659.25], // C4 + E5
+      [null, 783.99],   // G5
+      [174.61, 698.46], // F3 + F5
+      [null, 880.0],    // A5
+      [261.63, 1046.5], // C4 + C6
+      [null, null],
+      [174.61, 698.46], // F3 + F5
+      [220.0, 523.25],  // A3 + C5
+      [261.63, 698.46], // C4 + F5
+      [null, null],
+    ];
+
+    this.maltaStep = 0;
+
+    const triggerNote = () => {
+      const activeCtx = this.getContext();
+      if (!activeCtx) return;
+      const [bassFreq, leadFreq] = sequence[this.maltaStep % sequence.length];
+      this.maltaStep += 1;
+      const now = activeCtx.currentTime;
+      if (bassFreq) {
+        this.maltaVoice(activeCtx, bassFreq, 0.52, 0.065, now, true);
+      }
+      if (leadFreq) {
+        this.maltaVoice(activeCtx, leadFreq, 0.62, 0.075, now, false);
+      }
+    };
+
+    triggerNote();
+    this.maltaTimer = window.setInterval(triggerNote, 285);
+  }
+
+  public fadeOutMaltaShowTheme(durationMs = 2000): void {
+    if (this.maltaFadeTimer !== null) {
+      window.clearTimeout(this.maltaFadeTimer);
+      this.maltaFadeTimer = null;
+    }
+    const ctx = this.ctx;
+    if (ctx && this.maltaMasterGain && !this.muted) {
+      const now = ctx.currentTime;
+      const currentVal = Math.max(0.001, this.maltaMasterGain.gain.value);
+      this.maltaMasterGain.gain.cancelScheduledValues(now);
+      this.maltaMasterGain.gain.setValueAtTime(currentVal, now);
+      this.maltaMasterGain.gain.exponentialRampToValueAtTime(
+        0.0005,
+        now + durationMs / 1000
+      );
+    }
+    this.maltaFadeTimer = window.setTimeout(() => {
+      this.maltaFadeTimer = null;
+      this.stopMaltaShowTheme();
+    }, durationMs);
+  }
+
+  public stopMaltaShowTheme(): void {
+    if (this.maltaFadeTimer !== null) {
+      window.clearTimeout(this.maltaFadeTimer);
+      this.maltaFadeTimer = null;
+    }
+    if (this.maltaTimer !== null) {
+      window.clearInterval(this.maltaTimer);
+      this.maltaTimer = null;
+    }
+  }
+
+  private maltaVoice(
+    ctx: AudioContext,
+    freq: number,
+    duration: number,
+    volume: number,
+    startTime: number,
+    isBass: boolean
+  ): void {
+    const osc = ctx.createOscillator();
+    const harm = ctx.createOscillator();
+    const harmGain = ctx.createGain();
+    const gain = ctx.createGain();
+
+    osc.type = isBass ? 'triangle' : 'sine';
+    osc.frequency.setValueAtTime(freq, startTime);
+
+    harm.type = 'triangle';
+    harm.frequency.setValueAtTime(freq * 2, startTime);
+    harmGain.gain.setValueAtTime(isBass ? 0.12 : 0.22, startTime);
+
+    gain.gain.setValueAtTime(0.001, startTime);
+    gain.gain.linearRampToValueAtTime(volume, startTime + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0007, startTime + duration);
+
+    osc.connect(gain);
+    harm.connect(harmGain);
+    harmGain.connect(gain);
+    gain.connect(this.maltaMasterGain ?? ctx.destination);
+
+    osc.start(startTime);
+    harm.start(startTime);
+    osc.stop(startTime + duration + 0.03);
+    harm.stop(startTime + duration + 0.03);
   }
 
   private tone(

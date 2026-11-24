@@ -27,7 +27,16 @@ export type MiniGameId =
   | 'kids_sokoban'
   | 'lock_cables'
   | 'kids_dressup'
-  | 'ship_plan';
+  | 'ship_plan'
+  | 'vip_sokoban'
+  | 'vip_photo_search'
+  | 'fundbuero_log'
+  | 'duty_roster_puzzle'
+  | 'alibi_route_map'
+  | 'kowalski_books_hidden'
+  | 'letter_forensics'
+  | 'library_books_hidden'
+  | 'chronometer_compare';
 
 export type SoundEffect =
   | 'blip'
@@ -332,6 +341,7 @@ export interface GameSaveState {
     | 'INTRO_CUTSCENE'
     | 'PLAYING'
     | 'OUTRO_CUTSCENE'
+    | 'CREDITS'
     | 'VICTORY'
     | 'GAME_OVER';
   phase: 'investigation' | 'court';

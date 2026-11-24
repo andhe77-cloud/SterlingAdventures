@@ -1,7 +1,8 @@
 import type { CheckpointEntry, DialogLine, GameCheckpointSnapshot } from '../types/game';
 import { CRUISE_CASE } from './cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './creteCase';
-import { CASE3_SEETAG } from './case3Seetag';
+import { CASE3_SEETAG, F3_ST2_TRIAL_INTRO_LINES } from './case3Seetag';
+import { CASE4_MALTA, F4_EPILOG_INTRO_LINES, F4_FINALE_INTRO_LINES } from './case4Malta';
 
 export interface ChapterPhaseJump {
   label: string;
@@ -824,6 +825,66 @@ export function getChapterJumpOptions(caseId: string): ChapterJumpOption[] {
           createCheckpoint: createCase3St1Checkpoint,
         },
       },
+      {
+        id: 'f3_st2_spurensuche',
+        chapterLabel: 'Station 3.2 · Tag 5 (Seetag)',
+        chapterTitle: 'Spurensuche an Bord',
+        investigation: {
+          label: 'Anfang der Ermittlung',
+          subtitle: 'Schaltzentrale, VIP-Speisesaal & Pooldeck',
+          createCheckpoint: createCase3St2Checkpoint,
+        },
+        trial: {
+          label: 'Anfang der Abendverhandlung',
+          subtitle: 'Großer Ballsaal · Abendverhandlung',
+          createCheckpoint: createCase3St2TrialCheckpoint,
+        },
+      },
+    ];
+  }
+
+  if (caseId === CASE4_MALTA.id) {
+    return [
+      {
+        id: 'f4_teil1_malta',
+        chapterLabel: 'Fall 4 (Teil 1) · Tag 6 (Malta)',
+        chapterTitle: 'Die Spur nach Malta',
+        investigation: {
+          label: 'Anfang der Ermittlung',
+          subtitle: 'Promenadendeck · Sicherheitsraum & Valletta',
+          createCheckpoint: createCase4MaltaCheckpoint,
+        },
+      },
+      {
+        id: 'f4_teil1_bibliothek',
+        chapterLabel: 'Fall 4 (Teil 1) · Rückkehr an Bord',
+        chapterTitle: 'Alte Chroniken an Bord',
+        investigation: {
+          label: 'Ab Schiffsbibliothek (Deck 7)',
+          subtitle: 'Schiffsbibliothek · Altes Archiv prüfen',
+          createCheckpoint: createCase4LibraryCheckpoint,
+        },
+      },
+      {
+        id: 'f4_finale_verhandlung',
+        chapterLabel: 'Fall 4 (Teil 2) · Tag 6 (Abend)',
+        chapterTitle: 'Die letzte Verhandlung',
+        trial: {
+          label: 'Anfang der Finalverhandlung',
+          subtitle: 'Großer Ballsaal · Hauptverhandlung',
+          createCheckpoint: createCase4FinalTrialCheckpoint,
+        },
+      },
+      {
+        id: 'f4_epilog_athen',
+        chapterLabel: 'Epilog · Tag 7 (Athen)',
+        chapterTitle: 'Ausschiffung im Heimathafen',
+        investigation: {
+          label: 'Anfang des Epilogs',
+          subtitle: 'Hafen von Athen · Abschied von der MS Aurora',
+          createCheckpoint: createCase4EpilogCheckpoint,
+        },
+      },
     ];
   }
 
@@ -894,6 +955,378 @@ export function createCase3St1Checkpoint(): CheckpointEntry {
   return {
     label: 'Station 3.1 · Suche nach Andrew (Tag 5 · Seetag)',
     introLines: [...CASE3_SEETAG.introLines],
+    snapshot,
+  };
+}
+
+export function createCase3St2Checkpoint(): CheckpointEntry {
+  const introLines: DialogLine[] = [
+    {
+      speakerId: 'eleonore',
+      emotion: 'confident',
+      text: 'Also gut, Nate! Unser Notizbuch ist prall gefüllt: Täterwissen um das MS-400-Schloss, Andrews blauer Schal, die Nachtaufnahmen zwischen 01:58 und 02:23 Uhr und der „A. H.“-Brief.',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'thinking',
+      text: 'Wir müssen uns jetzt auf dem ganzen Schiff noch einmal ganz genau umschauen und jeden offenen Punkt gründlich durchleuchten.',
+    },
+    {
+      speakerId: 'eleonore',
+      emotion: 'confident',
+      text: 'Haken wir einen Punkt von Falks Anklage nach dem anderen ab, Assistentin-Ehrenwort! Wo fangen wir als Erstes an?',
+    },
+  ];
+
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE3_SEETAG.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'f3_st2_spurensuche',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'promenade',
+    unlockedLocations: [
+      'promenade',
+      'music_salon',
+      'vip_salon',
+      'bridge',
+      'backstage',
+      'higginson_cabin',
+      'brig_cell',
+      'infirmary',
+      'reception',
+      'marston_cabin',
+      'switchroom',
+    ],
+    collectedEvidence: [
+      'ausweis_f3_nate',
+      'notiz_kabine_518',
+      'notiz_rezeption_regeln',
+      'notiz_kabine_917',
+    ],
+    unlockedThoughts: [
+      'thought_f3_schlechtes_gewissen',
+      'thought_f3_eleonore_besuchen',
+      'thought_f3_assistentin_eleonore',
+      'thought_f3_andrew_weg',
+      'thought_f3_marston_gesucht',
+      'thought_f3_kabine_917',
+      'thought_f3_aufgabe_1_wissen',
+      'thought_f3_aufgabe_2_schal',
+      'thought_f3_aufgabe_3_kamera',
+      'thought_f3_aufgabe_4_motiv',
+    ],
+    solvedDeductions: [],
+    flags: {
+      flag_f3_backstage_offen: true,
+      flag_f3_kabine_518_offen: true,
+      flag_f3_maya_bei_kindern: true,
+      flag_f3_brig_offen: true,
+      flag_f3_zelle_leer_entdeckt: true,
+      flag_f3_brandt_abgewiegelt: true,
+      flag_f3_marston_suchen: true,
+      flag_f3_rezeption_offen: true,
+      flag_f3_miriam_raetsel_aktiv: true,
+      flag_f3_marston_kabine_offen: true,
+      flag_f3_marston_hilft: true,
+      flag_f3_auf_deck_4fragen: true,
+      flag_f3_aufgabe_1: true,
+      flag_f3_aufgabe_2: true,
+      flag_f3_aufgabe_3: true,
+      flag_f3_aufgabe_4: true,
+      flag_f3_st1_komplett: true,
+      flag_f3_st2_aktiv: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+
+  return {
+    label: 'Station 3.2 · Die 4 Beweise entkräften (Tag 5 · Seetag)',
+    introLines,
+    snapshot,
+  };
+}
+
+export function createCase3St2TrialCheckpoint(): CheckpointEntry {
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE3_SEETAG.id,
+    screen: 'PLAYING',
+    phase: 'court',
+    currentChapterId: 'f3_st2_spurensuche',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'courtroom',
+    unlockedLocations: [
+      'promenade',
+      'music_salon',
+      'vip_salon',
+      'bridge',
+      'backstage',
+      'higginson_cabin',
+      'brig_cell',
+      'infirmary',
+      'reception',
+      'marston_cabin',
+      'switchroom',
+      'vip_dining',
+      'laundry',
+      'lost_found',
+      'pool_deck',
+      'courtroom',
+    ],
+    collectedEvidence: [
+      'ausweis_f3_nate',
+      'notiz_kabine_518',
+      'notiz_rezeption_regeln',
+      'notiz_kabine_917',
+      'beweis_ms400_handbuch_luecke',
+      'beweis_vip_waeschefoto',
+      'beweis_fundbuero_protokoll',
+      'notiz_nachtdienstplan',
+      'beweis_kalle_aussage',
+      'beweis_alibi_laufweg',
+    ],
+    unlockedThoughts: Object.keys(CASE3_SEETAG.thoughts),
+    solvedDeductions: [],
+    flags: {
+      flag_f3_backstage_offen: true,
+      flag_f3_kabine_518_offen: true,
+      flag_f3_maya_bei_kindern: true,
+      flag_f3_brig_offen: true,
+      flag_f3_zelle_leer_entdeckt: true,
+      flag_f3_brandt_abgewiegelt: true,
+      flag_f3_marston_suchen: true,
+      flag_f3_rezeption_offen: true,
+      flag_f3_miriam_raetsel_aktiv: true,
+      flag_f3_marston_kabine_offen: true,
+      flag_f3_marston_hilft: true,
+      flag_f3_auf_deck_4fragen: true,
+      flag_f3_aufgabe_1: true,
+      flag_f3_aufgabe_2: true,
+      flag_f3_aufgabe_3: true,
+      flag_f3_aufgabe_4: true,
+      flag_f3_st1_komplett: true,
+      flag_f3_st2_aktiv: true,
+      flag_f3_kowalski_erlaubnis: true,
+      flag_f3_aufgabe1_erledigt: true,
+      flag_f3_vip_speisesaal_offen: true,
+      flag_f3_vip_aufgeraeumt: true,
+      flag_f3_vip_foto_gefunden: true,
+      flag_f3_waescherei_offen: true,
+      flag_f3_fundbuero_offen: true,
+      flag_f3_aufgabe2_erledigt: true,
+      flag_f3_pooldeck_offen: true,
+      flag_f3_kalle_braucht_batterien: true,
+      flag_f3_batterien_geholt: true,
+      flag_f3_kalle_aussage_erhalten: true,
+      flag_f3_aufgabe3_erledigt: true,
+      flag_f3_aufgaben123_jubel: true,
+      flag_f3_eleonore_zurueck: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+
+  return {
+    label: 'Station 3.2 · Abendverhandlung (Tag 5 · Abend)',
+    introLines: [...F3_ST2_TRIAL_INTRO_LINES],
+    snapshot,
+  };
+}
+
+export function createCase4MaltaCheckpoint(): CheckpointEntry {
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE4_MALTA.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'f4_teil1_malta',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: CASE4_MALTA.initialLocationId,
+    unlockedLocations: [...CASE4_MALTA.initialUnlockedLocations],
+    collectedEvidence: [...CASE4_MALTA.initialEvidenceIds],
+    unlockedThoughts: [...CASE4_MALTA.initialThoughtIds],
+    solvedDeductions: [],
+    flags: {},
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: 'Fall 4 (Teil 1) · Die Spur nach Malta',
+    introLines: [...CASE4_MALTA.introLines],
+    snapshot,
+  };
+}
+
+export function createCase4LibraryCheckpoint(): CheckpointEntry {
+  const introLines: DialogLine[] = [
+    {
+      speakerId: 'maya',
+      emotion: 'confident',
+      text: 'Wir stehen direkt in der Schiffsbibliothek auf Deck 7! Detective Marston wartet unten im Sicherheitsraum auf die drei offiziellen Chronometer-Merkmale aus der Flotten-Chronik.',
+    },
+    {
+      speakerId: 'nate',
+      emotion: 'thinking',
+      text: 'Durchsuchen wir sofort die Regale nach den Geschichts- und Flottenbüchern!',
+    },
+  ];
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE4_MALTA.id,
+    screen: 'PLAYING',
+    phase: 'investigation',
+    currentChapterId: 'f4_teil1_malta',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'ship_library',
+    unlockedLocations: [
+      'promenade',
+      'security_room',
+      'malta_harbor',
+      'malta_bastion',
+      'malta_souvenir_shop',
+      'marston_cabin',
+      'ship_library',
+    ],
+    collectedEvidence: [
+      'ausweis_f4_nate',
+      'akte_45k_brief',
+      'notiz_f4_chrono_fall1',
+      'notiz_f4_marston_konto',
+      'beweis_brief_manipuliert',
+      'notiz_andenkenladen_replik',
+    ],
+    unlockedThoughts: [
+      'thought_f4_offener_punkt4',
+      'thought_f4_brief_gefaelscht',
+      'thought_f4_chronometer_billig',
+      'thought_f4_kapitaen_replik',
+      'thought_f4_chronometer_pruefen',
+    ],
+    solvedDeductions: [],
+    flags: {
+      flag_f4_marston_deck_gesprochen: true,
+      flag_f4_brief_geprueft: true,
+      flag_f4_malta_offen: true,
+      flag_f4_pendelton_getroffen: true,
+      flag_f4_sabine_malta_getroffen: true,
+      flag_f4_higginson_malta_getroffen: true,
+      flag_f4_preise_geprueft: true,
+      flag_f4_laden_gesprochen: true,
+      flag_f4_zurueck_an_bord: true,
+      flag_f4_recap_fertig: true,
+      flag_f4_marston_will_grund: true,
+      flag_f4_marston_ueberzeugt: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: 'Fall 4 (Teil 1) · Schiffsbibliothek & Chronometer-Vergleich',
+    introLines,
+    snapshot,
+  };
+}
+
+export function createCase4FinalTrialCheckpoint(): CheckpointEntry {
+  const snapshot: GameCheckpointSnapshot = {
+    caseId: CASE4_MALTA.id,
+    screen: 'PLAYING',
+    phase: 'court',
+    currentChapterId: 'f4_finale_verhandlung',
+    pendingChapterTransition: null,
+    credibility: 5,
+    maxCredibility: 5,
+    currentLocationId: 'courtroom',
+    unlockedLocations: [
+      'promenade',
+      'security_room',
+      'malta_harbor',
+      'malta_bastion',
+      'malta_souvenir_shop',
+      'marston_cabin',
+      'ship_library',
+      'courtroom',
+    ],
+    collectedEvidence: [
+      'ausweis_f4_nate',
+      'akte_45k_brief',
+      'notiz_f4_chrono_fall1',
+      'notiz_f4_marston_konto',
+      'beweis_brief_manipuliert',
+      'notiz_andenkenladen_replik',
+      'beweis_flottenbuch_merkmale',
+      'beweis_chronometer_faelschung',
+    ],
+    unlockedThoughts: [
+      'thought_f4_offener_punkt4',
+      'thought_f4_brief_gefaelscht',
+      'thought_f4_chronometer_billig',
+      'thought_f4_kapitaen_replik',
+      'thought_f4_chronometer_pruefen',
+      'thought_f4_drei_merkmale',
+    ],
+    solvedDeductions: [],
+    flags: {
+      flag_f4_marston_deck_gesprochen: true,
+      flag_f4_brief_geprueft: true,
+      flag_f4_malta_offen: true,
+      flag_f4_pendelton_getroffen: true,
+      flag_f4_sabine_malta_getroffen: true,
+      flag_f4_higginson_malta_getroffen: true,
+      flag_f4_preise_geprueft: true,
+      flag_f4_laden_gesprochen: true,
+      flag_f4_zurueck_an_bord: true,
+      flag_f4_recap_fertig: true,
+      flag_f4_marston_will_grund: true,
+      flag_f4_marston_ueberzeugt: true,
+      flag_f4_buecher_gefunden: true,
+      flag_f4_faelschung_bewiesen: true,
+    },
+    visitedTopics: [],
+    inspectedHotspots: [],
+    activeTestimonyId: null,
+    statementIndex: 0,
+  };
+  return {
+    label: 'Fall 4 (Teil 2) · Letzte Verhandlung (Tag 6 · Abend)',
+    introLines: [...F4_FINALE_INTRO_LINES],
+    snapshot,
+  };
+}
+
+export function createCase4EpilogCheckpoint(): CheckpointEntry {
+  const finalSnapshot = createCase4FinalTrialCheckpoint().snapshot;
+  const snapshot: GameCheckpointSnapshot = {
+    ...finalSnapshot,
+    phase: 'investigation',
+    currentChapterId: 'f4_epilog_athen',
+    currentLocationId: 'athens_harbor',
+    unlockedLocations: ['athens_harbor'],
+    flags: {
+      ...finalSnapshot.flags,
+      flag_f4_fin_brief_entkraeftet: true,
+      flag_f4_backstage_aktiv: true,
+      flag_f4_kapitaen_gestanden: true,
+    },
+  };
+  return {
+    label: 'Epilog · Ausschiffung in Athen (Tag 7)',
+    introLines: [...F4_EPILOG_INTRO_LINES],
     snapshot,
   };
 }

@@ -4,6 +4,7 @@ export const CRUISE_CASE: GameCase = {
   id: 'fall-01-chronometer',
   title: 'Akte MS Aurora: Diebstahl auf hoher See',
   subtitle: 'Fall 1 komplett · Kapitel 1–4 & Epilog',
+  badgeLabel: 'Fall 1 · Auftakt auf hoher See',
   description:
     'Sieben Tage Urlaub auf dem Luxusliner MS Aurora – so war zumindest der Plan von Strafverteidiger Nate Sterling und seiner Assistentin Maya. Doch schon beim Willkommens-Dinner verschwindet ein unbezahlbares Erbstück.',
   initialChapterId: 'kap1_tag1_abend',
@@ -460,6 +461,11 @@ export const CRUISE_CASE: GameCase = {
       accentColor: '#0284c7',
       side: 'right',
       portraitUrl: '/src/assets/images/sprite_marston_detective_1795080940855.jpg',
+      portraits: {
+        grumpy: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+        headshake: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+        sweating: '/src/assets/images/marston_grumpy_chroma_1795426716136.jpg',
+      },
     },
     anya: {
       id: 'anya',
@@ -677,7 +683,7 @@ export const CRUISE_CASE: GameCase = {
       iconName: 'receipt',
       summary: '45.000 € bis Kreta – teures Büttenpapier mit „Konto-Ref: KRETA-77“.',
       detail:
-        'Lag unter dem umgekippten Rotweinglas auf dem Schreibtisch im VIP-Salon: „Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Der Chronometer deckt den Rest – sonst erfahren alle von Ihren Geschäften.“ Keine Unterschrift, Adressat „A. M.“.',
+        'Lag unter dem umgekippten Rotweinglas auf dem Schreibtisch im VIP-Salon: „Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Bis dahin bleibt der Chronometer als Sicherheit – sonst erfahren alle von Ihren Geschäften.“ Keine Unterschrift, Adressat im Weinfleck leicht verwischt wie „A. M.“.',
     },
   },
 
@@ -940,17 +946,17 @@ export const CRUISE_CASE: GameCase = {
             {
               speakerId: 'maya',
               emotion: 'thinking',
-              text: 'Schau, Nate – jetzt bei Tageslicht sieht man sofort, dass jemand das umgekippte Rotweinglas inzwischen abgeräumt hat. Aber der weinbefleckte Brief klebt immer noch halb getrocknet hier auf dem Tisch!',
+              text: 'Schau, Nate – jetzt im ruhigen Lampenlicht sieht man sofort, dass jemand das umgekippte Rotweinglas inzwischen abgeräumt hat. Aber der weinbefleckte Brief klebt immer noch halb getrocknet hier auf dem Tisch!',
             },
             {
               speakerId: 'nate',
               emotion: 'shocked',
-              text: 'Moment mal… jetzt, wo wir ihn vorsichtig entfalten, kann man die Tinte lesen! Hör dir das an: „Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Der Chronometer deckt den Rest – sonst erfahren alle von Ihren Geschäften.“',
+              text: 'Moment mal… jetzt, wo wir ihn vorsichtig entfalten, kann man die Tinte lesen! Hör dir das an: „Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Bis dahin bleibt der Chronometer als Sicherheit – sonst erfahren alle von Ihren Geschäften.“',
             },
             {
               speakerId: 'maya',
               emotion: 'shocked',
-              text: '45.000 Euro?! Und unten steht als Empfänger „A. M.“ – also ARTHUR MORGAN?! Dann hätte er tatsächlich ein klares Diebstahl-Motiv!',
+              text: '45.000 Euro?! Und unten steht – zwar leicht vom Rotwein verschmiert, aber lesbar – „A. M.“: also ARTHUR MORGAN?! Dann hätte er tatsächlich ein Motiv rund um den Chronometer!',
             },
             {
               speakerId: 'nate',
@@ -1635,6 +1641,11 @@ export const CRUISE_CASE: GameCase = {
               emotion: 'shocked',
               text: 'Ein Erste-Klasse-Serviertuch unter meinem Bett?! Nein, ich habe überhaupt keinen Zimmerservice bestellt – ich saß doch die ganze Nacht hier im Arrest!',
             },
+            {
+              speakerId: 'nate',
+              emotion: 'confident',
+              text: 'Keine Sorge, Anya – genau dieses Tuch beweist, dass jemand vom VIP-Service in deiner Kabine war!',
+            },
           ],
         },
         {
@@ -1646,6 +1657,11 @@ export const CRUISE_CASE: GameCase = {
               emotion: 'confident',
               text: 'Um 08:42 Uhr war Arthur Morgan in meiner Kabine?! Mr. Sterling, das beweist doch, dass er die Uhr noch vor der Verhandlung dort versteckt hat!',
             },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Ganz genau! Jetzt müssen wir nur noch herausfinden, welches Motiv hinter dem ganzen Spiel steckt!',
+            },
           ],
         },
         {
@@ -1656,6 +1672,11 @@ export const CRUISE_CASE: GameCase = {
               speakerId: 'anya',
               emotion: 'shocked',
               text: 'Genau so ein cremefarbenes Papier ragte gestern Abend aus Mr. Morgans Jacketttasche, als er mich nach Kabine 312 fragte!',
+            },
+            {
+              speakerId: 'nate',
+              emotion: 'thinking',
+              text: 'Interessant… Dann hat er diesen Brief tatsächlich vorher bei sich getragen, bevor der Rotwein darüber lief.',
             },
           ],
         },
@@ -1696,6 +1717,11 @@ export const CRUISE_CASE: GameCase = {
               speakerId: 'nate',
               emotion: 'neutral',
               text: 'Eigentlich wollten Maya und ich hier den Sonnenuntergang genießen… naja, sobald Anya frei ist, holen wir das hoffentlich nach!',
+            },
+            {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Versprochen! Mit zwei großen Limonaden und ganz ohne Blick auf irgendwelche Akten!',
             },
           ],
         },
@@ -2139,7 +2165,7 @@ export const CRUISE_CASE: GameCase = {
             },
             {
               speakerId: 'marston',
-              emotion: 'neutral',
+              emotion: 'grumpy',
               text: 'Nach heute Morgen steht der Kapitän persönlich hinter mir, Nate. Ohne eine konkrete Spur aus dieser Kabine, dass hier etwas vom Personal abgelegt wurde, darf ich den Türspeicher nicht anzapfen. PRÄSENTIER mir erst einen Fund!',
             },
           ],
@@ -2170,7 +2196,7 @@ export const CRUISE_CASE: GameCase = {
             {
               speakerId: 'maya',
               emotion: 'confident',
-              text: 'Wir brauchen zwei Dinge: Erstens das Tür-Log von Kabine 312 (untersuche das Bett genau!), und zweitens den Grund für diesen Diebstahl – schau dir den Schreibtisch im VIP-Salon nochmal an!',
+              text: 'Schau dir hier unbedingt noch einmal das Bett an, damit wir das Tür-Log von Kabine 312 bekommen. Und danach lohnt sich bestimmt ein frischer Blick auf den Schreibtisch im VIP-Salon – vielleicht finden wir dort endlich den Grund für dieses ganze Versteckspiel!',
             },
           ],
         },
@@ -2222,7 +2248,7 @@ export const CRUISE_CASE: GameCase = {
       fallbackPresentLines: [
         {
           speakerId: 'marston',
-          emotion: 'neutral',
+          emotion: 'grumpy',
           text: 'Damit kommen wir bei Kabine 312 noch nicht weiter, Nate. Sieh dich hier im Zimmer erst genau um!',
         },
       ],
@@ -2246,9 +2272,14 @@ export const CRUISE_CASE: GameCase = {
           speakerId: 'anya',
           lines: [
             {
+              speakerId: 'maya',
+              emotion: 'confident',
+              text: 'Endlich sitzen wir einfach nur im Konzertsaal statt vor dem Richterpult! Bist du bereit auf der Bühne, Anya?',
+            },
+            {
               speakerId: 'anya',
               emotion: 'confident',
-              text: 'Dieses Lied ist für meine Helden!',
+              text: 'Mehr als bereit! Ohne euch beide stünde ich heute Abend nicht in Freiheit vor diesen Tasten. Dieses Lied ist für meine Helden!',
               triggersOutro: true,
             },
           ],
@@ -3380,19 +3411,19 @@ export const CRUISE_CASE: GameCase = {
               {
                 speakerId: 'nate',
                 emotion: 'confident',
-                text: '„Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Der Chronometer deckt den Rest – sonst erfahren alle von Ihren Geschäften.“ Adressiert an: A. M. – ARTHUR MORGAN!',
+                text: '„Letzte Frist: 45.000 Euro bis zum Einlaufen auf Kreta. Bis dahin bleibt der Chronometer als Sicherheit – sonst erfahren alle von Ihren Geschäften.“ Adressiert an: A. M. – ARTHUR MORGAN!',
               },
               {
                 speakerId: 'arthur',
                 emotion: 'shocked',
                 shake: true,
-                text: 'WAS?! Nein!! Dieses Dokument kenne ich überhaupt nicht – das habe ich in meinem Leben noch nie gesehen!!',
+                text: 'WAS?! Nein!! Dieser Brief ist doch nicht an mich gerichtet – davon will ich vor diesem Gericht überhaupt nichts wissen!!',
               },
               {
                 speakerId: 'arthur',
                 emotion: 'sweating',
                 shake: true,
-                text: 'Glauben Sie mir doch!! Ich bin unschuldig!! Irgendjemand hat mir diesen Brief und die ganze Sache untergeschoben – ich habe das alles nicht gewollt, Sie verhaften den Falschen!!',
+                text: 'Glauben Sie mir doch!! Irgendjemand treibt hier ein ganz falsches Spiel mit dem Chronometer – ich wollte das alles nicht, Sie verhaften den Falschen!!',
               },
               {
                 speakerId: 'falk',
@@ -3459,7 +3490,7 @@ export const CRUISE_CASE: GameCase = {
                     {
                       speakerId: 'maya',
                       emotion: 'smug',
-                      text: 'Haha – ja, fast wie ein Tutorial, Nate! Warte nur ab, bis unser nächster Fall losgeht!',
+                      text: 'Haha – sag das bloß nicht zu laut, Nate! Nach unserer Glückssträhne geht der restliche Urlaub ab morgen jetzt bestimmt total friedlich weiter… oder?',
                     },
                     {
                       speakerId: 'marston',

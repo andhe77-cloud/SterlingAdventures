@@ -15,9 +15,14 @@ import {
 import { AnimatedIntro } from './components/AnimatedIntro';
 import {
   AnimatedOutro,
+  CASE3_ST2_OUTRO_SLIDES,
+  CASE4_EPILOG_OUTRO_SLIDES,
+  CASE4_FINALE_OUTRO_SLIDES,
+  CASE4_PART1_OUTRO_SLIDES,
   CRETE_ACT22_OUTRO_SLIDES,
   CRETE_ACT23_OUTRO_SLIDES,
 } from './components/AnimatedOutro';
+import { HorizontalCredits } from './components/HorizontalCredits';
 import { CaseBinder, type BinderTab } from './components/CaseBinder';
 import { GameStage, type InvestigationMenu } from './components/GameStage';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -25,7 +30,8 @@ import { PWAInstallButton } from './components/PWAInstallButton';
 import { useFullscreen } from './hooks/useFullscreen';
 import { CRUISE_CASE } from './data/cruiseCase';
 import { CRETE_ACT23_INTRO_LINES, CRETE_CASE } from './data/creteCase';
-import { CASE3_SEETAG } from './data/case3Seetag';
+import { CASE3_SEETAG, F3_ST2_TRIAL_INTRO_LINES } from './data/case3Seetag';
+import { CASE4_MALTA, F4_EPILOG_INTRO_LINES, F4_FINALE_INTRO_LINES } from './data/case4Malta';
 import {
   KAP4_MORGEN_INTRO_LINES,
   createCreteAct22Checkpoint,
@@ -88,11 +94,12 @@ class GameErrorBoundary extends Component<
   }
 }
 
-const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE, CASE3_SEETAG];
+const ALL_CASES: GameCase[] = [CRUISE_CASE, CRETE_CASE, CASE3_SEETAG, CASE4_MALTA];
 const CASE_MAP: Record<string, GameCase> = {
   [CRUISE_CASE.id]: CRUISE_CASE,
   [CRETE_CASE.id]: CRETE_CASE,
   [CASE3_SEETAG.id]: CASE3_SEETAG,
+  [CASE4_MALTA.id]: CASE4_MALTA,
 };
 
 function getStorageKey(caseId: string): string {
@@ -250,6 +257,7 @@ function AdvokatEngineApp() {
     [CRUISE_CASE.id]: Boolean(loadSavedState(CRUISE_CASE.id)),
     [CRETE_CASE.id]: Boolean(loadSavedState(CRETE_CASE.id)),
     [CASE3_SEETAG.id]: Boolean(loadSavedState(CASE3_SEETAG.id)),
+    [CASE4_MALTA.id]: Boolean(loadSavedState(CASE4_MALTA.id)),
   }));
   const [dialogQueue, setDialogQueue] = useState<DialogLine[]>([]);
   const [activeShout, setActiveShout] = useState<ShoutType | null>(null);
@@ -542,6 +550,111 @@ function AdvokatEngineApp() {
     activeCase.id,
   ]);
 
+  // Station 3.2 milestone celebration once Aufgaben 1, 2, and 3 are all cleared (Aufgabe 4 pending)
+  useEffect(() => {
+    if (
+      state.screen !== 'PLAYING' ||
+      dialogQueue.length > 0 ||
+      activeMiniGame !== null ||
+      activeCase.id !== CASE3_SEETAG.id ||
+      state.currentChapterId !== 'f3_st2_spurensuche' ||
+      !state.flags.flag_f3_aufgabe1_erledigt ||
+      !state.flags.flag_f3_aufgabe2_erledigt ||
+      !state.flags.flag_f3_aufgabe3_erledigt ||
+      state.flags.flag_f3_aufgaben123_jubel
+    ) {
+      return;
+    }
+
+    setDialogQueue([
+      {
+        speakerId: 'eleonore',
+        emotion: 'confident',
+        shout: 'VOLLTREFFER!',
+        shake: true,
+        sfx: 'victory',
+        setsFlag: 'flag_f3_aufgaben123_jubel',
+        text: 'NATE!! Hast du eben auf unsere Aufgabenliste geschaut?! DREI VON VIER ANKLAGEPUNKTEN SIND IN EINEM ZUG ZERLEGT!!',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'confident',
+        text: 'Tatsächlich, Eleonore! Drei massive Säulen von Falks Anklage liegen am Boden: Punkt 1 – im MS-400-Handbuch fehlt genau die Seite „Bekannte Fehler“.',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'confident',
+        text: 'Punkt 2 – Andrews verlorener blauer Schal landete über die VIP-Schmutzwäsche als nicht abgeholtes Fundstück F-418 im Fundbüro. Und Punkt 3 – Kalle Jensens Dienstplan-Zeugnis und unsere Laufweg-Analyse beweisen, dass Andrew um 02:12 Uhr oben auf Deck 10 stand!',
+      },
+      {
+        speakerId: 'eleonore',
+        emotion: 'thinking',
+        text: 'Jetzt hängt über unserem ganzen Fall nur noch Aufgabe 4 – dieser verflixte 45.000-€-Brief an „A. H.“ und Andrews angebliches Motiv. Und wenn wir ganz ehrlich sind…',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'thinking',
+        text: 'Für Aufgabe 4 reichen unsere Spuren von heute auf See nicht aus. Um herauszufinden, was es mit diesem weingetränkten Brief wirklich auf sich hat, müssen wir uns die Original-Beweise aus Fall 1 noch einmal ganz genau vorknöpfen.',
+      },
+      {
+        speakerId: 'eleonore',
+        emotion: 'confident',
+        text: 'Hoffen wir, dass diese drei zertrümmerten Indizien für heute Abend reichen, um den Richter umzustimmen! Und weißt du was, Nate? Mir ist beim Ermitteln tatsächlich mein ganzer Magenkrampf vergangen… fast macht mir diese Detektivarbeit unheimlich Spaß!',
+      },
+      {
+        speakerId: 'eleonore',
+        emotion: 'confident',
+        setsFlag: 'flag_f3_eleonore_zurueck',
+        text: 'Aber jetzt muss ich schnell zurück zu meinen drei Räubern und die arme Maya erlösen – die ist mit den Jungs bestimmt längst am Rand der Verzweiflung! Wir sehen uns direkt vor dem Ballsaal, Nate! Viel Glück da drinnen!',
+      },
+      {
+        speakerId: 'maya_chaos',
+        emotion: 'sweating',
+        animation: 'shock',
+        shake: true,
+        sfx: 'damage',
+        text: 'NATE!! *keuch* ICH LEBE NOCH!! KNAPP!!',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'smug',
+        text: 'Na, Maya… hast du dich oben in der Spielecke gemütlich auf dem Sofa ausgeruht? Du siehst aus, als wärst du mit einer Piratengaleere kollidiert.',
+      },
+      {
+        speakerId: 'maya_chaos',
+        emotion: 'sweating',
+        animation: 'headshake',
+        text: '„AUSGERUHT“?! Leo hat mich als Schiedsrichterin für ein blindes Liegestuhl-Hindernisrennen durch Kabine 642 engagiert, während Conrad mir alle dreißig Sekunden mit einer Schaumstoff-Torpedonudel in die Kniekehlen gerammt ist!',
+      },
+      {
+        speakerId: 'maya_chaos',
+        emotion: 'sweating',
+        text: 'Und DANN kam Rick auf die glorreiche Idee eines wissenschaftlichen Experiments mit Stoppuhr: Wie schnell können drei Jungs sechs Päckchen Multivitaminsaft durch verknotete Knick-Strohhalme leeren?! Exakt drei Sekunden, bevor Conrad mitten im Zug nieste — direkt auf meine Bluse!!',
+      },
+      {
+        speakerId: 'maya_chaos',
+        emotion: 'grumpy',
+        text: 'Das Schokoladeneis als Friedensangebot habe ich nur überlebt, weil ich mir anschließend noch fünfundvierzig Minuten lang Dino-Sticker auf den Kragen kleben lassen musste – guck nicht so auf den grünen T-Rex, der klebt wie Sekundenkleber! Und meine Handtasche blubbert immer noch verdächtig.',
+      },
+      {
+        speakerId: 'nate',
+        emotion: 'confident',
+        text: 'Dann verdienst du jetzt offiziell das höchste Tapferkeits-Abzeichen der Seefahrt, Partnerin! Hier, nimm ein frisches Tuch und wirf dir schnell deine Reserve-Bluse über — denn gerade schlägt die Schiffsglocke zur Abendverhandlung. Im Großen Ballsaal wartet schon Staatsanwalt von Falk höchstpersönlich auf uns!',
+      },
+      ...F3_ST2_TRIAL_INTRO_LINES,
+    ]);
+  }, [
+    state.screen,
+    state.currentChapterId,
+    state.flags.flag_f3_aufgabe1_erledigt,
+    state.flags.flag_f3_aufgabe2_erledigt,
+    state.flags.flag_f3_aufgabe3_erledigt,
+    state.flags.flag_f3_aufgaben123_jubel,
+    dialogQueue.length,
+    activeMiniGame,
+    activeCase.id,
+  ]);
+
   const startNewGame = (targetCaseId?: string) => {
     const caseDef = CASE_MAP[targetCaseId ?? activeCase.id] ?? CRUISE_CASE;
     if (caseDef.id === CASE3_SEETAG.id) {
@@ -789,6 +902,11 @@ function AdvokatEngineApp() {
 
     if (transition.nextChapterId === CASE3_SEETAG.id) {
       startNewGame(CASE3_SEETAG.id);
+      return;
+    }
+
+    if (transition.nextChapterId === CASE4_MALTA.id) {
+      startNewGame(CASE4_MALTA.id);
       return;
     }
 
@@ -1151,6 +1269,302 @@ function AdvokatEngineApp() {
           text: 'Kommen Sie, Eleonore — gehen wir hoch zu Deck 9 und klopfen direkt an Kabine 917!',
         },
       ]);
+      return;
+    }
+
+    if (miniGameId === 'vip_sokoban') {
+      enqueueLines([
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'victory',
+          setsFlag: 'flag_f3_vip_aufgeraeumt',
+          text: 'So!! Alle drei Servierwagen stehen wie mit dem Lineal gezogen an der Wand — nicht einmal ein Krümel liegt mehr quer!',
+        },
+        {
+          speakerId: 'vip_guest',
+          emotion: 'neutral',
+          text: 'Hmpf… na gut, meine Dame, wenigstens versteht noch jemand auf diesem Kahn etwas von Zucht und Ordnung! Meinetwegen schauen Sie auf meinem Tablet auf gut Glück kurz durch meine zehn Beschwerdefotos von der gesamten Reise.',
+          choices: [
+            {
+              label: 'Die Beschwerde-Fotos gleich auf gut Glück ansehen!',
+              nextLines: [
+                {
+                  speakerId: 'nate',
+                  emotion: 'thinking',
+                  text: 'Danke, Herr von Berg — mal sehen, ob auf diesen Fotos irgendetwas Bemerkenswertes zu erkennen ist.',
+                  startsMiniGameId: 'vip_photo_search',
+                },
+              ],
+            },
+            {
+              label: 'Tablet später über den Schauplatz ansehen',
+              nextLines: [
+                {
+                  speakerId: 'eleonore',
+                  emotion: 'confident',
+                  text: 'Wir schauen gleich auf das Tablet drüben auf dem Tisch!',
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'vip_photo_search') {
+      enqueueLines([
+        {
+          speakerId: 'eleonore',
+          emotion: 'shocked',
+          shout: 'MOMENT MAL!',
+          shake: true,
+          sfx: 'deduction',
+          text: 'NATE!! HALTEN SIE DAS BILD AN!! Schauen Sie rechts zwischen diese zerknüllten weißen VIP-Handtücher!! Das da — dieses königsblaue Seidentuch mit dem kleinen Goldrand!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'shocked',
+          unlocksEvidence: 'beweis_vip_waeschefoto',
+          unlocksLocation: 'laundry',
+          setsFlag: 'flag_f3_vip_foto_gefunden',
+          text: 'UNFASSBAR!! Das ist exakt Andrews Kreta-Seidenschal!! Er hat ihn gestern gar nicht in seine Jacke gesteckt, sondern beim späten Aufräumen versehentlich mit den feuchten Handtüchern im VIP-Wagen mit abgeräumt!',
+        },
+        {
+          speakerId: 'vip_guest',
+          emotion: 'neutral',
+          setsFlag: 'flag_f3_waescherei_offen',
+          text: 'Äh… mein Schal-Ding da interessiert mich herzlich wenig! Diese junge Kraft aus der Wäscherei — eine gewisse Elara — hat jedenfalls genau diesen Handtuch-Wagen noch am Abend nach unten in die Bord-Wäscherei geschoben!',
+        },
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          text: 'Das ist unsere goldene Spur!! Ab hinunter in die Bord-Wäscherei und Elara genau dieses Foto zeigen!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'fundbuero_log') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_fundbuero_protokoll',
+          unlocksThought: 'thought_f3_schal_crew_verdacht',
+          setsFlag: 'flag_f3_aufgabe2_erledigt',
+          text: 'SCHWARZ AUF WEISS!! Eintrag F-418: „Königsblauer Kreta-Seidenschal mit goldener Borte, eingeliefert aus VIP-Wäscherei — Status: NICHT ABGEHOLT“!',
+        },
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          unlocksThought: 'thought_f3_erledigt_2_schal',
+          text: 'Damit bricht Staatsanwalt von Falks ganze Schal-Lüge zusammen! Andrew hat kein Tatwerkzeug versteckt — sein Schal landete völlig harmlos in der Wäsche und danach im Fundbüro!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          text: 'Und noch viel brisanter, Eleonore: Wenn der Schal hier im verschlossenen Fundbüro nie regulär abgeholt wurde, dann hat ihn danach jemand an sich genommen, der freien Zugang zum Personal- & Fundbereich hatte… Jemand aus der Crew!! Aufgabe 2 ist damit komplett geklärt!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'duty_roster_puzzle') {
+      enqueueLines([
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'notiz_nachtdienstplan',
+          unlocksLocation: 'pool_deck',
+          setsFlag: 'flag_f3_pooldeck_offen',
+          text: 'Kombination perfekt aufgelöst!! Timo war unten auf Deck 5, Svenja im Korridor von Deck 2 — aber genau zwischen 01:55 und 02:35 Uhr hatte Matrose KALLE JENSEN mit dem Zitrusreiniger Schicht oben auf Deck 10, dem Pool- & Spieldeck!!',
+        },
+        {
+          speakerId: 'captain',
+          emotion: 'neutral',
+          text: 'Na bitte — geht doch, wenn man selbst liest! Kalle dreht gerade wieder oben auf dem Pooldeck seine Runden. Fragen Sie ihn meinetwegen direkt selbst aus!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'alibi_route_map') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_alibi_laufweg',
+          unlocksThought: 'thought_f3_erledigt_3_alibi',
+          setsFlag: 'flag_f3_aufgabe3_erledigt',
+          text: 'UND DA STEHT ES SCHWARZ AUF WEISS!! 01:58 Uhr auf der Deck-5-Kamera beim Auszug — 02:12 Uhr von Matrose Kalle auf Deck 10 gesehen — und 02:23 Uhr wieder auf Deck 5 zurück!!',
+        },
+        {
+          speakerId: 'eleonore',
+          emotion: 'confident',
+          text: 'Das bedeutet klipp und klar: Zwischen 02:04 und 02:19 Uhr konnte Andrew niemals unten in Zelle 08 auf Deck 2 gewesen sein!! Falks drittes Indiz — die Nachtaufnahmen — ist damit restlos vom Tisch! Aufgabe 3 erledigt!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'kowalski_books_hidden') {
+      enqueueLines([
+        {
+          speakerId: 'eleonore',
+          emotion: 'shocked',
+          shout: 'MOMENT MAL!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_ms400_handbuch_luecke',
+          unlocksThought: 'thought_f3_erledigt_1_wissen',
+          setsFlag: 'flag_f3_aufgabe1_erledigt',
+          text: 'NATE!! SCHAUEN SIE IN DIESES SCHLOSS-HANDBUCH (MS-400 · BORDCODE MS-400)!! Genau bei der Seite „Bekannte Fehler“ klafft eine saubere Risskante — SIE WURDE KOMPLETT HERAUSGERISSEN!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          text: 'GENIALER FUND!! Irgendjemand hat genau diese Wartungs-Seite vor der Tat heimlich aus Kowalskis Werkstatt-Handbuch entfernt, damit sich niemand an die Sicherheitslücke erinnert — außer dem Täter selbst!! Damit ist Falks „Täterwissen“-Argument in Aufgabe 1 komplett entkräftet!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'letter_forensics') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_brief_manipuliert',
+          unlocksThought: 'thought_f4_brief_gefaelscht',
+          setsFlag: 'flag_f4_brief_geprueft',
+          text: 'EINSPRUCH GEGEN DIESES MOTIV-INDIZ!! Unter Lupe und UV-Streiflicht ist es glasklar: Dieser Brief wurde nachträglich über den angetrockneten Weinrand mit einer zweiten Tinte manipuliert!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          text: 'Und schau dir die Initialen unten rechts an! Die Federstriche sind so mehrfach überschrieben worden, dass kein Mensch mehr sagen kann, ob da ursprünglich „A. W.“, „A. M.“ oder „A. H.“ stand!!',
+        },
+        {
+          speakerId: 'marston',
+          emotion: 'neutral',
+          text: 'Verflucht… damit hat von Falk überhaupt keine Kontoverbindung mehr UND einen offensichtlich verfälschten Brief! Als Beweis vor Pendelton taugt das Ding heute Abend keine Sekunde mehr.',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          text: 'Für heute Abend reicht das völlig aus, Maya! Damit fällt auch der letzte Rest von Punkt 4 in sich zusammen!',
+        },
+        {
+          speakerId: 'marston',
+          emotion: 'sweating',
+          text: 'So, ihr beiden — meine zehn Minuten sind um! Eleonore, Andrew und die drei Wildfänge warten unten an der Gangway. Wir sehen uns nach dem Landgang! Und ihr zwei könnt jetzt endlich guten Gewissens auf Malta an Land gehen!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'thinking',
+          sfx: 'thought_pop',
+          unlocksThought: 'thought_f4_chronometer_billig',
+          unlocksLocation: 'malta_harbor',
+          setsFlag: 'flag_f4_malta_offen',
+          text: '(Moment… Frank schließt gerade die Kammer ab. Während wir rausgehen, fällt mein Blick noch einmal kurz auf den Goldenen Chronometer in der Vitrine… Sagt mal: Ich verstehe die ganze Aufregung um das Teil gar nicht — aus der Nähe sieht es irgendwie seltsam billig aus?)',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          text: 'Ach, bestimmt nur das grelle Neonlicht hier drinnen, Nate! Jetzt legen wir kurz die Akten zur Seite — ab nach Valletta ins maltesische Sonnenlicht!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'library_books_hidden') {
+      enqueueLines([
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          shout: 'VOLLTREFFER!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_flottenbuch_merkmale',
+          unlocksThought: 'thought_f4_drei_merkmale',
+          setsFlag: 'flag_f4_buecher_gefunden',
+          text: 'TREFFER!! In der „Chronik der Aurora-Linie (1924)“ stehen exakt die drei Echtheitsmerkmale des originalen Schiffs-Chronometers!!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          text: 'Lies vor, Maya: Erstens massives 18-Karat-Vollgold, zweitens eine bewegliche doppelte kardanische Aufhängung, und drittens der tiefe Manufaktur-Stempel „Chronométrie Horloge Genève · Nr. 1924-A“!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'confident',
+          switchesLocationId: 'security_room',
+          text: 'Nichts wie zurück in die Sicherheits- & Asservatenkammer zu Detective Marston! Halten wir genau diese drei Punkte gegen unseren Chronometer!!',
+        },
+      ]);
+      return;
+    }
+
+    if (miniGameId === 'chronometer_compare') {
+      enqueueLines([
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          shout: 'EINSPRUCH!',
+          shake: true,
+          sfx: 'deduction',
+          unlocksEvidence: 'beweis_chronometer_faelschung',
+          setsFlag: 'flag_f4_faelschung_bewiesen',
+          text: 'ES IST OFFIZIELL BEWIESEN: DAS HIER IST EINE FÄLSCHUNG!!',
+        },
+        {
+          speakerId: 'maya',
+          emotion: 'shocked',
+          text: 'Schau dir diese drei Befunde an: Das angebliche 18-Karat-Gold blättert als dünne Farbe über grauem Zinn ab — die kardanische Aufhängung ist starr verschraubt — und im Innendeckel prangt sauber eingraviert: „REPLIKA · VALLETTA M-09“!!',
+        },
+        {
+          speakerId: 'marston',
+          emotion: 'shocked',
+          animation: 'shock',
+          sfx: 'tension',
+          text: 'Beim Klabautermann… der echte Schiffs-Chronometer aus Fall 1 liegt gar nicht in dieser Vitrine?! Jemand hat ein ganzes Schiff mit einer Replik aus Malta getäuscht — und ein echter Kapitän hat sie bestellt!!',
+        },
+        {
+          speakerId: 'cruisemanager',
+          emotion: 'confident',
+          sfx: 'alarm',
+          text: 'DURCHSAGE AN ALLE BETEILIGTEN! Hier spricht Sabine Lindemann! Es ist Abend geworden, alle Passagiere sitzen bereits auf ihren Plätzen — im Großen Ballsaal beginnt in wenigen Minuten DIE LETZTE VERHANDLUNG!!',
+        },
+        {
+          speakerId: 'pendelton',
+          emotion: 'neutral',
+          sfx: 'gavel_double',
+          text: 'Verteidiger Sterling, Detective Marston — bringen Sie unverzüglich jede neue Erkenntnis in den Großen Ballsaal! Heute Abend werden alle Geheimnisse von Fall 1 bis Malta restlos aufgeklärt!',
+        },
+        {
+          speakerId: 'nate',
+          emotion: 'confident',
+          triggersOutro: true,
+          text: 'Komm, Maya! Pack die Chronometer-Fälschung und alle Akten ein — vor dem ganzen Schiff beginnt jetzt die letzte Verhandlung!!',
+        },
+      ]);
+      return;
     }
   };
 
@@ -1639,6 +2053,7 @@ function AdvokatEngineApp() {
       soundFx.stopPianoBallad();
       soundFx.stopGreekBouzouki();
       soundFx.stopDramaticTheme();
+      soundFx.stopMaltaShowTheme();
     }
     setMuted(next);
   };
@@ -1701,7 +2116,7 @@ function AdvokatEngineApp() {
         )}
 
         <main className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-6">
-          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
             {ALL_CASES.map((caseItem) => {
               const hasCaseSave = Boolean(savedCaseIds[caseItem.id]);
               return (
@@ -1799,6 +2214,123 @@ function AdvokatEngineApp() {
 
   // ANIMATED OUTRO CUTSCENE
   if (state.screen === 'OUTRO_CUTSCENE') {
+    if (activeCase.id === CASE4_MALTA.id) {
+      if (
+        state.currentChapterId === 'f4_epilog_athen' ||
+        Boolean(state.flags.flag_f4_epilog_fertig)
+      ) {
+        return (
+          <AnimatedOutro
+            muted={muted}
+            slides={CASE4_EPILOG_OUTRO_SLIDES}
+            cliffhangerTitle="ENDE"
+            finishButtonLabel="Abspann ansehen"
+            accentVariant="ending"
+            onComplete={() =>
+              setState((prev) => ({
+                ...prev,
+                screen: 'CREDITS',
+              }))
+            }
+          />
+        );
+      }
+
+      if (
+        state.currentChapterId === 'f4_finale_verhandlung' ||
+        Boolean(state.flags.flag_f4_kapitaen_gestanden)
+      ) {
+        return (
+          <AnimatedOutro
+            muted={muted}
+            slides={CASE4_FINALE_OUTRO_SLIDES}
+            cliffhangerTitle="Übergang zum Epilog: Heimathafen Athen"
+            finishButtonLabel="Weiter zum Epilog"
+            accentVariant="ending"
+            onComplete={() =>
+              setState((prev) => ({
+                ...prev,
+                screen: 'PLAYING',
+                pendingChapterTransition: {
+                  completedChapterTitle: 'Fall 4 abgeschlossen',
+                  completedTimeLabel: 'Die Wahrheit an Bord · Einlaufen in Athen',
+                  summary:
+                    'Vor dem ganzen Ballsaal hast du Beweis 4 (den zu „A. H.“ manipulierten Brief an „A. W.“) und die Chronometer-Fälschung aus Malta entlarvt und über die vier Bereichs-Zeugen bewiesen, dass nur ein einziger General-Schlüssel alle fünf Tatorte verband. Hinter der Bühne gestand Kapitän Albert Werner Brammer den Tausch und die Verzweiflungstat an Arthur Morgan — und heute Morgen läuft die MS Aurora endlich in ihren Heimathafen Athen ein.',
+                  nextChapterId: 'f4_epilog_athen',
+                  nextLocationId: 'athens_harbor',
+                  nextPhase: 'investigation',
+                  nextTimeOfDay: 'tag',
+                  resetLocations: ['athens_harbor'],
+                  isComingSoon: false,
+                  nextButtonLabel: 'Weiter zum Epilog: Ausschiffung in Athen',
+                  nextIntroLines: [...F4_EPILOG_INTRO_LINES],
+                },
+              }))
+            }
+          />
+        );
+      }
+
+      return (
+        <AnimatedOutro
+          muted={muted}
+          slides={CASE4_PART1_OUTRO_SLIDES}
+          cliffhangerTitle="Übergang in die letzte Verhandlung!"
+          finishButtonLabel="Teil 1 von Fall 4 abschließen"
+          onComplete={() =>
+            setState((prev) => ({
+              ...prev,
+              screen: 'PLAYING',
+              pendingChapterTransition: {
+                completedChapterTitle: 'Fall 4 (Teil 1) abgeschlossen',
+                completedTimeLabel: 'Valletta beendet · Die letzte Verhandlung wartet',
+                summary:
+                  'Im Sicherheitsraum hast du bewiesen, dass der 45.000-€-Brief nachträglich manipuliert wurde („A. W.“ oder „A. H.“) und keinerlei Kontoverbindung existiert. Auf Malta führte ein berühmter Repliken-Händler dich auf die Spur einer maßgefertigten Chronometer-Kopie für einen echten Kapitän — und der Abgleich mit der 1924er Flotten-Chronik entlarvte den Goldenen Schiffs-Chronometer als Fälschung!',
+                nextChapterId: 'f4_finale_verhandlung',
+                nextLocationId: 'courtroom',
+                nextPhase: 'court',
+                nextTimeOfDay: 'abend',
+                unlocksLocations: ['courtroom'],
+                isComingSoon: false,
+                nextButtonLabel: 'Weiter: Die letzte Verhandlung (Großer Ballsaal)',
+                nextIntroLines: [...F4_FINALE_INTRO_LINES],
+              },
+            }))
+          }
+        />
+      );
+    }
+
+    if (activeCase.id === CASE3_SEETAG.id) {
+      return (
+        <AnimatedOutro
+          muted={muted}
+          slides={CASE3_ST2_OUTRO_SLIDES}
+          cliffhangerTitle="Fortsetzung in Fall 4: Die Spur nach Malta!"
+          finishButtonLabel="Fall 3 abschließen"
+          onComplete={() =>
+            setState((prev) => ({
+              ...prev,
+              screen: 'PLAYING',
+              pendingChapterTransition: {
+                completedChapterTitle: 'Fall 3 abgeschlossen',
+                completedTimeLabel: 'Kurs auf Malta · Verhandlung vertagt',
+                summary:
+                  'Im Großen Ballsaal hast du drei von vier Pfeilern von Falks Anklage zerlegt: das manipulierte MS-400-Handbuch, Andrews im Fundbüro F-418 gelandeten Schal und Kalle Jensens Alibi-Sichtung um 02:12 Uhr auf Deck 10. Wegen des noch offenen 45.000-€-Briefs (Aufgabe 4) hat Richter Pendelton die Verhandlung bis morgen vertagt und Andrew unter Detective Marstons persönlicher Bürgschaft vorläufig freigelassen. Morgen legt die MS Aurora in Malta an!',
+                nextChapterId: CASE4_MALTA.id,
+                nextLocationId: 'promenade',
+                nextPhase: 'investigation',
+                nextTimeOfDay: 'tag',
+                isComingSoon: false,
+                nextButtonLabel: 'Weiter zu Fall 4: Die Spur nach Malta',
+                nextIntroLines: [],
+              },
+            }))
+          }
+        />
+      );
+    }
+
     if (activeCase.id === CRETE_CASE.id) {
       if (state.currentChapterId === 'c2_akt3_nachmittag') {
         return (
@@ -1867,6 +2399,17 @@ function AdvokatEngineApp() {
       <AnimatedOutro
         muted={muted}
         onComplete={() => setState((prev) => ({ ...prev, screen: 'VICTORY' }))}
+      />
+    );
+  }
+
+  // HORIZONTAL SCROLLING END CREDITS
+  if (state.screen === 'CREDITS') {
+    return (
+      <HorizontalCredits
+        muted={muted}
+        onFinish={() => setState((prev) => ({ ...prev, screen: 'VICTORY' }))}
+        onReturnToMenu={() => setState((prev) => ({ ...prev, screen: 'TITLE_MENU' }))}
       />
     );
   }
@@ -1956,6 +2499,15 @@ function AdvokatEngineApp() {
             </div>
           ) : (
             <div className="flex flex-col gap-2.5">
+              {activeCase.id === CASE4_MALTA.id && (
+                <button
+                  type="button"
+                  onClick={() => setState((prev) => ({ ...prev, screen: 'CREDITS' }))}
+                  className="w-full px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-colors cursor-pointer"
+                >
+                  Abspann erneut ansehen
+                </button>
+              )}
               {activeCase.id === CRUISE_CASE.id && (
                 <button
                   type="button"
@@ -2168,11 +2720,25 @@ function AdvokatEngineApp() {
           onCancelMiniGame={() => {
             const canceledGame = activeMiniGame;
             setActiveMiniGame(null);
-            if (canceledGame === 'cooling_pipes') {
+            const hotspotResetMap: Partial<Record<MiniGameId, string>> = {
+              cooling_pipes: 'c2_a2_klima_panel',
+              ship_plan: 'hs_f3_schiffsplan',
+              kowalski_books_hidden: 'hs_f3_kowalski_werkbank',
+              vip_sokoban: 'hs_f3_vip_servierwagen',
+              vip_photo_search: 'hs_f3_vip_tablet',
+              fundbuero_log: 'hs_f3_fundbuero_buch',
+              duty_roster_puzzle: 'hs_f3_bridge_dienstplan',
+              alibi_route_map: 'hs_f3_pooldeck_karte',
+              letter_forensics: 'hs_f4_brief_tisch',
+              library_books_hidden: 'hs_f4_bibliothek_regal',
+              chronometer_compare: 'hs_f4_vitrine_hinweis',
+            };
+            const resetHotspotId = canceledGame ? hotspotResetMap[canceledGame] : undefined;
+            if (resetHotspotId && canceledGame !== 'ship_plan') {
               setState((prev) => ({
                 ...prev,
                 inspectedHotspots: prev.inspectedHotspots.filter(
-                  (id) => id !== 'c2_a2_klima_panel'
+                  (id) => id !== resetHotspotId
                 ),
               }));
             }

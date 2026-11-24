@@ -237,6 +237,24 @@
   animation: speakingBob 0.22s ease-in-out infinite;
 }
 
+@keyframes horizontalCreditsScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-credits-scroll {
+  animation: horizontalCreditsScroll 78s linear infinite;
+  will-change: transform;
+}
+
+.animate-credits-scroll-paused {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-stage-shake,
   .animate-shout-slam,
@@ -249,7 +267,8 @@
   .animate-portrait-shock,
   .animate-portrait-slam,
   .animate-portrait-tremble,
-  .animate-speaking-bob {
+  .animate-speaking-bob,
+  .animate-credits-scroll {
     animation: none;
   }
 }
